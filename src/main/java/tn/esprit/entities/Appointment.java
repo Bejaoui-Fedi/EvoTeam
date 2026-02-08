@@ -1,0 +1,46 @@
+package tn.esprit.entities;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+
+public class Appointment {
+    private int id;
+    private LocalDate dateRdv;
+    private LocalTime heureRdv;
+    private String statut;
+    private String motif;
+    private String typeRdv;
+
+    public Appointment() {}
+
+    public Appointment(LocalDate dateRdv, LocalTime heureRdv, String statut, String motif, String typeRdv) {
+        this.dateRdv = dateRdv;
+        this.heureRdv = heureRdv;
+        this.statut = statut;
+        this.motif = motif;
+        this.typeRdv = typeRdv;
+    }
+
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
+
+    public LocalDate getDateRdv() { return dateRdv; }
+    public void setDateRdv(LocalDate dateRdv) { this.dateRdv = dateRdv; }
+
+    public LocalTime getHeureRdv() { return heureRdv; }
+    public void setHeureRdv(LocalTime heureRdv) { this.heureRdv = heureRdv; }
+
+    public String getStatut() { return statut; }
+    public void setStatut(String statut) { this.statut = statut; }
+
+    public String getMotif() { return motif; }
+    public void setMotif(String motif) { this.motif = motif; }
+
+    public String getTypeRdv() { return typeRdv; }
+    public void setTypeRdv(String typeRdv) { this.typeRdv = typeRdv; }
+
+    @Override
+    public String toString() {
+        return "Appointment{id=" + id + ", date=" + dateRdv + ", heure=" + heureRdv + ", statut='" + statut + "'}";
+    }
+}
