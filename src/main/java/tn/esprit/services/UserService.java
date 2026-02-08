@@ -7,153 +7,76 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserService implements IUserService<User> {
-
-    private Connection connection;
-
-    public UserService() {
-        this.connection = DBConnection.getInstance().getConnection();
-    }
+public class UserService implements IService<User> {
+    private Connection connection = DBConnection.getInstance().getConnection();
 
     @Override
-    public void add(User user) throws SQLException {
-        String query = "INSERT INTO user (nom, email, password, role) VALUES (?, ?, ?, ?)";
+    public void add(User u) throws SQLException {
+        String sql = "INSERT INTO `user` (nom, email, password, role, telephone, actif) VALUES (?, ?, ?, ?, ?, ?)";
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, user.getNom());
-            preparedStatement.setString(2, user.getEmail());
-            preparedStatement.setString(3, user.getPassword());
-            preparedStatement.setString(4, user.getRole());
+        PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        ps.setString(1, u.getNom());
+        ps.setString(2, u.getEmail());
+        ps.setString(3, u.getPassword());
+        ps.setString(4, u.getRole());
+        ps.setString(5, u.getTelephone());
+        ps.setBoolean(6, u.isActif());
 
-            int rowsAffected = preparedStatement.executeUpdate();
+        ps.executeUpdate();
 
-            if (rowsAffected > 0) {
-                System.out.println("Utilisateur ajouté avec succès !");
-            }
-        } catch (SQLException e) {
-            System.err.println("Erreur lors de l'ajout de l'utilisateur : " + e.getMessage());
-            throw e;
-        }
+        ResultSet rs = ps.getGeneratedKeys();
+        if (rs.next()) u.setId(rs.getInt(1));
+
+        System.out.println("User ajouté : " + u);
     }
 
     @Override
     public List<User> getAll() throws SQLException {
-        List<User> users = new ArrayList<>();
-        String query = "SELECT * FROM user";
+        List<User> list = new ArrayList<>();
+        String sql = "SELECT * FROM `user`";
 
-        try (Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(query)) {
+        Statement st = connection.createStatement();
+        ResultSet rs = st.executeQuery(sql);
 
-            while (resultSet.next()) {
-                User user = new User(
-                        resultSet.getInt("id"),
-                        resultSet.getString("nom"),
-                        resultSet.getString("email"),
-                        resultSet.getString("password"),
-                        resultSet.getString("role")
-                );
-                users.add(user);
-            }
-        } catch (SQLException e) {
-            System.err.println("Erreur lors de la récupération des utilisateurs : " + e.getMessage());
-            throw e;
+        while (rs.next()) {
+            User u = new User();
+            u.setId(rs.getInt("id"));
+            u.setNom(rs.getString("nom"));
+            u.setEmail(rs.getString("email"));
+            u.setPassword(rs.getString("password"));
+            u.setRole(rs.getString("role"));
+            u.setTelephone(rs.getString("telephone"));
+            u.setActif(rs.getBoolean("actif"));
+            list.add(u);
         }
-
-        return users;
+        return list;
     }
 
     @Override
-    public void update(User user) throws SQLException {
-        String query = "UPDATE user SET nom = ?, email = ?, password = ?, role = ? WHERE id = ?";
+    public void update(User u) throws SQLException {
+        String sql = "UPDATE `user` SET nom=?, email=?, password=?, role=?, telephone=?, actif=? WHERE id=?";
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, user.getNom());
-            preparedStatement.setString(2, user.getEmail());
-            preparedStatement.setString(3, user.getPassword());
-            preparedStatement.setString(4, user.getRole());
-            preparedStatement.setInt(5, user.getId());
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setString(1, u.getNom());
+        ps.setString(2, u.getEmail());
+        ps.setString(3, u.getPassword());
+        ps.setString(4, u.getRole());
+        ps.setString(5, u.getTelephone());
+        ps.setBoolean(6, u.isActif());
+        ps.setInt(7, u.getId());
 
-            int rowsAffected = preparedStatement.executeUpdate();
-
-            if (rowsAffected > 0) {
-                System.out.println("Utilisateur mis à jour avec succès !");
-            } else {
-                System.out.println("Aucun utilisateur trouvé avec l'ID : " + user.getId());
-            }
-        } catch (SQLException e) {
-            System.err.println("Erreur lors de la mise à jour de l'utilisateur : " + e.getMessage());
-            throw e;
-        }
+        ps.executeUpdate();
+        System.out.println("User mis à jour : " + u);
     }
 
     @Override
-    public void delete(User user) throws SQLException {
-        String query = "DELETE FROM user WHERE id = ?";
+    public void delete(User u) throws SQLException {
+        String sql = "DELETE FROM `user` WHERE id=?";
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setInt(1, user.getId());
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setInt(1, u.getId());
+        ps.executeUpdate();
 
-            int rowsAffected = preparedStatement.executeUpdate();
-
-            if (rowsAffected > 0) {
-                System.out.println("Utilisateur supprimé avec succès !");
-            } else {
-                System.out.println("Aucun utilisateur trouvé avec l'ID : " + user.getId());
-            }
-        } catch (SQLException e) {
-            System.err.println("Erreur lors de la suppression de l'utilisateur : " + e.getMessage());
-            throw e;
-        }
-    }
-
-
-    public User getUserById(int id) throws SQLException {
-        String query = "SELECT * FROM user WHERE id = ?";
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setInt(1, id);
-
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    return new User(
-                            resultSet.getInt("id"),
-                            resultSet.getString("nom"),
-                            resultSet.getString("email"),
-                            resultSet.getString("password"),
-                            resultSet.getString("role")
-                    );
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("Erreur lors de la récupération de l'utilisateur : " + e.getMessage());
-            throw e;
-        }
-
-        return null;
-    }
-
-    public User getUserByEmail(String email) throws SQLException {
-        String query = "SELECT * FROM user WHERE email = ?";
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, email);
-
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    return new User(
-                            resultSet.getInt("id"),
-                            resultSet.getString("nom"),
-                            resultSet.getString("email"),
-                            resultSet.getString("password"),
-                            resultSet.getString("role")
-                    );
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("Erreur lors de la récupération de l'utilisateur : " + e.getMessage());
-            throw e;
-        }
-
-        return null;
+        System.out.println("User supprimé : " + u.getId());
     }
 }

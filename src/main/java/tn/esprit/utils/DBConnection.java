@@ -4,30 +4,28 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class DBConnection {
-
+    private static DBConnection instance;
     private Connection connection;
 
-    private static final String URL = "jdbc:mysql://localhost:3306/pidevusermanagement";
-    private static final String USER = "root";
-    private static final String PASSWORD = "";
+    private DBConnection() {
+        try {
+            String url = "jdbc:mysql://localhost:3306/pidevusermanagement";
+            String user = "root";
+            String password = "";
 
-    private static DBConnection instance;
-
-    private DBConnection(){
-            try {
-                connection = DriverManager.getConnection(URL, USER, PASSWORD);
-                System.out.println("Connexion MySQL réussie");
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
+            connection = DriverManager.getConnection(url, user, password);
+            System.out.println("Connexion MySQL réussie !");
+        } catch (Exception e) {
+            System.out.println("Erreur connexion : " + e.getMessage());
         }
+    }
+
+    public static DBConnection getInstance() {
+        if (instance == null) instance = new DBConnection();
+        return instance;
+    }
+
     public Connection getConnection() {
         return connection;
-    }
-    public static DBConnection getInstance(){
-        if (instance == null){
-            instance = new DBConnection();
-        }
-        return instance;
     }
 }
