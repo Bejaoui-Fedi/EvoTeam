@@ -9,13 +9,11 @@ public class User {
     private String telephone;
     private boolean actif;
 
-    /** 1) Constructeur par défaut */
     public User() {
         this.actif = true;
     }
 
-    /** 2) Constructeur sans id (tous les attributs sauf l'identifiant) */
-    public User(String nom, String email, String password, String role, String telephone, boolean actif) {
+     public User(String nom, String email, String password, String role, String telephone, boolean actif) {
         this.nom = nom;
         this.email = email;
         this.password = password;
@@ -24,13 +22,11 @@ public class User {
         this.actif = actif;
     }
 
-    /** Surcharge utile si tu veux garder 'actif' à true par défaut */
-    public User(String nom, String email, String password, String role, String telephone) {
+     public User(String nom, String email, String password, String role, String telephone) {
         this(nom, email, password, role, telephone, true);
     }
 
-    /** 3) Constructeur avec tous les attributs (y compris id) */
-    public User(int id, String nom, String email, String password, String role, String telephone, boolean actif) {
+     public User(int id, String nom, String email, String password, String role, String telephone, boolean actif) {
         this.id = id;
         this.nom = nom;
         this.email = email;
