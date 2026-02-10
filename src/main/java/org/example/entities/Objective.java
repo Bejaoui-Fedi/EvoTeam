@@ -14,6 +14,7 @@ public class Objective {
     private int isPublished;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private int userId;
 
 
 
@@ -44,7 +45,27 @@ public class Objective {
 
     }
 
+    public Objective(int userId, String title, String description, String icon, String color, String level, int isPublished) {
+        this.userId = userId;
+        this.title = title;
+        this.description = description;
+        this.icon = icon;
+        this.color = color;
+        this.level = level;
+        this.isPublished = isPublished;
+    }
 
+    public Objective(Long idObjective, int userId, String title, String description, String icon, String color,
+                     String level, int isPublished) {
+        this.idObjective = idObjective;
+        this.userId = userId;
+        this.title = title;
+        this.description = description;
+        this.icon = icon;
+        this.color = color;
+        this.level = level;
+        this.isPublished = isPublished;
+    }
     // ---------------- Getters/Setters ----------------
 
     public Long getIdObjective() {
@@ -118,6 +139,10 @@ public class Objective {
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+    public int getUserId() { return userId; }
+
+    public void setUserId(int userId) { this.userId = userId; }
 
     // ---------------- equals/hashCode/toString ----------------
 

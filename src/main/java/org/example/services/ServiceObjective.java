@@ -19,27 +19,42 @@ public class ServiceObjective implements IService <Objective> {
 
     @Override
     public void insert(Objective objective) throws SQLException {
-        if (connection == null) {
-            throw new IllegalStateException("Connexion BD = NULL. Verify MyDataBase (URL/user/password).");        }
-    String sql= "INSERT INTO `objective`(`title`, `description`, `icon`, `color`, `level`, `isPublished`) " +
-            "VALUES ('"+ objective.getTitle()+"','"+ objective.getDescription()+"','"+ objective.getIcon()+"','"+ objective.getColor()+"','"+ objective.getLevel()+"','"+ objective.isPublished()+"')";
-    Statement stmt = connection.createStatement();
-    stmt.executeUpdate(sql);
+        String sql = "INSERT INTO `objective`(`user_id`, `title`, `description`, `icon`, `color`, `level`, `isPublished`) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setInt(1, objective.getUserId());
+            ps.setString(2, objective.getTitle());
+            ps.setString(3, objective.getDescription());
+            ps.setString(4, objective.getIcon());
+            ps.setString(5, objective.getColor());
+            ps.setString(6, objective.getLevel());
+            ps.setInt(7, objective.isPublished());
+
+            ps.executeUpdate();
+
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) objective.setIdObjective(rs.getLong(1));
+            }
+        }
     }
 
     @Override
     public void update(Objective objective) throws SQLException {
-      String sql="UPDATE `objective` SET `title`=?,`description`=?,`icon`=?,`color`=?,`level`=?,`isPublished`=? WHERE `id_objective`=?"  ;
-   PreparedStatement stmt = connection.prepareStatement(sql);
-        stmt.setString(1, objective.getTitle());
-        stmt.setString(2, objective.getDescription());
-        stmt.setString(3, objective.getIcon());
-        stmt.setString(4, objective.getColor());
-        stmt.setString(5, objective.getLevel());
-        stmt.setInt(6, objective.isPublished());
-        stmt.setLong(7, objective.getIdObjective());
-        stmt.executeUpdate();
+        String sql = "UPDATE `objective` SET `user_id`=?, `title`=?, `description`=?, `icon`=?, `color`=?, `level`=?, `isPublished`=? " +
+                "WHERE `id_objective`=?";
 
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, objective.getUserId());
+            stmt.setString(2, objective.getTitle());
+            stmt.setString(3, objective.getDescription());
+            stmt.setString(4, objective.getIcon());
+            stmt.setString(5, objective.getColor());
+            stmt.setString(6, objective.getLevel());
+            stmt.setInt(7, objective.isPublished());
+            stmt.setLong(8, objective.getIdObjective());
+            stmt.executeUpdate();
+        }
     }
 
     @Override
@@ -66,6 +81,7 @@ public class ServiceObjective implements IService <Objective> {
            O.setColor(rs.getString("color"));
            O.setLevel(rs.getString("level"));
            O.setPublished(rs.getInt("isPublished"));
+           O.setUserId(rs.getInt("user_id"));
            objectives.add(O);
 
        }
