@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="550.0"
+            prefWidth="794.0"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="tn.esprit.controllers.AddEvent"
+            style="-fx-background-color: white;">
+
+    <VBox layoutX="160.0"
+          layoutY="30.0"
+          prefWidth="480.0"
+          spacing="10"
+          style="-fx-background-color: white; -fx-border-color: #7C81AB; -fx-border-width: 1;">
+
+        <padding>
+            <Insets top="25" right="25" bottom="25" left="25"/>
+        </padding>
+
+        <effect>
+            <DropShadow color="#888888" offsetX="4" offsetY="4" radius="15"/>
+        </effect>
+
+        <Label text="Ajouter un Event">
+            <font>
+                <Font size="20"/>
+            </font>
+        </Label>
+
+        <Separator/>
+
+        <Label text="Nom de l'événement">
+            <font><Font size="14"/></font>
+        </Label>
+        <TextField fx:id="name" prefHeight="35" promptText="Ex: Conférence JavaFX"/>
+
+        <Label text="Date de début">
+            <font><Font size="14"/></font>
+        </Label>
+        <DatePicker fx:id="startDate" prefHeight="35"/>
+
+        <Label text="Date de fin">
+            <font><Font size="14"/></font>
+        </Label>
+        <DatePicker fx:id="endDate" prefHeight="35"/>
+
+        <Label text="Nombre max de participants">
+            <font><Font size="14"/></font>
+        </Label>
+        <TextField fx:id="maxParticipants" prefHeight="35" promptText="Ex: 50"/>
+
+        <Label text="Description">
+            <font><Font size="14"/></font>
+        </Label>
+        <TextField fx:id="description" prefHeight="35" promptText="Ex: Atelier + networking"/>
+
+        <Label text="Prix (fee)">
+            <font><Font size="14"/></font>
+        </Label>
+        <TextField fx:id="fee" prefHeight="35" promptText="Ex: 20"/>
+
+        <Label text="Localisation">
+            <font><Font size="14"/></font>
+        </Label>
+        <TextField fx:id="tfLocation" prefHeight="35" promptText="Ex: INSA / Centre ville..."/>
+
+        <Button text="Enregistrer"
+                prefHeight="45"
+                prefWidth="200"
+                onAction="#handleAddEvent"
+                style="-fx-background-color: #7C81AB; -fx-text-fill: white; -fx-font-size: 14;"/>
+
+    </VBox>
+
+    <Button
+            text="📋 Afficher les événements"
+            prefWidth="200"
+            onAction="#goToDisplay"
+    />
+
+
+</AnchorPane>

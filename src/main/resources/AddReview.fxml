@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="600.0" prefWidth="900.0"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="tn.esprit.controllers.AddReview"
+            style="-fx-background-color: #F7F8FC;">
+
+    <VBox layoutX="30" layoutY="30" prefWidth="840" prefHeight="540" spacing="12"
+          style="-fx-background-color: white; -fx-border-color: #D9D9D9; -fx-border-width: 1; -fx-background-radius: 12; -fx-border-radius: 12;">
+        <padding>
+            <Insets top="16" right="16" bottom="16" left="16"/>
+        </padding>
+
+        <!-- Header -->
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Ajouter Review">
+                <font><Font size="20"/></font>
+            </Label>
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Button text="📋 Afficher les reviews"
+                    onAction="#goToDisplayReviews"
+                    style="-fx-background-color: #7C81AB; -fx-text-fill: white; -fx-background-radius: 8;"/>
+        </HBox>
+
+        <Separator/>
+
+        <!-- EventId (FK) -->
+        <Label text="Event (eventId) *"/>
+        <ComboBox fx:id="cbEventId" promptText="Choisir un eventId" prefHeight="35"/>
+
+        <Label text="Titre (optionnel)"/>
+        <TextField fx:id="title" promptText="Titre de la review" prefHeight="35"/>
+
+        <Label text="Rating (1..5) *"/>
+        <TextField fx:id="rating" promptText="Ex: 4" prefHeight="35"/>
+
+        <Label text="Date review *"/>
+        <DatePicker fx:id="reviewDate" prefHeight="35"/>
+
+        <Label text="Commentaire (optionnel)"/>
+        <TextArea fx:id="comment" promptText="Votre commentaire..." prefRowCount="4" wrapText="true"/>
+
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <Button text="✅ Enregistrer"
+                    onAction="#handleAddReview"
+                    prefWidth="160"
+                    style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-background-radius: 8;"/>
+
+            <Button text="🧹 Reset"
+                    onAction="#resetForm"
+                    prefWidth="120"
+                    style="-fx-background-radius: 8;"/>
+        </HBox>
+
+        <Label text="(*) champs obligatoires" style="-fx-text-fill:#777777;"/>
+    </VBox>
+</AnchorPane>
