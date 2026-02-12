@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="tn.esprit.controllers.admin.AdminSupervisionRdvController"
+      spacing="20" style="-fx-background-color: white; -fx-padding: 30;">
+
+    <Label text="SUPERVISION DES RENDEZ-VOUS - ADMIN" style="-fx-text-fill: #2c3e50;">
+        <font>
+            <Font size="28" name="System Bold"/>
+        </font>
+    </Label>
+
+    <Separator/>
+
+    <Label fx:id="totalLabel" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+    <Label fx:id="statsLabel" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #27ae60;"/>
+
+    <HBox spacing="20" alignment="CENTER_LEFT">
+        <Label text="🔍 Recherche :" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+        <TextField fx:id="searchField" promptText="ID, motif, statut, patient..." prefWidth="250"/>
+
+        <Label text="📅 Date :" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+        <DatePicker fx:id="dateFilterPicker" prefWidth="150"/>
+
+        <Label text="📊 Statut :" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+        <ChoiceBox fx:id="statutFilterChoice" prefWidth="120"/>
+
+        <Button text="Réinitialiser" onAction="#resetFilters"
+                style="-fx-background-color: #95a5a6; -fx-text-fill: white;"/>
+        <Button text="Actualiser" onAction="#refresh"
+                style="-fx-background-color: #3498db; -fx-text-fill: white;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="consultationsButton" text="SUPERVISER CONSULTATIONS"
+                onAction="#gererConsultations"
+                style="-fx-background-color: #9b59b6; -fx-text-fill: white;
+                       -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10 20;"/>
+    </HBox>
+
+    <TableView fx:id="tableView" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colId" text="ID" prefWidth="60"/>
+            <TableColumn fx:id="colUserId" text="Patient" prefWidth="80"/>
+            <TableColumn fx:id="colDate" text="Date" prefWidth="100"/>
+            <TableColumn fx:id="colHeure" text="Heure" prefWidth="80"/>
+            <TableColumn fx:id="colStatut" text="Statut" prefWidth="100"/>
+            <TableColumn fx:id="colMotif" text="Motif" prefWidth="200"/>
+            <TableColumn fx:id="colType" text="Type" prefWidth="120"/>
+        </columns>
+        <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+        </columnResizePolicy>
+    </TableView>
+
+    <HBox spacing="20" alignment="CENTER_RIGHT">
+        <Button fx:id="deleteButton" text="🗑️ SUPPRIMER LE RENDEZ-VOUS"
+                onAction="#deleteRendezVous" disable="true"
+                style="-fx-background-color: #e74c3c; -fx-text-fill: white;
+                       -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 12 25;"/>
+    </HBox>
+</VBox>

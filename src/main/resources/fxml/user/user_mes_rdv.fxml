@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+        <?import javafx.scene.control.*?>
+        <?import javafx.scene.layout.*?>
+        <?import javafx.geometry.Insets?>
+        <?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="tn.esprit.controllers.user.UserMesRdvController"
+      spacing="20" style="-fx-background-color: white; -fx-padding: 30;">
+
+    <Label text="MES RENDEZ-VOUS" style="-fx-text-fill: #2c3e50;">
+        <font>
+            <Font size="28" name="System Bold"/>
+        </font>
+    </Label>
+
+    <Separator/>
+
+    <HBox spacing="20" alignment="CENTER_LEFT">
+        <Label fx:id="infoLabel" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label fx:id="compteurLabel" style="-fx-font-size: 14px; -fx-text-fill: #27ae60;"/>
+    </HBox>
+
+    <TableView fx:id="tableView" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colDate" text="Date" prefWidth="120"/>
+            <TableColumn fx:id="colHeure" text="Heure" prefWidth="100"/>
+            <TableColumn fx:id="colMotif" text="Motif" prefWidth="200"/>
+            <TableColumn fx:id="colType" text="Type" prefWidth="120"/>
+            <TableColumn fx:id="colStatut" text="Statut" prefWidth="120"/>
+        </columns>
+        <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+        </columnResizePolicy>
+    </TableView>
+
+    <!-- Panneau de modification - TOUJOURS ACTIF -->
+    <TitledPane fx:id="modificationPane" text="MODIFIER MON RENDEZ-VOUS" expanded="false">
+        <GridPane hgap="20" vgap="15" style="-fx-padding: 20;">
+
+            <Label text="📅 Nouvelle date :" GridPane.rowIndex="0" GridPane.columnIndex="0"
+                   style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+            <DatePicker fx:id="modifierDatePicker" GridPane.rowIndex="0" GridPane.columnIndex="1"
+                        prefWidth="200" editable="true"/>
+
+            <Label text="⏰ Nouvelle heure :" GridPane.rowIndex="1" GridPane.columnIndex="0"
+                   style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+            <ComboBox fx:id="modifierHeureCombo" GridPane.rowIndex="1" GridPane.columnIndex="1"
+                      prefWidth="200" promptText="Choisissez un créneau" editable="true"/>
+
+            <Label text="📝 Motif :" GridPane.rowIndex="2" GridPane.columnIndex="0"
+                   style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+            <TextField fx:id="modifierMotifField" GridPane.rowIndex="2" GridPane.columnIndex="1"
+                       prefWidth="200" promptText="Raison de la consultation"/>
+
+            <Label text="🖥️ Type :" GridPane.rowIndex="3" GridPane.columnIndex="0"
+                   style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+            <ChoiceBox fx:id="modifierTypeChoice" GridPane.rowIndex="3" GridPane.columnIndex="1"
+                       prefWidth="200"/>
+
+        </GridPane>
+
+        <HBox spacing="15" alignment="CENTER" style="-fx-padding: 10 0 20 0;">
+            <Button fx:id="validerModificationButton" text="✓ CONFIRMER LA MODIFICATION"
+                    onAction="#validerModification"
+                    style="-fx-background-color: #27ae60; -fx-text-fill: white;
+                           -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10 25;"/>
+            <Button fx:id="annulerModificationButton" text="✗ ANNULER"
+                    onAction="#annulerModification"
+                    style="-fx-background-color: #95a5a6; -fx-text-fill: white;
+                           -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10 25;"/>
+        </HBox>
+    </TitledPane>
+
+    <HBox spacing="20" alignment="CENTER">
+        <Button fx:id="modifierButton" text="✏️ MODIFIER"
+                onAction="#modifierRendezVous" disable="true"
+                style="-fx-background-color: #3498db; -fx-text-fill: white;
+                       -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10 20;"/>
+
+        <Button fx:id="annulerButton" text="ANNULER LE RENDEZ-VOUS"
+                onAction="#annulerRendezVous" disable="true"
+                style="-fx-background-color: #f39c12; -fx-text-fill: white;
+                       -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10 20;"/>
+
+        <Button fx:id="supprimerButton" text="🗑️ SUPPRIMER DÉFINITIVEMENT"
+                onAction="#supprimerRendezVous" disable="true"
+                style="-fx-background-color: #e74c3c; -fx-text-fill: white;
+                       -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10 20;"/>
+
+        <Button fx:id="nouveauRdvButton" text="+ NOUVEAU RENDEZ-VOUS"
+                onAction="#nouveauRendezVous"
+                style="-fx-background-color: #27ae60; -fx-text-fill: white;
+                       -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10 20;"/>
+    </HBox>
+</VBox>

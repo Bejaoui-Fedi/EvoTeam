@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="tn.esprit.controllers.admin.AdminSupervisionConsultationController"
+      spacing="20" style="-fx-background-color: white; -fx-padding: 30;">
+
+    <Label text="SUPERVISION DES CONSULTATIONS - ADMIN" style="-fx-text-fill: #2c3e50;">
+        <font>
+            <Font size="28" name="System Bold"/>
+        </font>
+    </Label>
+
+    <Separator/>
+
+    <Label fx:id="totalLabel" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+    <Label fx:id="statsLabel" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #27ae60;"/>
+
+    <HBox spacing="20" alignment="CENTER_LEFT">
+        <Label text="🔍 Recherche :" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+        <TextField fx:id="searchField" promptText="ID, diagnostic, statut..." prefWidth="250"/>
+
+        <Label text="📅 Date :" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+        <DatePicker fx:id="dateFilterPicker" prefWidth="150"/>
+
+        <Label text="📊 Statut :" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+        <ChoiceBox fx:id="statutFilterChoice" prefWidth="120"/>
+
+        <Button text="Réinitialiser" onAction="#resetFilters"
+                style="-fx-background-color: #95a5a6; -fx-text-fill: white;"/>
+        <Button text="Actualiser" onAction="#refresh"
+                style="-fx-background-color: #3498db; -fx-text-fill: white;"/>
+    </HBox>
+
+    <TableView fx:id="tableView" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colId" text="ID" prefWidth="60"/>
+            <TableColumn fx:id="colAppointmentId" text="RDV #" prefWidth="70"/>
+            <TableColumn fx:id="colDate" text="Date" prefWidth="100"/>
+            <TableColumn fx:id="colDiagnostic" text="Diagnostic" prefWidth="150"/>
+            <TableColumn fx:id="colObservation" text="Observations" prefWidth="150"/>
+            <TableColumn fx:id="colTraitement" text="Traitement" prefWidth="120"/>
+            <TableColumn fx:id="colOrdonnance" text="Ordonnance" prefWidth="150"/>
+            <TableColumn fx:id="colDuree" text="Durée" prefWidth="70"/>
+            <TableColumn fx:id="colStatut" text="Statut" prefWidth="100"/>
+        </columns>
+        <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+        </columnResizePolicy>
+    </TableView>
+
+    <HBox spacing="20" alignment="CENTER_RIGHT">
+        <Button fx:id="deleteButton" text="🗑️ SUPPRIMER LA CONSULTATION"
+                onAction="#deleteConsultation" disable="true"
+                style="-fx-background-color: #e74c3c; -fx-text-fill: white;
+                       -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 12 25;"/>
+    </HBox>
+
+    <HBox alignment="CENTER_LEFT">
+        <Button fx:id="retourButton" text="← RETOUR AUX RENDEZ-VOUS"
+                onAction="#retourSupervisionRdv"
+                style="-fx-background-color: #7f8c8d; -fx-text-fill: white;
+                       -fx-font-size: 14px; -fx-padding: 10 20;"/>
+    </HBox>
+</VBox>

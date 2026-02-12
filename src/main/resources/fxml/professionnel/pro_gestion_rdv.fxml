@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="tn.esprit.controllers.professionnel.ProGestionRdvController"
+      spacing="20" style="-fx-background-color: white; -fx-padding: 30;">
+
+    <Label text="GESTION DES RENDEZ-VOUS" style="-fx-text-fill: #2c3e50;">
+        <font>
+            <Font size="28" name="System Bold"/>
+        </font>
+    </Label>
+
+    <Separator/>
+
+    <Label fx:id="totalLabel" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #27ae60;"/>
+
+    <HBox spacing="20" alignment="CENTER_LEFT">
+        <Label text="Filtrer par date :" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+        <DatePicker fx:id="dateFilterPicker" prefWidth="150"/>
+
+        <Label text="Statut :" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+        <ChoiceBox fx:id="statutFilterChoice" prefWidth="120"/>
+
+        <Button text="Réinitialiser" onAction="#resetFilters"
+                style="-fx-background-color: #95a5a6; -fx-text-fill: white;"/>
+        <Button text="Actualiser" onAction="#refresh"
+                style="-fx-background-color: #3498db; -fx-text-fill: white;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="consultationsButton" text="GÉRER LES CONSULTATIONS"
+                onAction="#gererConsultations"
+                style="-fx-background-color: #9b59b6; -fx-text-fill: white;
+                       -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10 20;"/>
+    </HBox>
+
+    <TableView fx:id="tableView" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colId" text="ID" prefWidth="60"/>
+            <TableColumn fx:id="colUserId" text="Patient ID" prefWidth="80"/>
+            <TableColumn fx:id="colDate" text="Date" prefWidth="100"/>
+            <TableColumn fx:id="colHeure" text="Heure" prefWidth="80"/>
+            <TableColumn fx:id="colMotif" text="Motif" prefWidth="200"/>
+            <TableColumn fx:id="colType" text="Type" prefWidth="120"/>
+            <TableColumn fx:id="colStatut" text="Statut" prefWidth="120"/>
+        </columns>
+        <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+        </columnResizePolicy>
+    </TableView>
+
+    <!-- Modification rapide du statut -->
+    <HBox spacing="20" alignment="CENTER_RIGHT">
+        <Label text="Modifier le statut :" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+        <ChoiceBox fx:id="statutUpdateChoice" prefWidth="120"/>
+        <Button fx:id="updateStatusButton" text="METTRE À JOUR"
+                onAction="#updateStatut" disable="true"
+                style="-fx-background-color: #f39c12; -fx-text-fill: white;
+                       -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10 20;"/>
+    </HBox>
+
+    <Separator/>
+
+    <!-- Formulaire de modification complète -->
+    <TitledPane text="MODIFIER UN RENDEZ-VOUS" expanded="false">
+        <GridPane hgap="20" vgap="15" style="-fx-padding: 20;">
+
+            <Label text="Date :" GridPane.rowIndex="0" GridPane.columnIndex="0"
+                   style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+            <DatePicker fx:id="datePicker" GridPane.rowIndex="0" GridPane.columnIndex="1" prefWidth="200"/>
+
+            <Label text="Heure (HH:MM) :" GridPane.rowIndex="1" GridPane.columnIndex="0"
+                   style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+            <TextField fx:id="heureField" GridPane.rowIndex="1" GridPane.columnIndex="1"
+                       prefWidth="200" promptText="14:30"/>
+
+            <Label text="Motif :" GridPane.rowIndex="2" GridPane.columnIndex="0"
+                   style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+            <TextField fx:id="motifField" GridPane.rowIndex="2" GridPane.columnIndex="1"
+                       prefWidth="200"/>
+
+            <Label text="Type :" GridPane.rowIndex="3" GridPane.columnIndex="0"
+                   style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+            <ChoiceBox fx:id="typeChoice" GridPane.rowIndex="3" GridPane.columnIndex="1"
+                       prefWidth="200"/>
+
+            <Label text="Statut :" GridPane.rowIndex="4" GridPane.columnIndex="0"
+                   style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+            <ChoiceBox fx:id="statutChoice" GridPane.rowIndex="4" GridPane.columnIndex="1"
+                       prefWidth="200"/>
+
+        </GridPane>
+
+        <HBox spacing="15" alignment="CENTER" style="-fx-padding: 10 0 20 0;">
+            <Button fx:id="modifierButton" text="💾 MODIFIER LE RDV"
+                    onAction="#modifierRendezVous" disable="true"
+                    style="-fx-background-color: #f39c12; -fx-text-fill: white;
+                           -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10 25;"/>
+            <Button fx:id="supprimerButton" text="🗑️ SUPPRIMER LE RDV"
+                    onAction="#supprimerRendezVous" disable="true"
+                    style="-fx-background-color: #e74c3c; -fx-text-fill: white;
+                           -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10 25;"/>
+            <Button text="🧹 EFFACER" onAction="#clearForm"
+                    style="-fx-background-color: #95a5a6; -fx-text-fill: white;
+                           -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10 25;"/>
+        </HBox>
+    </TitledPane>
+</VBox>

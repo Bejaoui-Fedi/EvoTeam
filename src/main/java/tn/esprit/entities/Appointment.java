@@ -11,6 +11,11 @@ public class Appointment {
     private String motif;
     private String typeRdv;
 
+
+
+    private int userId;
+
+
     public Appointment() {}
 
     public Appointment(LocalDate dateRdv, LocalTime heureRdv, String statut, String motif, String typeRdv) {
@@ -38,6 +43,19 @@ public class Appointment {
 
     public String getTypeRdv() { return typeRdv; }
     public void setTypeRdv(String typeRdv) { this.typeRdv = typeRdv; }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public Appointment(int userId) {
+        this.userId = userId;
+    }
+
 
     @Override
     public String toString() {

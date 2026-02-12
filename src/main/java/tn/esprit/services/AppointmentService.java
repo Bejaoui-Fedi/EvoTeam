@@ -17,7 +17,8 @@ public class AppointmentService implements IService<Appointment> {
 
     @Override
     public void add(Appointment a) throws SQLException {
-        String sql = "INSERT INTO appointment(date_rdv, heure_rdv, statut, motif, type_rdv) VALUES (?, ?, ?, ?, ?)";
+        // ✅ AJOUTE user_id dans la requête
+        String sql = "INSERT INTO appointment(date_rdv, heure_rdv, statut, motif, type_rdv, user_id) VALUES (?, ?, ?, ?, ?, ?)";
 
         PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         ps.setDate(1, Date.valueOf(a.getDateRdv()));
@@ -25,19 +26,21 @@ public class AppointmentService implements IService<Appointment> {
         ps.setString(3, a.getStatut());
         ps.setString(4, a.getMotif());
         ps.setString(5, a.getTypeRdv());
+        // ✅ AJOUTE CETTE LIGNE
+        ps.setInt(6, a.getUserId());  // ← TRÈS IMPORTANT !
 
         ps.executeUpdate();
 
         ResultSet rs = ps.getGeneratedKeys();
         if (rs.next()) a.setId(rs.getInt(1));
 
-        System.out.println("RDV ajouté : " + a);
+        System.out.println("RDV ajouté : " + a + " | user_id: " + a.getUserId());
     }
 
     @Override
     public List<Appointment> getAll() throws SQLException {
         List<Appointment> list = new ArrayList<>();
-        String sql = "SELECT * FROM appointment";
+        String sql = "SELECT * FROM appointment";  // Vérifie que user_id est sélectionné
 
         Statement st = connection.createStatement();
         ResultSet rs = st.executeQuery(sql);
@@ -50,9 +53,12 @@ public class AppointmentService implements IService<Appointment> {
             a.setStatut(rs.getString("statut"));
             a.setMotif(rs.getString("motif"));
             a.setTypeRdv(rs.getString("type_rdv"));
+
+            // ✅ AJOUTE CETTE LIGNE
+            a.setUserId(rs.getInt("user_id"));  // ← TRÈS IMPORTANT !
+
             list.add(a);
         }
-
         return list;
     }
 

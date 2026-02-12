@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="tn.esprit.controllers.user.UserPrendreRdvController"
+      spacing="20" style="-fx-background-color: white; -fx-padding: 30;">
+
+    <Label text="PRENDRE RENDEZ-VOUS" style="-fx-text-fill: #2c3e50;">
+        <font>
+            <Font size="28" name="System Bold"/>
+        </font>
+    </Label>
+
+    <Separator/>
+
+    <GridPane hgap="20" vgap="15" alignment="CENTER">
+        <padding><Insets top="20" bottom="20"/></padding>
+
+        <Label text="📅 Date :" GridPane.rowIndex="0" GridPane.columnIndex="0"
+               style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+        <DatePicker fx:id="datePicker" GridPane.rowIndex="0" GridPane.columnIndex="1"
+                    prefWidth="250" style="-fx-font-size: 14px;"/>
+
+        <Label text="⏰ Heure :" GridPane.rowIndex="1" GridPane.columnIndex="0"
+               style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+        <ComboBox fx:id="heureCombo" GridPane.rowIndex="1" GridPane.columnIndex="1"
+                  prefWidth="250" promptText="Choisissez un créneau"
+                  style="-fx-font-size: 14px;"/>
+
+        <Label text="📝 Motif :" GridPane.rowIndex="2" GridPane.columnIndex="0"
+               style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+        <TextField fx:id="motifField" GridPane.rowIndex="2" GridPane.columnIndex="1"
+                   prefWidth="250" promptText="Raison de la consultation"
+                   style="-fx-font-size: 14px;"/>
+
+        <Label text="🖥️ Type :" GridPane.rowIndex="3" GridPane.columnIndex="0"
+               style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+        <ChoiceBox fx:id="typeChoice" GridPane.rowIndex="3" GridPane.columnIndex="1"
+                   prefWidth="250" style="-fx-font-size: 14px;"/>
+    </GridPane>
+
+    <Label fx:id="messageLabel" style="-fx-text-fill: #e74c3c; -fx-font-size: 14px;"/>
+
+    <HBox spacing="20" alignment="CENTER">
+        <Button fx:id="prendreRdvButton" text="PRENDRE RENDEZ-VOUS"
+                onAction="#prendreRendezVous"
+                style="-fx-background-color: #27ae60; -fx-text-fill: white;
+                       -fx-font-size: 16px; -fx-font-weight: bold; -fx-padding: 12 25;"/>
+
+        <Button fx:id="voirMesRdvButton" text="VOIR MES RENDEZ-VOUS"
+                onAction="#voirMesRendezVous"
+                style="-fx-background-color: #3498db; -fx-text-fill: white;
+                       -fx-font-size: 16px; -fx-font-weight: bold; -fx-padding: 12 25;"/>
+    </HBox>
+
+    <Region VBox.vgrow="ALWAYS"/>
+</VBox>
