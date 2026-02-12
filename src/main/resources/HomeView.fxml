@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="tn.esprit.controllers.HomeController"
+            prefWidth="1000" prefHeight="600"
+            style="-fx-background-color: #F5F7FA;">
+
+    <top>
+        <VBox alignment="CENTER" spacing="10"
+              style="-fx-background-color: linear-gradient(to right, #1E2A47, #2C3E50); -fx-padding: 30;">
+            <Label text="🧠 PsyCoach Pro" textFill="WHITE">
+                <font>
+                    <Font name="System Bold" size="32.0"/>
+                </font>
+            </Label>
+            <Label text="Plateforme de développement personnel et bien-être"
+                   textFill="#ECF0F1" style="-fx-font-size: 16;"/>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox alignment="CENTER" spacing="40" style="-fx-padding: 50;">
+            <Label text="Bienvenue sur votre espace bien-être"
+                   style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #2C3E50;"/>
+
+            <HBox alignment="CENTER" spacing="50">
+                <!-- Espace Utilisateur -->
+                <VBox spacing="20" style="-fx-background-color: white; -fx-padding: 30; -fx-background-radius: 15;
+                                          -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);"
+                      prefWidth="350" prefHeight="380" alignment="TOP_CENTER">
+                    <Label text="👤" style="-fx-font-size: 64;"/>
+                    <Label text="Espace Utilisateur"
+                           style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #2C3E50;"/>
+                    <Label text="Patient ou Coach"
+                           style="-fx-font-size: 14; -fx-text-fill: #7F8C8D;"/>
+                    <Separator prefWidth="200"/>
+                    <VBox spacing="8" alignment="CENTER_LEFT" style="-fx-padding: 10 0 0 20;">
+                        <Label text="✓ Participer aux événements" style="-fx-font-size: 13;"/>
+                        <Label text="✓ Exercices interactifs" style="-fx-font-size: 13;"/>
+                        <Label text="✓ Journal de bien-être" style="-fx-font-size: 13;"/>
+                        <Label text="✓ Prise de rendez-vous" style="-fx-font-size: 13;"/>
+                    </VBox>
+                    <Region prefHeight="10"/>
+                    <Button fx:id="userButton" text="🔑 Accéder à mon espace"
+                            onAction="#handleUserAccess"
+                            prefWidth="250" prefHeight="45"
+                            style="-fx-background-color: #27AE60; -fx-text-fill: white; -fx-font-size: 15;
+                                   -fx-font-weight: bold; -fx-background-radius: 8;"/>
+                </VBox>
+
+                <!-- Espace Admin -->
+                <VBox spacing="20" style="-fx-background-color: white; -fx-padding: 30; -fx-background-radius: 15;
+                                          -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);"
+                      prefWidth="350" prefHeight="380" alignment="TOP_CENTER">
+                    <Label text="⚙️" style="-fx-font-size: 64;"/>
+                    <Label text="Espace Administrateur"
+                           style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #2C3E50;"/>
+                    <Label text="Gestion de la plateforme"
+                           style="-fx-font-size: 14; -fx-text-fill: #7F8C8D;"/>
+                    <Separator prefWidth="200"/>
+                    <VBox spacing="8" alignment="CENTER_LEFT" style="-fx-padding: 10 0 0 20;">
+                        <Label text="✓ Gestion des utilisateurs" style="-fx-font-size: 13;"/>
+                        <Label text="✓ Gestion des événements" style="-fx-font-size: 13;"/>
+                        <Label text="✓ Gestion des exercices" style="-fx-font-size: 13;"/>
+                        <Label text="✓ Suivi du bien-être" style="-fx-font-size: 13;"/>
+                        <Label text="✓ Gestion des rendez-vous" style="-fx-font-size: 13;"/>
+                    </VBox>
+                    <Region prefHeight="10"/>
+                    <Button fx:id="adminButton" text="🔐 Accéder à l'administration"
+                            onAction="#handleAdminAccess"
+                            prefWidth="250" prefHeight="45"
+                            style="-fx-background-color: #3498DB; -fx-text-fill: white; -fx-font-size: 15;
+                                   -fx-font-weight: bold; -fx-background-radius: 8;"/>
+                </VBox>
+            </HBox>
+
+            <Label text="Sélectionnez votre espace pour continuer"
+                   style="-fx-font-size: 14; -fx-text-fill: #7F8C8D; -fx-font-style: italic;"/>
+        </VBox>
+    </center>
+
+    <bottom>
+        <VBox style="-fx-background-color: #2C3E50; -fx-padding: 20;" alignment="CENTER">
+            <Label text="© 2026 PsyCoach Pro - Plateforme de développement personnel et bien-être"
+                   textFill="#ECF0F1" style="-fx-font-size: 12;"/>
+        </VBox>
+    </bottom>
+
+</BorderPane>

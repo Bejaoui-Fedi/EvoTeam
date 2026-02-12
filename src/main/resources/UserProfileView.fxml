@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="tn.esprit.controllers.UserProfileController"
+            prefWidth="600" prefHeight="700">
+
+    <!-- Header -->
+    <top>
+        <VBox spacing="10" style="-fx-background-color: linear-gradient(to right, #3498DB, #2980B9); -fx-padding: 30;">
+            <Label text="👤 Mon Profil" textFill="WHITE">
+                <font>
+                    <Font name="System Bold" size="28.0"/>
+                </font>
+            </Label>
+            <Label fx:id="usernameLabel" text="..." textFill="#ECF0F1"
+                   style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+        </VBox>
+    </top>
+
+    <!-- Center -->
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-border-width: 0;">
+            <VBox spacing="25" style="-fx-padding: 30;">
+
+                <!-- Informations personnelles -->
+                <VBox spacing="15">
+                    <Label text="📋 Informations personnelles"
+                           style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #2C3E50;"/>
+                    <Separator/>
+
+                    <GridPane hgap="20" vgap="15">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="30"/>
+                            <ColumnConstraints percentWidth="70"/>
+                        </columnConstraints>
+
+                        <Label text="Nom :" GridPane.rowIndex="0" GridPane.columnIndex="0"
+                               style="-fx-font-weight: bold; -fx-font-size: 14;"/>
+                        <Label fx:id="usernameLabel" text="..." GridPane.rowIndex="0" GridPane.columnIndex="1"
+                               style="-fx-font-size: 14;"/>
+
+                        <Label text="Email :" GridPane.rowIndex="1" GridPane.columnIndex="0"
+                               style="-fx-font-weight: bold; -fx-font-size: 14;"/>
+                        <Label fx:id="emailLabel" text="..." GridPane.rowIndex="1" GridPane.columnIndex="1"
+                               style="-fx-font-size: 14;"/>
+
+                        <Label text="Téléphone :" GridPane.rowIndex="2" GridPane.columnIndex="0"
+                               style="-fx-font-weight: bold; -fx-font-size: 14;"/>
+                        <Label fx:id="telephoneLabel" text="..." GridPane.rowIndex="2" GridPane.columnIndex="1"
+                               style="-fx-font-size: 14;"/>
+
+                        <Label text="Rôle :" GridPane.rowIndex="3" GridPane.columnIndex="0"
+                               style="-fx-font-weight: bold; -fx-font-size: 14;"/>
+                        <Label fx:id="roleLabel" text="..." GridPane.rowIndex="3" GridPane.columnIndex="1"
+                               style="-fx-font-size: 14;"/>
+
+                        <Label text="Statut :" GridPane.rowIndex="4" GridPane.columnIndex="0"
+                               style="-fx-font-weight: bold; -fx-font-size: 14;"/>
+                        <Label fx:id="statusLabel" text="..." GridPane.rowIndex="4" GridPane.columnIndex="1"
+                               style="-fx-font-size: 14;"/>
+                    </GridPane>
+                </VBox>
+
+                <!-- Profil détaillé -->
+                <VBox spacing="15">
+                    <Label text="📊 Informations détaillées"
+                           style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #2C3E50;"/>
+                    <Separator/>
+
+                    <GridPane hgap="20" vgap="15">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="30"/>
+                            <ColumnConstraints percentWidth="70"/>
+                        </columnConstraints>
+
+                        <Label text="Bio :" GridPane.rowIndex="0" GridPane.columnIndex="0"
+                               style="-fx-font-weight: bold; -fx-font-size: 14;"/>
+                        <Label fx:id="bioLabel" text="Aucune biographie"
+                               GridPane.rowIndex="0" GridPane.columnIndex="1"
+                               style="-fx-font-size: 14;" wrapText="true"/>
+
+                        <Label text="Date naissance :" GridPane.rowIndex="1" GridPane.columnIndex="0"
+                               style="-fx-font-weight: bold; -fx-font-size: 14;"/>
+                        <Label fx:id="dateNaissanceLabel" text="Non renseignée"
+                               GridPane.rowIndex="1" GridPane.columnIndex="1"
+                               style="-fx-font-size: 14;"/>
+
+                        <Label text="Langue :" GridPane.rowIndex="2" GridPane.columnIndex="0"
+                               style="-fx-font-weight: bold; -fx-font-size: 14;"/>
+                        <Label fx:id="langueLabel" text="FR"
+                               GridPane.rowIndex="2" GridPane.columnIndex="1"
+                               style="-fx-font-size: 14;"/>
+
+                        <Label text="Confidentialité :" GridPane.rowIndex="3" GridPane.columnIndex="0"
+                               style="-fx-font-weight: bold; -fx-font-size: 14;"/>
+                        <Label fx:id="confidentialiteLabel" text="Public"
+                               GridPane.rowIndex="3" GridPane.columnIndex="1"
+                               style="-fx-font-size: 14;"/>
+
+                        <Label text="Notifications :" GridPane.rowIndex="4" GridPane.columnIndex="0"
+                               style="-fx-font-weight: bold; -fx-font-size: 14;"/>
+                        <Label fx:id="notificationsLabel" text="Email"
+                               GridPane.rowIndex="4" GridPane.columnIndex="1"
+                               style="-fx-font-size: 14;"/>
+                    </GridPane>
+                </VBox>
+            </VBox>
+        </ScrollPane>
+    </center>
+
+    <!-- Bottom -->
+    <bottom>
+        <VBox spacing="10">
+            <Separator/>
+            <HBox spacing="15" alignment="CENTER" style="-fx-padding: 20; -fx-background-color: #F8F9FA;">
+                <Button text="🏠 Retour à l'accueil" onAction="#handleBackToHome"
+                        prefWidth="200" prefHeight="40"
+                        style="-fx-background-color: #95A5A6; -fx-text-fill: white; -fx-font-size: 14; -fx-font-weight: bold; -fx-background-radius: 5; -fx-cursor: hand;"/>
+            </HBox>
+        </VBox>
+    </bottom>
+</BorderPane>
