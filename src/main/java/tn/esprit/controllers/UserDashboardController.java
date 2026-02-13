@@ -205,25 +205,23 @@ public class UserDashboardController implements Initializable {
 
     @FXML
     private void handleLogout() {
-        System.out.println("🚪 Déconnexion - Navigation vers LoginView");
+        System.out.println("🚪 Déconnexion - Navigation vers l'accueil");
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(LOGIN_VIEW_PATH));
-            if (loader.getLocation() == null) {
-                throw new IOException("FXML file not found: " + LOGIN_VIEW_PATH);
-            }
+            // ✅ CHARGER LA PAGE D'ACCUEIL
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/HomeView.fxml"));
+            Parent homeView = loader.load();
 
-            Parent loginView = loader.load();
             Stage stage = (Stage) contentArea.getScene().getWindow();
-            stage.setScene(new Scene(loginView, 1000, 600));
-            stage.setTitle("EVOLIA - Connexion");
+            stage.setScene(new Scene(homeView, 1400, 800));
+            stage.setTitle("Evolia - Accueil");
             stage.centerOnScreen();
             stage.show();
-            System.out.println("✅ Redirection vers LoginView réussie");
+            System.out.println("✅ Redirection vers l'accueil réussie");
 
         } catch (IOException e) {
-            System.err.println("❌ Erreur chargement LoginView.fxml: " + e.getMessage());
-            showError("Page de connexion non trouvée");
+            System.err.println("❌ Erreur chargement HomeView.fxml: " + e.getMessage());
+            showError("Page d'accueil non trouvée");
         }
     }
 

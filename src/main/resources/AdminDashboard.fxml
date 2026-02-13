@@ -31,72 +31,86 @@
     <!-- HBox principale avec Sidebar + Contenu -->
     <HBox spacing="0" alignment="CENTER">
 
-        <!-- ================ NAVBAR LATÉRALE GAUCHE ================ -->
-        <VBox styleClass="sidebar" alignment="TOP_CENTER" prefWidth="250">
+        <!-- ================ NAVBAR ADMIN - DESIGN VERT AVEC ORGANISATION ================ -->
+        <VBox style="-fx-background-color: rgba(58, 125, 107, 0.95);
+                     -fx-background-radius: 0 20 20 0;
+                     -fx-padding: 0;
+                     -fx-pref-width: 280;
+                     -fx-max-height: 800;
+                     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 20, 0, 0, 8);"
+              alignment="TOP_CENTER">
 
             <!-- Logo et titre -->
-            <VBox alignment="CENTER" spacing="10" style="-fx-padding: 0 0 30 0;">
-                <Label text="🌿" style="-fx-font-size: 48;" styleClass="sidebar-logo"/>
+            <VBox alignment="CENTER" spacing="10" style="-fx-background-color: rgba(40, 90, 75, 0.9); -fx-padding: 30 20 20 20; -fx-pref-width: 280;">
+                <Label text="🌿" style="-fx-font-size: 48; -fx-text-fill: white; -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.3), 10, 0, 0, 2);"/>
                 <Label text="EVOLIA" style="-fx-font-size: 22; -fx-font-weight: bold; -fx-text-fill: white;"/>
-                <Label text="ADMIN" style="-fx-font-size: 16; -fx-text-fill: #E0F2E0; -fx-background-color: rgba(255,255,255,0.15); -fx-padding: 5 15 5 15; -fx-background-radius: 20;"/>
+                <Label text="ADMIN" style="-fx-font-size: 14; -fx-text-fill: #E0F2E0; -fx-background-color: rgba(255,255,255,0.15); -fx-padding: 5 20; -fx-background-radius: 20;"/>
             </VBox>
 
-            <Separator style="-fx-background-color: rgba(255,255,255,0.3); -fx-pref-height: 1; -fx-pref-width: 180;"/>
+            <Separator style="-fx-background-color: rgba(255,255,255,0.2); -fx-pref-height: 1.5; -fx-pref-width: 220; -fx-padding: 5 0;"/>
 
-            <!-- MENU DE NAVIGATION DYNAMIQUE -->
-            <VBox spacing="10" style="-fx-padding: 20 0 0 0;" VBox.vgrow="ALWAYS">
+            <!-- MENU AVEC SECTIONS -->
+            <VBox spacing="5" style="-fx-padding: 20 15 20 15;" VBox.vgrow="ALWAYS">
 
-                <!-- Tableau de bord -->
+                <!-- Section PRINCIPAL -->
+                <Label text="PRINCIPAL" style="-fx-text-fill: #B5D3A7; -fx-font-size: 12; -fx-font-weight: bold; -fx-padding: 0 0 5 10; -fx-letter-spacing: 1px;"/>
+
                 <Button fx:id="btnDashboard" text="📊 Tableau de bord"
-                        styleClass="sidebar-button" prefWidth="210"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 15;
+                               -fx-alignment: CENTER_LEFT; -fx-pref-width: 230; -fx-pref-height: 40;
+                               -fx-padding: 0 0 0 20; -fx-background-radius: 10; -fx-cursor: hand;"
                         onAction="#handleDashboard"/>
 
-                <!-- Utilisateurs -->
                 <Button fx:id="btnUsers" text="👥 Utilisateurs"
-                        styleClass="sidebar-button" prefWidth="210"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 15;
+                               -fx-alignment: CENTER_LEFT; -fx-pref-width: 230; -fx-pref-height: 40;
+                               -fx-padding: 0 0 0 20; -fx-background-radius: 10; -fx-cursor: hand;"
                         onAction="#handleUsers"/>
 
-                <!-- Événements -->
+                <!-- Section GESTION -->
+                <Label text="GESTION" style="-fx-text-fill: #B5D3A7; -fx-font-size: 12; -fx-font-weight: bold; -fx-padding: 15 0 5 10; -fx-letter-spacing: 1px;"/>
+
                 <Button fx:id="btnEvents" text="📅 Événements"
-                        styleClass="sidebar-button" prefWidth="210"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 15;
+                               -fx-alignment: CENTER_LEFT; -fx-pref-width: 230; -fx-pref-height: 40;
+                               -fx-padding: 0 0 0 20; -fx-background-radius: 10; -fx-cursor: hand;"
                         onAction="#handleEvents"/>
 
-                <!-- Exercices -->
                 <Button fx:id="btnExercises" text="🧘 Exercices"
-                        styleClass="sidebar-button" prefWidth="210"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 15;
+                               -fx-alignment: CENTER_LEFT; -fx-pref-width: 230; -fx-pref-height: 40;
+                               -fx-padding: 0 0 0 20; -fx-background-radius: 10; -fx-cursor: hand;"
                         onAction="#handleExercises"/>
 
-                <!-- Bien-être -->
                 <Button fx:id="btnWellness" text="💚 Bien-être"
-                        styleClass="sidebar-button" prefWidth="210"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 15;
+                               -fx-alignment: CENTER_LEFT; -fx-pref-width: 230; -fx-pref-height: 40;
+                               -fx-padding: 0 0 0 20; -fx-background-radius: 10; -fx-cursor: hand;"
                         onAction="#handleWellness"/>
 
-                <!-- Rendez-vous -->
                 <Button fx:id="btnAppointments" text="📆 Rendez-vous"
-                        styleClass="sidebar-button" prefWidth="210"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 15;
+                               -fx-alignment: CENTER_LEFT; -fx-pref-width: 230; -fx-pref-height: 40;
+                               -fx-padding: 0 0 0 20; -fx-background-radius: 10; -fx-cursor: hand;"
                         onAction="#handleAppointments"/>
             </VBox>
 
             <Region VBox.vgrow="ALWAYS"/>
 
-            <!-- Footer navbar -->
-            <VBox alignment="CENTER" spacing="15" style="-fx-padding: 30 0 0 0;">
-                <Separator style="-fx-background-color: rgba(255,255,255,0.3); -fx-pref-height: 1; -fx-pref-width: 180;"/>
+            <!-- Footer avec déconnexion -->
+            <VBox alignment="CENTER" spacing="10" style="-fx-background-color: rgba(40, 90, 75, 0.9); -fx-padding: 20 0 30 0; -fx-pref-width: 280;">
+                <Separator style="-fx-background-color: rgba(255,255,255,0.2); -fx-pref-height: 1.5; -fx-pref-width: 220;"/>
+
                 <Button fx:id="btnLogout" text="🚪 Déconnexion"
-                        styleClass="sidebar-button" prefWidth="210"
-                        style="-fx-background-color: rgba(255,255,255,0.1);"
+                        style="-fx-background-color: rgba(255,255,255,0.1); -fx-text-fill: white; -fx-font-size: 15;
+                               -fx-alignment: CENTER_LEFT; -fx-pref-width: 230; -fx-pref-height: 40;
+                               -fx-padding: 0 0 0 20; -fx-background-radius: 10; -fx-cursor: hand;"
                         onAction="#handleLogout"/>
-                <HBox alignment="CENTER" spacing="5">
-                    <Label text="Admin" style="-fx-text-fill: #E0F2E0; -fx-font-size: 14;"/>
-                    <Label text="•" style="-fx-text-fill: #E0F2E0; -fx-font-size: 14;"/>
-                    <Label text="admin@psycoach.com" style="-fx-text-fill: #E0F2E0; -fx-font-size: 12;"/>
-                </HBox>
             </VBox>
         </VBox>
 
         <!-- ================ CONTENU PRINCIPAL ================ -->
         <StackPane fx:id="contentArea" HBox.hgrow="ALWAYS"
                    style="-fx-background-color: transparent; -fx-padding: 0;"/>
-
     </HBox>
 </StackPane>

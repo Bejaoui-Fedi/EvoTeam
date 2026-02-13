@@ -126,22 +126,22 @@ public class AdminDashboardController implements Initializable {
 
     @FXML
     private void handleLogout() {
-        System.out.println("🚪 Déconnexion - Navigation vers LoginView");
+        System.out.println("🚪 Déconnexion - Navigation vers l'accueil");
 
         try {
-            // Charger la page de connexion
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/LoginView.fxml"));
-            Parent loginView = loader.load();
+            // ✅ CHARGER LA PAGE D'ACCUEIL
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/HomeView.fxml"));
+            Parent homeView = loader.load();
 
-            // Remplacer tout le contenu de la fenêtre (pas seulement contentArea)
-            contentArea.getScene().setRoot(loginView);
+            // Remplacer tout le contenu de la fenêtre
+            contentArea.getScene().setRoot(homeView);
 
         } catch (IOException e) {
             e.printStackTrace();
-            showError("Impossible de charger la page de connexion");
+            showError("Impossible de charger la page d'accueil");
         } catch (NullPointerException e) {
-            System.err.println("❌ Fichier FXML non trouvé ! Vérifiez le chemin : /LoginView.fxml");
-            showError("Fichier LoginView.fxml introuvable !");
+            System.err.println("❌ Fichier FXML non trouvé ! Vérifiez le chemin : /HomeView.fxml");
+            showError("Fichier HomeView.fxml introuvable !");
         }
     }
 

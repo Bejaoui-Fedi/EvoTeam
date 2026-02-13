@@ -367,19 +367,21 @@ public class UserFormController {
     @FXML
     private void handleLoginLink() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/LoginView.fxml"));
+            // ✅ REDIRECTION VERS LoginUserView.fxml (page bleue)
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/LoginUserView.fxml"));
             Parent root = loader.load();
 
-            if (nomField != null) {
-                Stage stage = (Stage) nomField.getScene().getWindow();
-                stage.setScene(new Scene(root, 450, 550));
-                stage.setTitle("Connexion");
-                stage.centerOnScreen();
-                stage.show();
-            }
+            // Plus besoin de paramètres car la page est déjà configurée pour les utilisateurs
+
+            Stage stage = (Stage) nomField.getScene().getWindow();
+            stage.setScene(new Scene(root, 900, 600)); // Taille de la page de login
+            stage.setTitle("Evolia - Connexion Utilisateur");
+            stage.centerOnScreen();
+            stage.show();
 
         } catch (IOException e) {
             showMessage("❌ Impossible d'ouvrir la page de connexion", "error");
+            e.printStackTrace();
         }
     }
 

@@ -29,12 +29,14 @@ public class HomeController {
 
     @FXML
     private void handleUserAccess() {
-        redirectToLogin("Espace Utilisateur", "USER");
+        // ✅ REDIRECTION VERS LOGIN USER (BLEU)
+        redirectToLogin("/LoginUserView.fxml", "Espace Utilisateur", 900, 600);
     }
 
     @FXML
     private void handleAdminAccess() {
-        redirectToLogin("Espace Administrateur", "ADMIN");
+        // ✅ REDIRECTION VERS LOGIN ADMIN (VERT)
+        redirectToLogin("/LoginAdminView.fxml", "Espace Administrateur", 900, 600);
     }
 
     @FXML
@@ -75,23 +77,28 @@ public class HomeController {
         translate.play();
     }
 
-    private void redirectToLogin(String espace, String role) {
+    /**
+     * Méthode générique pour rediriger vers une page de login spécifique
+     * @param fxmlPath Chemin du fichier FXML
+     * @param title Titre de la fenêtre
+     * @param width Largeur de la scène
+     * @param height Hauteur de la scène
+     */
+    private void redirectToLogin(String fxmlPath, String title, int width, int height) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/LoginView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent root = loader.load();
 
-            LoginController loginController = loader.getController();
-            loginController.setEspace(espace);
-            loginController.setRoleSuggere(role);
-
             Stage stage = (Stage) userButton.getScene().getWindow();
-            stage.setScene(new Scene(root, 450, 500));
-            stage.setTitle("Connexion - " + espace);
+            stage.setScene(new Scene(root, width, height));
+            stage.setTitle("Evolia - " + title);
             stage.centerOnScreen();
             stage.show();
 
         } catch (IOException e) {
-            showAlert("Erreur", "Impossible d'ouvrir la page de connexion", e.getMessage());
+            showAlert("Erreur", "Impossible d'ouvrir la page de connexion",
+                    "Fichier introuvable: " + fxmlPath + "\n" + e.getMessage());
+            e.printStackTrace();
         }
     }
 

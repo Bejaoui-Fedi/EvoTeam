@@ -1,7 +1,5 @@
 package tn.esprit.controllers;
 
-import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,7 +11,6 @@ import tn.esprit.services.UserService;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.time.LocalDate;
 
 public class AdminFormController {
 
@@ -110,12 +107,14 @@ public class AdminFormController {
             newAdmin.setRole("ADMIN");
             newAdmin.setActif(true);
 
-            userService.add(newAdmin);
+            // ✅ Récupérer l'ID généré
+            int generatedId = userService.add(newAdmin);
+            newAdmin.setId(generatedId);
 
             showSuccessMessage("✅ Compte administrateur créé !");
 
-            // ✅ REDIRIGER VERS LA PAGE DE CONNEXION ADMIN
-            handleLoginLink();
+            // ✅ REDIRIGER VERS LE DASHBOARD ADMIN
+            redirectToDashboard(newAdmin);
 
         } catch (SQLException e) {
             if (e.getMessage().contains("Duplicate")) {
@@ -126,25 +125,55 @@ public class AdminFormController {
         }
     }
 
+    // ✅ Redirection vers le Dashboard Admin
+    private void redirectToDashboard(User admin) {
+        try {
+            System.out.println("🚀 Redirection vers le Dashboard Admin pour: " + admin.getEmail());
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AdminDashboard.fxml"));
+            if (loader.getLocation() == null) {
+                showMessage("❌ Erreur: Fichier AdminDashboard.fxml introuvable", "error");
+                return;
+            }
+
+            Parent root = loader.load();
+
+            // ✅ Récupérer le contrôleur du Dashboard Admin
+            AdminDashboardController controller = loader.getController();
+            if (controller != null) {
+                // Si vous avez une méthode setCurrentUser dans AdminDashboardController
+                // controller.setCurrentUser(admin);
+                System.out.println("✅ Admin connecté: " + admin.getNom());
+            }
+
+            Stage stage = (Stage) nomField.getScene().getWindow();
+            stage.setScene(new Scene(root, 1400, 800));
+            stage.setTitle("Evolia - Administration");
+            stage.centerOnScreen();
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showMessage("❌ Impossible d'ouvrir le tableau de bord: " + e.getMessage(), "error");
+        }
+    }
+
     @FXML
     private void handleLoginLink() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/LoginView.fxml"));
+            // ✅ REDIRECTION VERS LoginAdminView.fxml (page verte)
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/LoginAdminView.fxml"));
             Parent root = loader.load();
 
-            // ✅ PRÉPARER LA PAGE DE CONNEXION POUR ADMIN
-            LoginController loginController = loader.getController();
-            loginController.setEspace("Espace Administrateur");
-            loginController.setRoleSuggere("ADMIN");
-
             Stage stage = (Stage) nomField.getScene().getWindow();
-            stage.setScene(new Scene(root, 450, 550));
-            stage.setTitle("Connexion Administrateur");
+            stage.setScene(new Scene(root, 900, 600));
+            stage.setTitle("Evolia - Connexion Administrateur");
             stage.centerOnScreen();
             stage.show();
 
         } catch (IOException e) {
             showMessage("❌ Impossible d'ouvrir la page de connexion", "error");
+            e.printStackTrace();
         }
     }
 
@@ -174,31 +203,31 @@ public class AdminFormController {
 
         switch (type) {
             case "success":
-                messageLabel.setStyle("-fx-background-color: #D4EDDA; -fx-text-fill: #155724; -fx-border-color: #C3E6CB;");
+                messageLabel.setStyle("-fx-background-color: #D4EDDA; -fx-text-fill: #155724; -fx-border-color: #C3E6CB; -fx-border-radius: 5; -fx-background-radius: 5;");
                 break;
             case "error":
-                messageLabel.setStyle("-fx-background-color: #F8D7DA; -fx-text-fill: #721C24; -fx-border-color: #F5C6CB;");
+                messageLabel.setStyle("-fx-background-color: #F8D7DA; -fx-text-fill: #721C24; -fx-border-color: #F5C6CB; -fx-border-radius: 5; -fx-background-radius: 5;");
                 break;
             default:
-                messageLabel.setStyle("-fx-background-color: #FFF3CD; -fx-text-fill: #856404; -fx-border-color: #FFEEBA;");
+                messageLabel.setStyle("-fx-background-color: #FFF3CD; -fx-text-fill: #856404; -fx-border-color: #FFEEBA; -fx-border-radius: 5; -fx-background-radius: 5;");
                 break;
         }
     }
 
     private void showSuccessMessage(String text) {
         showMessage(text, "success");
-        String originalText = saveButton.getText();
-        saveButton.setText("✅ Succès !");
+        if (saveButton != null) {
+            String originalText = saveButton.getText();
+            saveButton.setText("✅ Succès !");
 
-        new Thread(() -> {
-            try {
-                Thread.sleep(2000);
-                javafx.application.Platform.runLater(() -> {
-                    saveButton.setText(originalText);
-                });
-            } catch (InterruptedException e) {}
-        }).start();
+            new Thread(() -> {
+                try {
+                    Thread.sleep(2000);
+                    javafx.application.Platform.runLater(() -> {
+                        saveButton.setText(originalText);
+                    });
+                } catch (InterruptedException e) {}
+            }).start();
+        }
     }
-
-
 }

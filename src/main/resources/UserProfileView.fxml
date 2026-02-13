@@ -15,7 +15,7 @@
            prefWidth="1150" prefHeight="800"
            stylesheets="@styles.css">
 
-    <!-- 🌿 Background nature apaisant (comme dashboard) -->
+    <!-- 🌿 Background nature apaisant -->
     <ImageView fitWidth="1150" fitHeight="800" preserveRatio="false" styleClass="nature-background">
         <image>
             <Image url="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?w=1600&amp;q=80"
@@ -26,75 +26,83 @@
         </effect>
     </ImageView>
 
-    <!-- 🌿 Overlay -->
-    <Region styleClass="overlay"/>
+    <!-- 🌿 Overlay BLEU pour user -->
+    <Region style="-fx-background-color: rgba(173, 216, 230, 0.7);"/> <!-- ✅ BLEU CIEL -->
 
     <!-- Contenu principal -->
     <BorderPane style="-fx-background-color: transparent; -fx-padding: 20;">
 
-        <!-- HEADER - DESIGN EVOLIA -->
+        <!-- HEADER - BLEU -->
         <top>
-            <VBox spacing="10" styleClass="profile-header">
+            <VBox spacing="10" style="-fx-background-color: linear-gradient(to right, #3A7CA5, #5F9DBF);
+                                      -fx-padding: 25; -fx-background-radius: 20 20 0 0;
+                                      -fx-effect: dropshadow(gaussian, rgba(58,124,165,0.3), 10, 0, 0, 5);">
 
                 <HBox alignment="CENTER_LEFT" spacing="20">
-                    <Label text="👤" style="-fx-font-size: 40; -fx-text-fill: white;"/>
+                    <Label text="💙" style="-fx-font-size: 40; -fx-text-fill: white;"/>
                     <VBox spacing="5">
                         <Label text="Mon Profil" textFill="WHITE">
                             <font><Font name="System Bold" size="28.0"/></font>
                         </Label>
-                        <Label fx:id="usernameHeaderLabel" text="..." textFill="#E0F2E0"
+                        <Label fx:id="usernameHeaderLabel" text="..." textFill="#E0F2FF"
                                style="-fx-font-size: 16; -fx-font-weight: bold; -fx-font-style: italic;"/>
                     </VBox>
                 </HBox>
             </VBox>
         </top>
 
-        <!-- CENTER - CARTE PRINCIPALE -->
+        <!-- CENTER - CARTE PRINCIPALE BLEUE -->
         <center>
             <ScrollPane fitToWidth="true"
                         style="-fx-background-color: transparent; -fx-border-width: 0; -fx-background: transparent;"
                         hbarPolicy="NEVER" vbarPolicy="AS_NEEDED">
 
-                <VBox spacing="25" styleClass="profile-card">
+                <VBox spacing="25" style="-fx-padding: 25; -fx-background-color: rgba(255,255,255,0.95);
+                                          -fx-background-radius: 0 0 20 20; -fx-border-radius: 0 0 20 20;
+                                          -fx-border-color: #3A7CA5; -fx-border-width: 2;
+                                          -fx-effect: dropshadow(gaussian, rgba(58,124,165,0.15), 20, 0, 0, 5);">
 
-                    <!-- SECTION AVATAR -->
+                    <!-- SECTION AVATAR - BLEU -->
                     <HBox spacing="25" alignment="CENTER_LEFT">
                         <StackPane>
-                            <!-- ImageView avec avatar par défaut intégré -->
                             <ImageView fx:id="avatarImageView" fitWidth="120" fitHeight="120" preserveRatio="true">
                                 <image>
-                                    <!-- Avatar par défaut (icône utilisateur) -->
                                     <Image url="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" />
                                 </image>
                                 <clip>
                                     <Circle radius="60" centerX="60" centerY="60"/>
                                 </clip>
                             </ImageView>
-                            <!-- Cercle de bordure vert -->
+                            <!-- Cercle de bordure BLEU -->
                             <Circle radius="60" centerX="60" centerY="60"
-                                    style="-fx-fill: transparent; -fx-stroke: #B5D3A7; -fx-stroke-width: 3;"/>
+                                    style="-fx-fill: transparent; -fx-stroke: #3A7CA5; -fx-stroke-width: 3;"/>
                         </StackPane>
                         <VBox spacing="8" alignment="CENTER_LEFT">
                             <Label text="Photo de profil"
-                                   style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #3A7D6B;"/>
+                                   style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #3A7CA5;"/>
                             <Label text="Format JPG ou PNG - 120x120"
-                                   style="-fx-font-size: 12; -fx-text-fill: #6DA38B;"/>
+                                   style="-fx-font-size: 12; -fx-text-fill: #6BA2C0;"/>
                             <Button fx:id="uploadAvatarButton" text="📷 Changer la photo"
                                     onAction="#handleUploadAvatar" visible="false"
-                                    styleClass="button-primary"/>
+                                    style="-fx-background-color: #3A7CA5; -fx-text-fill: white;
+                                           -fx-font-weight: bold; -fx-background-radius: 25; -fx-cursor: hand;
+                                           -fx-padding: 8 20 8 20; -fx-font-size: 13;"/>
                         </VBox>
                         <Region HBox.hgrow="ALWAYS"/>
-                        <Label fx:id="roleLabel" text="..." styleClass="status-label"/>
+                        <Label fx:id="roleLabel" text="..."
+                               style="-fx-background-color: #E8F0F8; -fx-text-fill: #3A7CA5;
+                                      -fx-font-weight: bold; -fx-padding: 8 25; -fx-background-radius: 25;
+                                      -fx-font-size: 14; -fx-border-color: #AAD0D9; -fx-border-radius: 25; -fx-border-width: 1;"/>
                     </HBox>
 
-                    <Separator style="-fx-background-color: #B5D3A7; -fx-opacity: 0.5; -fx-pref-height: 1.5;"/>
+                    <Separator style="-fx-background-color: #AAD0D9; -fx-opacity: 0.5; -fx-pref-height: 1.5;"/>
 
-                    <!-- INFORMATIONS PERSONNELLES -->
+                    <!-- INFORMATIONS PERSONNELLES - BLEU -->
                     <VBox spacing="15">
                         <HBox spacing="15" alignment="CENTER_LEFT">
-                            <Label text="📋" style="-fx-font-size: 24; -fx-text-fill: #3A7D6B;"/>
+
                             <Label text="Informations personnelles"
-                                   style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #3A7D6B;"/>
+                                   style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #3A7CA5;"/>
                         </HBox>
 
                         <GridPane hgap="30" vgap="15" style="-fx-padding: 10 0 0 20;">
@@ -104,35 +112,35 @@
                             </columnConstraints>
 
                             <Label text="Nom complet :" GridPane.rowIndex="0" GridPane.columnIndex="0"
-                                   style="-fx-font-weight: bold; -fx-text-fill: #3C665B; -fx-font-size: 15;"/>
+                                   style="-fx-font-weight: bold; -fx-text-fill: #2F5570; -fx-font-size: 15;"/>
                             <Label fx:id="nomLabel" text="..." GridPane.rowIndex="0" GridPane.columnIndex="1"
                                    style="-fx-text-fill: #2C3E50; -fx-font-size: 15;"/>
 
                             <Label text="Email :" GridPane.rowIndex="1" GridPane.columnIndex="0"
-                                   style="-fx-font-weight: bold; -fx-text-fill: #3C665B; -fx-font-size: 15;"/>
+                                   style="-fx-font-weight: bold; -fx-text-fill: #2F5570; -fx-font-size: 15;"/>
                             <Label fx:id="emailLabel" text="..." GridPane.rowIndex="1" GridPane.columnIndex="1"
                                    style="-fx-text-fill: #2C3E50; -fx-font-size: 15;"/>
 
                             <Label text="Téléphone :" GridPane.rowIndex="2" GridPane.columnIndex="0"
-                                   style="-fx-font-weight: bold; -fx-text-fill: #3C665B; -fx-font-size: 15;"/>
+                                   style="-fx-font-weight: bold; -fx-text-fill: #2F5570; -fx-font-size: 15;"/>
                             <Label fx:id="telephoneLabel" text="..." GridPane.rowIndex="2" GridPane.columnIndex="1"
                                    style="-fx-text-fill: #2C3E50; -fx-font-size: 15;"/>
 
                             <Label text="Statut :" GridPane.rowIndex="3" GridPane.columnIndex="0"
-                                   style="-fx-font-weight: bold; -fx-text-fill: #3C665B; -fx-font-size: 15;"/>
+                                   style="-fx-font-weight: bold; -fx-text-fill: #2F5570; -fx-font-size: 15;"/>
                             <Label fx:id="statusLabel" text="..." GridPane.rowIndex="3" GridPane.columnIndex="1"
                                    style="-fx-text-fill: #2E7D32; -fx-font-weight: bold; -fx-font-size: 14;"/>
                         </GridPane>
                     </VBox>
 
-                    <Separator style="-fx-background-color: #B5D3A7; -fx-opacity: 0.5; -fx-pref-height: 1.5;"/>
+                    <Separator style="-fx-background-color: #AAD0D9; -fx-opacity: 0.5; -fx-pref-height: 1.5;"/>
 
-                    <!-- PARAMÈTRES DU PROFIL -->
+                    <!-- PARAMÈTRES DU PROFIL - BLEU -->
                     <VBox spacing="15">
                         <HBox spacing="15" alignment="CENTER_LEFT">
-                            <Label text="⚙️" style="-fx-font-size: 24; -fx-text-fill: #3A7D6B;"/>
+
                             <Label text="Paramètres du profil"
-                                   style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #3A7D6B;"/>
+                                   style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #3A7CA5;"/>
                         </HBox>
 
                         <!-- MODE VISUALISATION -->
@@ -143,66 +151,66 @@
                             </columnConstraints>
 
                             <Label text="Bio :" GridPane.rowIndex="0" GridPane.columnIndex="0"
-                                   style="-fx-font-weight: bold; -fx-text-fill: #3C665B; -fx-font-size: 15;"/>
+                                   style="-fx-font-weight: bold; -fx-text-fill: #2F5570; -fx-font-size: 15;"/>
                             <Label fx:id="bioLabel" text="Aucune biographie"
                                    GridPane.rowIndex="0" GridPane.columnIndex="1"
                                    wrapText="true" style="-fx-text-fill: #2C3E50; -fx-font-size: 14;"/>
 
                             <Label text="Date naissance :" GridPane.rowIndex="1" GridPane.columnIndex="0"
-                                   style="-fx-font-weight: bold; -fx-text-fill: #3C665B; -fx-font-size: 15;"/>
+                                   style="-fx-font-weight: bold; -fx-text-fill: #2F5570; -fx-font-size: 15;"/>
                             <Label fx:id="dateNaissanceLabel" text="Non renseignée"
                                    GridPane.rowIndex="1" GridPane.columnIndex="1"
                                    style="-fx-text-fill: #2C3E50; -fx-font-size: 14;"/>
 
                             <Label text="Langue :" GridPane.rowIndex="2" GridPane.columnIndex="0"
-                                   style="-fx-font-weight: bold; -fx-text-fill: #3C665B; -fx-font-size: 15;"/>
+                                   style="-fx-font-weight: bold; -fx-text-fill: #2F5570; -fx-font-size: 15;"/>
                             <Label fx:id="langueLabel" text="Français"
                                    GridPane.rowIndex="2" GridPane.columnIndex="1"
                                    style="-fx-text-fill: #2C3E50; -fx-font-size: 14;"/>
 
                             <Label text="Confidentialité :" GridPane.rowIndex="3" GridPane.columnIndex="0"
-                                   style="-fx-font-weight: bold; -fx-text-fill: #3C665B; -fx-font-size: 15;"/>
+                                   style="-fx-font-weight: bold; -fx-text-fill: #2F5570; -fx-font-size: 15;"/>
                             <Label fx:id="confidentialiteLabel" text="Public"
                                    GridPane.rowIndex="3" GridPane.columnIndex="1"
                                    style="-fx-text-fill: #2C3E50; -fx-font-size: 14;"/>
 
                             <Label text="Notifications Email :" GridPane.rowIndex="4" GridPane.columnIndex="0"
-                                   style="-fx-font-weight: bold; -fx-text-fill: #3C665B; -fx-font-size: 15;"/>
+                                   style="-fx-font-weight: bold; -fx-text-fill: #2F5570; -fx-font-size: 15;"/>
                             <Label fx:id="notificationsEmailLabel" text="Désactivées"
                                    GridPane.rowIndex="4" GridPane.columnIndex="1"
                                    style="-fx-text-fill: #2C3E50; -fx-font-size: 14;"/>
 
                             <Label text="Notifications SMS :" GridPane.rowIndex="5" GridPane.columnIndex="0"
-                                   style="-fx-font-weight: bold; -fx-text-fill: #3C665B; -fx-font-size: 15;"/>
+                                   style="-fx-font-weight: bold; -fx-text-fill: #2F5570; -fx-font-size: 15;"/>
                             <Label fx:id="notificationsSmsLabel" text="Désactivées"
                                    GridPane.rowIndex="5" GridPane.columnIndex="1"
                                    style="-fx-text-fill: #2C3E50; -fx-font-size: 14;"/>
                         </GridPane>
 
-                        <!-- MODE ÉDITION -->
+                        <!-- MODE ÉDITION - BLEU -->
                         <VBox fx:id="editModeVBox" spacing="15" visible="false" managed="false"
-                              style="-fx-padding: 15; -fx-background-color: #F8F9FA; -fx-background-radius: 15; -fx-border-color: #B5D3A7; -fx-border-radius: 15; -fx-border-width: 1;">
+                              style="-fx-padding: 15; -fx-background-color: #F8F9FA; -fx-background-radius: 15; -fx-border-color: #AAD0D9; -fx-border-radius: 15; -fx-border-width: 1;">
 
                             <Label text="✏️ Mode édition"
-                                   style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #3A7D6B;"/>
+                                   style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #3A7CA5;"/>
 
-                            <Label text="Bio :" style="-fx-font-weight: bold; -fx-text-fill: #3C665B;"/>
+                            <Label text="Bio :" style="-fx-font-weight: bold; -fx-text-fill: #2F5570;"/>
                             <TextArea fx:id="bioTextArea" prefRowCount="3" promptText="Parlez de vous..."
-                                      style="-fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: #B5D3A7;"/>
+                                      style="-fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: #AAD0D9;"/>
 
-                            <Label text="Date de naissance :" style="-fx-font-weight: bold; -fx-text-fill: #3C665B;"/>
+                            <Label text="Date de naissance :" style="-fx-font-weight: bold; -fx-text-fill: #2F5570;"/>
                             <DatePicker fx:id="dateNaissancePicker" prefWidth="250"
-                                        style="-fx-background-radius: 10; -fx-border-radius: 10;"/>
+                                        style="-fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: #AAD0D9;"/>
 
-                            <Label text="Langue :" style="-fx-font-weight: bold; -fx-text-fill: #3C665B;"/>
+                            <Label text="Langue :" style="-fx-font-weight: bold; -fx-text-fill: #2F5570;"/>
                             <ComboBox fx:id="langueComboBox" prefWidth="250"
-                                      style="-fx-background-radius: 10; -fx-border-radius: 10;"/>
+                                      style="-fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: #AAD0D9;"/>
 
-                            <Label text="Confidentialité :" style="-fx-font-weight: bold; -fx-text-fill: #3C665B;"/>
+                            <Label text="Confidentialité :" style="-fx-font-weight: bold; -fx-text-fill: #2F5570;"/>
                             <ComboBox fx:id="confidentialiteComboBox" prefWidth="250"
-                                      style="-fx-background-radius: 10; -fx-border-radius: 10;"/>
+                                      style="-fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: #AAD0D9;"/>
 
-                            <Label text="Notifications :" style="-fx-font-weight: bold; -fx-text-fill: #3C665B;"/>
+                            <Label text="Notifications :" style="-fx-font-weight: bold; -fx-text-fill: #2F5570;"/>
                             <CheckBox fx:id="notificationsEmailCheckBox" text="Activer les notifications Email"
                                       style="-fx-text-fill: #2C3E50;"/>
                             <CheckBox fx:id="notificationsSmsCheckBox" text="Activer les notifications SMS"
@@ -210,33 +218,36 @@
                         </VBox>
                     </VBox>
 
-                    <!-- ESPACE POUR LE FOOTER -->
                     <Region VBox.vgrow="ALWAYS" minHeight="20"/>
 
                 </VBox>
             </ScrollPane>
         </center>
 
-        <!-- BOTTOM - BOUTONS D'ACTION -->
+        <!-- BOTTOM - BOUTONS D'ACTION BLEUS -->
         <bottom>
             <VBox spacing="10">
                 <Separator style="-fx-background-color: transparent;"/>
                 <HBox spacing="20" alignment="CENTER"
                       style="-fx-padding: 20 20 30 20; -fx-background-color: transparent;">
 
-                    <!-- Bouton Modifier -->
+                    <!-- Bouton Modifier - BLEU -->
                     <Button fx:id="editButton" text="✏️ Modifier le profil" onAction="#handleEdit"
-                            prefWidth="220"
-                            styleClass="button-primary"/>
+                            prefWidth="220" prefHeight="45"
+                            style="-fx-background-color: #3A7CA5; -fx-text-fill: white; -fx-font-size: 15;
+                                   -fx-font-weight: bold; -fx-background-radius: 30; -fx-cursor: hand;
+                                   -fx-effect: dropshadow(gaussian, rgba(58,124,165,0.3), 12, 0, 0, 3);"/>
 
-                    <!-- Boutons mode édition (cachés par défaut) -->
+                    <!-- Boutons mode édition - BLEU -->
                     <Button fx:id="saveButton" text="💾 Enregistrer" onAction="#handleSave"
-                            prefWidth="180" visible="false" managed="false"
-                            styleClass="button-success"/>
+                            prefWidth="180" prefHeight="45" visible="false" managed="false"
+                            style="-fx-background-color: #27AE60; -fx-text-fill: white; -fx-font-size: 15;
+                                   -fx-font-weight: bold; -fx-background-radius: 30; -fx-cursor: hand;"/>
 
                     <Button fx:id="cancelButton" text="❌ Annuler" onAction="#handleCancel"
-                            prefWidth="180" visible="false" managed="false"
-                            styleClass="button-danger"/>
+                            prefWidth="180" prefHeight="45" visible="false" managed="false"
+                            style="-fx-background-color: #E74C3C; -fx-text-fill: white; -fx-font-size: 15;
+                                   -fx-font-weight: bold; -fx-background-radius: 30; -fx-cursor: hand;"/>
                 </HBox>
             </VBox>
         </bottom>
