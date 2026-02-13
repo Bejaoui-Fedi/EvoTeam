@@ -1,0 +1,261 @@
+/* Global Nature Theme */
+.root {
+    -primary-color: #3A7D6B;
+    /* Sage Green */
+    -secondary-color: #5F9B8A;
+    /* Muted Green */
+    -accent-color: #6DA38B;
+    /* Light Sage */
+    -text-color: #2C3E50;
+    /* Dark Blue-Grey */
+    -background-overlay: rgba(225, 240, 218, 0.85);
+    -card-bg: rgba(255, 255, 255, 0.9);
+    -font-family: 'Segoe UI', sans-serif;
+}
+
+/* Backgrounds */
+.nature-background {
+    -fx-background-image: url("https://images.unsplash.com/photo-1501004318641-b39e6451bec6?w=1600&q=80");
+    -fx-background-size: cover;
+}
+
+.overlay {
+    -fx-background-color: -background-overlay;
+}
+
+/* Cards */
+.card {
+    -fx-background-color: -card-bg;
+    -fx-background-radius: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 10, 0, 0, 5);
+    -fx-padding: 30;
+}
+
+/* Labels */
+.header-label {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -primary-color;
+}
+
+.subheader-label {
+    -fx-font-size: 16px;
+    -fx-text-fill: -secondary-color;
+    -fx-font-style: italic;
+}
+
+.normal-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: -text-color;
+}
+
+/* TextFields */
+.text-field {
+    -fx-background-color: white;
+    -fx-background-radius: 25;
+    -fx-border-color: -secondary-color;
+    -fx-border-radius: 25;
+    -fx-border-width: 1;
+    -fx-padding: 10 15;
+    -fx-prompt-text-fill: derive(-text-color, 50%);
+}
+
+.text-field:focused {
+    -fx-border-color: -primary-color;
+    -fx-border-width: 2;
+}
+
+/* Buttons */
+.button-primary {
+    -fx-background-color: linear-gradient(to right, -accent-color, -primary-color);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 25;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(58, 125, 107, 0.3), 5, 0, 0, 2);
+}
+
+.button-primary:hover {
+    -fx-background-color: linear-gradient(to right, derive(-accent-color, 10%), derive(-primary-color, 10%));
+}
+
+.button-secondary {
+    -fx-background-color: transparent;
+    -fx-text-fill: -primary-color;
+    -fx-border-color: -primary-color;
+    -fx-border-radius: 25;
+    -fx-border-width: 2;
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+}
+
+.button-secondary:hover {
+    -fx-background-color: rgba(58, 125, 107, 0.1);
+}
+
+.button-link {
+    -fx-background-color: transparent;
+    -fx-text-fill: -primary-color;
+    -fx-underline: true;
+    -fx-cursor: hand;
+}
+
+.button-success {
+    -fx-background-color: linear-gradient(to right, #27AE60, #229954);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 25;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(39, 174, 96, 0.3), 5, 0, 0, 2);
+}
+
+.button-danger {
+    -fx-background-color: linear-gradient(to right, #E74C3C, #C0392B);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 25;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(231, 76, 60, 0.3), 5, 0, 0, 2);
+}
+
+/* Sidebar */
+.sidebar {
+    -fx-background-color: rgba(58, 125, 107, 0.95);
+    -fx-background-radius: 0 20 20 0;
+    -fx-padding: 30 20;
+    -fx-spacing: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 20, 0, 0, 8);
+}
+
+.sidebar-logo {
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.3), 10, 0, 0, 2);
+}
+
+.sidebar-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-alignment: center-left;
+    -fx-padding: 12 15;
+    -fx-background-radius: 25;
+    -fx-cursor: hand;
+}
+
+.sidebar-button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-button-active {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+    -fx-font-weight: bold;
+    -fx-border-color: white;
+    -fx-border-width: 1.5;
+    -fx-border-radius: 25;
+}
+
+/* Profile View */
+.profile-header {
+    -fx-background-color: linear-gradient(to right, -primary-color, -secondary-color);
+    -fx-padding: 25;
+    -fx-background-radius: 20 20 0 0;
+    -fx-effect: dropshadow(gaussian, rgba(58, 125, 107, 0.3), 10, 0, 0, 5);
+}
+
+.profile-card {
+    -fx-background-color: rgba(255, 255, 255, 0.85);
+    -fx-background-radius: 0 0 20 20;
+    -fx-border-color: -secondary-color;
+    -fx-border-width: 2;
+    -fx-padding: 25;
+    -fx-effect: dropshadow(gaussian, rgba(90, 140, 100, 0.15), 20, 0, 0, 5);
+}
+
+.status-label {
+    -fx-background-color: #E8F4E8;
+    -fx-text-fill: -primary-color;
+    -fx-font-weight: bold;
+    -fx-padding: 8 25;
+    -fx-background-radius: 25;
+    -fx-border-color: -secondary-color;
+    -fx-border-radius: 25;
+}
+
+/* Boutons utilisateurs (ou events) */
+.button-edit {
+    -fx-background-color: #3498DB;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+    -fx-padding: 5 10;
+}
+
+.button-profile {
+    -fx-background-color: #9B59B6;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+    -fx-padding: 5 10;
+}
+
+.button-delete {
+    -fx-background-color: #E74C3C;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+    -fx-padding: 5 10;
+}
+
+/* Hover effet */
+.button-edit:hover { -fx-background-color: #2980B9; }
+.button-profile:hover { -fx-background-color: #8E44AD; }
+.button-delete:hover { -fx-background-color: #C0392B; }
+
+
+/* =======================
+   EVENT CARD STYLE PRO
+======================= */
+
+.event-card {
+    -fx-background-color: linear-gradient(to bottom right, #ffffff, #f3f9f6);
+    -fx-background-radius: 18;
+    -fx-border-radius: 18;
+    -fx-border-color: rgba(0,0,0,0.05);
+    -fx-padding: 18;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 15, 0.2, 0, 4);
+    -fx-cursor: hand;
+    -fx-transition: all 0.3s ease-in-out;
+}
+
+/* Hover animation */
+.event-card:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.18), 25, 0.3, 0, 8);
+    -fx-translate-y: -4;
+}
+
+/* Titre */
+.event-title {
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2F6F5E;
+}
+
+/* Informations */
+.event-info {
+    -fx-font-size: 13px;
+    -fx-text-fill: #555555;
+}
+
+/* Description */
+.event-description {
+    -fx-font-size: 13px;
+    -fx-text-fill: #333333;
+}
+
+/* Ligne séparatrice douce */
+.event-separator {
+    -fx-opacity: 0.3;
+}

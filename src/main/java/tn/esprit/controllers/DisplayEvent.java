@@ -1,7 +1,9 @@
 package tn.esprit.controllers;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -19,113 +21,130 @@ public class DisplayEvent {
 
     @FXML private FlowPane cardsContainer;
     @FXML private Label lblCount;
+    @FXML private TextField searchField;
 
-    private final ServiceEvent serviceEvent = new ServiceEvent();
+    private ServiceEvent serviceEvent = new ServiceEvent();
+    private Image imgEdit, imgDelete;
 
-    private Image imgEdit;
-    private Image imgDelete;
+    private AdminDashboardController dashboard;
+
+    public void setDashboardController(AdminDashboardController dashboard) {
+        this.dashboard = dashboard;
+    }
 
     @FXML
     public void initialize() {
-        // charger les images une fois
         imgEdit = new Image(getClass().getResource("/images/edit.png").toExternalForm());
         imgDelete = new Image(getClass().getResource("/images/delete.png").toExternalForm());
-
         loadCards();
     }
 
     @FXML
     private void refresh() {
         loadCards();
+        searchField.clear();
     }
 
-    private void loadCards() {
-        cardsContainer.getChildren().clear();
-
-        List<Event> events = serviceEvent.getAll();
-        lblCount.setText(events.size() + " événement(s)");
-
-        for (Event e : events) {
-            cardsContainer.getChildren().add(createCard(e));
-        }
-    }
-
-    private VBox createCard(Event e) {
-
-        // ====== Conteneur carte
-        VBox card = new VBox(8);
-        card.setPrefWidth(280);
-        card.setStyle("""
-                -fx-background-color: white;
-                -fx-padding: 14;
-                -fx-border-color: #E2E2E2;
-                -fx-border-radius: 12;
-                -fx-background-radius: 12;
-                """);
-
-        // ====== Ligne top : titre + actions
-        Label title = new Label(e.getName());
-        title.setStyle("-fx-font-size: 16; -fx-font-weight: bold;");
-
-        Button btnEdit = iconButton(imgEdit);
-        Button btnDelete = iconButton(imgDelete);
-
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-
-        HBox top = new HBox(10, title, spacer, btnEdit, btnDelete);
-        top.setStyle("-fx-alignment: center-left;");
-
-        // ====== infos
-        Label dates = new Label("📅 " + e.getStartDate() + "  →  " + e.getEndDate());
-        dates.setStyle("-fx-text-fill: #555555;");
-
-        Label max = new Label("👥 Max: " + e.getMaxParticipants());
-        max.setStyle("-fx-text-fill: #555555;");
-
-        Label fee = new Label("💰 Fee: " + e.getFee());
-        fee.setStyle("-fx-text-fill: #555555;");
-
-        Label location = new Label("📍 " + e.getLocation());
-        location.setStyle("-fx-text-fill: #555555;");
-
-        Label desc = new Label(e.getDescription());
-        desc.setWrapText(true);
-        desc.setStyle("-fx-text-fill: #333333;");
-
-        Separator sep = new Separator();
-
-        // ====== Actions
-        btnDelete.setOnAction(ev -> confirmAndDelete(e));
-        btnEdit.setOnAction(ev -> openUpdateWindow(e));
-
-        card.getChildren().addAll(top, sep, dates, max, fee, location, desc);
-        return card;
-    }
-
-
+    // =====================================================
+    // CORRIGE : Navigation vers DisplayReview via le dashboard
+    // au lieu de remplacer toute la scene
+    // =====================================================
     @FXML
-    private void goToDisplayReview() {
+    private void goToDisplayReview(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/DisplayReview.fxml"));
-            Stage stage = (Stage) /* n'importe quel node de la page */ cardsContainer.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Reviews");
-            stage.show();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/DisplayReview.fxml"));
+            Parent root = loader.load();
+
+            // Passer la reference du dashboard au DisplayReview
+            DisplayReview controller = loader.getController();
+            controller.setDashboardController(dashboard);
+
+            if (dashboard != null) {
+                // Charger dans le contentArea du dashboard (sidebar reste visible)
+                dashboard.setContent(root);
+            } else {
+                // Fallback si pas de dashboard (ouverture standalone)
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.setScene(new Scene(root));
+                stage.setTitle("Reviews");
+                stage.show();
+            }
         } catch (IOException e) {
             e.printStackTrace();
             new Alert(Alert.AlertType.ERROR, "Impossible d'ouvrir DisplayReview.fxml").show();
         }
     }
 
+    @FXML
+    private void handleSearch() {
+        String text = searchField.getText().toLowerCase().trim();
+        cardsContainer.getChildren().clear();
+        List<Event> events = serviceEvent.getAll();
+        if (!text.isEmpty()) {
+            events.removeIf(e -> !e.getName().toLowerCase().contains(text) &&
+                    !e.getLocation().toLowerCase().contains(text));
+        }
+        lblCount.setText(events.size() + " evenement(s)");
+        for (Event e : events) {
+            cardsContainer.getChildren().add(createCard(e));
+        }
+    }
 
+    private VBox createCard(Event e) {
+        VBox card = new VBox(12);
+        card.setPrefWidth(300);
+        card.getStyleClass().add("event-card");
+
+        Label title = new Label("🎉 " + e.getName());
+        title.getStyleClass().add("event-title");
+
+        Label badge = new Label();
+        if (e.getFee() == 0) {
+            badge.setText("GRATUIT");
+            badge.getStyleClass().add("badge-free");
+        } else {
+            badge.setText(e.getFee() + " DT");
+            badge.getStyleClass().add("badge-paid");
+        }
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        Button btnEdit = new Button("✏️");
+        btnEdit.setStyle("-fx-background-color: #3A7DFF; -fx-text-fill: white; -fx-cursor: hand; -fx-font-weight: bold;");
+        btnEdit.setOnAction(ev -> openUpdateWindow(e));
+
+        Button btnDelete = new Button("🗑");
+        btnDelete.setStyle("-fx-background-color: #FF3A3A; -fx-text-fill: white; -fx-cursor: hand; -fx-font-weight: bold;");
+        btnDelete.setOnAction(ev -> confirmAndDelete(e));
+
+        HBox header = new HBox(10, title, spacer, badge, btnEdit, btnDelete);
+        header.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+
+        Label dates = new Label("📅 " + e.getStartDate() + " → " + e.getEndDate());
+        dates.getStyleClass().add("event-info");
+
+        Label max = new Label("👥 Max participants: " + e.getMaxParticipants());
+        max.getStyleClass().add("event-info");
+
+        Label location = new Label("📍 " + e.getLocation());
+        location.getStyleClass().add("event-info");
+
+        Label desc = new Label(e.getDescription());
+        desc.setWrapText(true);
+        desc.getStyleClass().add("event-description");
+
+        Separator sep = new Separator();
+        sep.getStyleClass().add("event-separator");
+
+        card.getChildren().addAll(header, sep, dates, max, location, desc);
+        return card;
+    }
 
     private Button iconButton(Image img) {
         ImageView iv = new ImageView(img);
         iv.setFitWidth(18);
         iv.setFitHeight(18);
-        iv.setPreserveRatio(true);
-
         Button b = new Button();
         b.setGraphic(iv);
         b.setStyle("-fx-background-color: transparent; -fx-cursor: hand;");
@@ -133,17 +152,13 @@ public class DisplayEvent {
     }
 
     private void confirmAndDelete(Event e) {
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-        confirm.setTitle("Suppression");
-        confirm.setHeaderText(null);
-        confirm.setContentText("Supprimer l'événement : " + e.getName() + " ?");
-
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
+                "Supprimer l'evenement : " + e.getName() + " ?", ButtonType.OK, ButtonType.CANCEL);
         confirm.showAndWait().ifPresent(resp -> {
             if (resp == ButtonType.OK) {
-                // IMPORTANT: ton service est delete(int)
                 serviceEvent.delete(e.getEventId());
                 loadCards();
-                new Alert(Alert.AlertType.INFORMATION, "Supprimé ✅").show();
+                new Alert(Alert.AlertType.INFORMATION, "Supprime").show();
             }
         });
     }
@@ -155,30 +170,50 @@ public class DisplayEvent {
 
             UpdateEvent controller = loader.getController();
             controller.initData(selected);
+            controller.setDashboardController(dashboard);
 
             Stage stage = new Stage();
             stage.setTitle("Modifier Event");
             stage.setScene(new Scene(root));
             stage.show();
 
+            stage.setOnHidden(ev -> loadCards());
         } catch (IOException ex) {
             ex.printStackTrace();
-            new Alert(Alert.AlertType.ERROR, "Impossible d’ouvrir UpdateEvent.fxml").show();
+            new Alert(Alert.AlertType.ERROR, "Impossible d'ouvrir UpdateEvent.fxml").show();
         }
     }
 
     @FXML
     private void goToAddEvent() {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/AddEvent.fxml"));
-            Stage stage = (Stage) cardsContainer.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AddEvent.fxml"));
+            Parent root = loader.load();
+
+            Object controller = loader.getController();
+            if (controller instanceof AddEvent) {
+                ((AddEvent) controller).setDashboardController(dashboard);
+            }
+
+            Stage stage = new Stage();
+            stage.setTitle("Ajouter un evenement");
             stage.setScene(new Scene(root));
-            stage.setTitle("Ajouter Event");
             stage.show();
+
+            stage.setOnHidden(e -> loadCards());
+
         } catch (IOException e) {
             e.printStackTrace();
-            new Alert(Alert.AlertType.ERROR, "Impossible d’ouvrir AddEvent.fxml").show();
+            new Alert(Alert.AlertType.ERROR, "Impossible d'ouvrir AddEvent.fxml").show();
+        }
+    }
+
+    private void loadCards() {
+        cardsContainer.getChildren().clear();
+        List<Event> events = serviceEvent.getAll();
+        lblCount.setText(events.size() + " evenement(s)");
+        for (Event e : events) {
+            cardsContainer.getChildren().add(createCard(e));
         }
     }
 }
-

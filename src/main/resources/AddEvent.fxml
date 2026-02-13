@@ -1,93 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.effect.DropShadow?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.effect.GaussianBlur?>
 
-<AnchorPane prefHeight="550.0"
-            prefWidth="794.0"
-            xmlns="http://javafx.com/javafx/17"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="tn.esprit.controllers.AddEvent"
-            style="-fx-background-color: white;">
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="tn.esprit.controllers.AddEvent"
+           prefWidth="650" prefHeight="750"
+           stylesheets="@styles.css">
 
-    <VBox layoutX="160.0"
-          layoutY="30.0"
-          prefWidth="480.0"
-          spacing="10"
-          style="-fx-background-color: white; -fx-border-color: #7C81AB; -fx-border-width: 1;">
-
-        <padding>
-            <Insets top="25" right="25" bottom="25" left="25"/>
-        </padding>
-
+    <!-- 🌿 Background -->
+    <ImageView fitWidth="650" fitHeight="750" preserveRatio="false" styleClass="nature-background">
+        <image>
+            <Image url="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?w=1600&amp;q=80"
+                   backgroundLoading="true"/>
+        </image>
         <effect>
-            <DropShadow color="#888888" offsetX="4" offsetY="4" radius="15"/>
+            <GaussianBlur radius="6"/>
         </effect>
+    </ImageView>
 
-        <Label text="Ajouter un Event">
-            <font>
-                <Font size="20"/>
-            </font>
-        </Label>
+    <!-- Overlay -->
+    <Region styleClass="overlay"/>
 
-        <Separator/>
+    <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;">
+        <VBox alignment="CENTER" spacing="20" style="-fx-padding: 40;">
 
-        <Label text="Nom de l'événement">
-            <font><Font size="14"/></font>
-        </Label>
-        <TextField fx:id="name" prefHeight="35" promptText="Ex: Conférence JavaFX"/>
+            <VBox styleClass="card" maxWidth="500" spacing="15">
 
-        <Label text="Date de début">
-            <font><Font size="14"/></font>
-        </Label>
-        <DatePicker fx:id="startDate" prefHeight="35"/>
+                <Label text="🎉 Ajouter un Événement" styleClass="header-label"/>
+                <Label text="Créez une nouvelle expérience pour votre communauté"
+                       styleClass="subheader-label"/>
 
-        <Label text="Date de fin">
-            <font><Font size="14"/></font>
-        </Label>
-        <DatePicker fx:id="endDate" prefHeight="35"/>
+                <Separator/>
 
-        <Label text="Nombre max de participants">
-            <font><Font size="14"/></font>
-        </Label>
-        <TextField fx:id="maxParticipants" prefHeight="35" promptText="Ex: 50"/>
+                <!-- Nom -->
+                <Label text="Nom de l'événement" styleClass="normal-label"/>
+                <TextField fx:id="name" promptText="Conférence JavaFX"
+                           styleClass="text-field"/>
 
-        <Label text="Description">
-            <font><Font size="14"/></font>
-        </Label>
-        <TextField fx:id="description" prefHeight="35" promptText="Ex: Atelier + networking"/>
+                <!-- Dates -->
+                <Label text="Date de début" styleClass="normal-label"/>
+                <DatePicker fx:id="startDate" styleClass="text-field"/>
 
-        <Label text="Prix (fee)">
-            <font><Font size="14"/></font>
-        </Label>
-        <TextField fx:id="fee" prefHeight="35" promptText="Ex: 20"/>
+                <Label text="Date de fin" styleClass="normal-label"/>
+                <DatePicker fx:id="endDate" styleClass="text-field"/>
 
-        <Label text="Localisation">
-            <font><Font size="14"/></font>
-        </Label>
-        <TextField fx:id="tfLocation" prefHeight="35" promptText="Ex: INSA / Centre ville..."/>
+                <!-- Participants -->
+                <Label text="Nombre max de participants" styleClass="normal-label"/>
+                <TextField fx:id="maxParticipants" promptText="50"
+                           styleClass="text-field"/>
 
-        <Button text="Enregistrer"
-                prefHeight="45"
-                prefWidth="200"
-                onAction="#handleAddEvent"
-                style="-fx-background-color: #7C81AB; -fx-text-fill: white; -fx-font-size: 14;"/>
+                <!-- Description -->
+                <Label text="Description" styleClass="normal-label"/>
+                <TextArea fx:id="description"
+                          prefRowCount="3"
+                          promptText="Atelier + networking..."
+                          styleClass="text-field"/>
 
-    </VBox>
+                <!-- Prix -->
+                <Label text="Prix (DT)" styleClass="normal-label"/>
+                <TextField fx:id="fee" promptText="20"
+                           styleClass="text-field"/>
 
-    <Button
-            text="📋 Afficher les événements"
-            prefWidth="200"
-            onAction="#goToDisplay"
-    />
+                <!-- Localisation -->
+                <Label text="Localisation" styleClass="normal-label"/>
+                <TextField fx:id="tfLocation" promptText="Centre ville / INSA..."
+                           styleClass="text-field"/>
 
+                <Separator/>
 
-</AnchorPane>
+                <!-- Boutons -->
+                <VBox spacing="10" alignment="CENTER">
+                    <Button text="✅ Enregistrer"
+                            prefWidth="280"
+                            onAction="#handleAddEvent"
+                            styleClass="button-primary"/>
+
+                    <Button text="📋 Voir les événements"
+                            prefWidth="280"
+                            onAction="#goToDisplay"
+                            styleClass="button-secondary"/>
+                </VBox>
+
+            </VBox>
+        </VBox>
+    </ScrollPane>
+
+</StackPane>

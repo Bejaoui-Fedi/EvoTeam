@@ -1,64 +1,115 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.effect.GaussianBlur?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="560.0" prefWidth="700.0"
-            xmlns="http://javafx.com/javafx/17"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="tn.esprit.controllers.UpdateReview"
-            style="-fx-background-color: #F7F8FC;">
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="tn.esprit.controllers.UpdateReview"
+           prefWidth="750" prefHeight="700"
+           stylesheets="@styles.css">
 
-    <VBox layoutX="20" layoutY="20" prefWidth="660" prefHeight="520" spacing="12"
-          style="-fx-background-color: white; -fx-border-color: #D9D9D9; -fx-border-width: 1; -fx-background-radius: 12; -fx-border-radius: 12;">
-        <padding>
-            <Insets top="16" right="16" bottom="16" left="16"/>
-        </padding>
+    <!-- Background nature apaisant -->
+    <ImageView fitWidth="750" fitHeight="700" preserveRatio="false" styleClass="nature-background">
+        <image>
+            <Image url="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?w=1600&amp;q=80"
+                   backgroundLoading="true"/>
+        </image>
+        <effect>
+            <GaussianBlur radius="5"/>
+        </effect>
+    </ImageView>
 
-        <HBox spacing="10" alignment="CENTER_LEFT">
-            <Label text="Modifier Review">
-                <font><Font size="20"/></font>
-            </Label>
-            <Region HBox.hgrow="ALWAYS"/>
-            <Label fx:id="lblId" text="ID: -" style="-fx-text-fill:#666666;"/>
-        </HBox>
+    <!-- Overlay vert pistache doux -->
+    <Region styleClass="overlay"/>
 
-        <Separator/>
+    <!-- Contenu principal -->
+    <BorderPane style="-fx-background-color: transparent; -fx-padding: 20;">
 
-        <Label text="Event (eventId) *"/>
-        <ComboBox fx:id="cbEventId" prefHeight="35"/>
+        <!-- Header -->
+        <top>
+            <VBox alignment="CENTER" spacing="10" style="-fx-padding: 20 0 15 0;">
+                <HBox alignment="CENTER" spacing="15">
+                    <Label text="&#x270F;" style="-fx-font-size: 36; -fx-text-fill: #3A7D6B;"/>
+                    <Label text="Modifier Review" styleClass="header-label" style="-fx-font-size: 28;"/>
+                    <Label text="&#x1F33F;" style="-fx-font-size: 36; -fx-text-fill: #3A7D6B;"/>
+                </HBox>
+                <HBox alignment="CENTER" spacing="10">
+                    <Label text="Mettez a jour les informations de la review" styleClass="subheader-label"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="lblId" text="ID: -" style="-fx-font-size: 13; -fx-text-fill: #6F9A8D; -fx-font-style: italic;"/>
+                </HBox>
+            </VBox>
+        </top>
 
-        <Label text="Titre"/>
-        <TextField fx:id="title" prefHeight="35"/>
+        <!-- Centre : formulaire -->
+        <center>
+            <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
+                <VBox spacing="18" styleClass="card" style="-fx-padding: 30; -fx-background-color: rgba(255,255,255,0.75); -fx-max-width: 520;"
+                      alignment="CENTER_LEFT">
 
-        <Label text="Rating (1..5) *"/>
-        <TextField fx:id="rating" prefHeight="35"/>
+                    <!-- Event ID -->
+                    <VBox spacing="5">
+                        <Label text="Evenement (eventId) *" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #3A7D6B;"/>
+                        <ComboBox fx:id="cbEventId" prefHeight="38" prefWidth="460"
+                                  style="-fx-background-color: rgba(255,255,255,0.9); -fx-border-color: #B5D6CC; -fx-border-radius: 8; -fx-background-radius: 8;"/>
+                    </VBox>
 
-        <Label text="Date review *"/>
-        <DatePicker fx:id="reviewDate" prefHeight="35"/>
+                    <!-- Titre -->
+                    <VBox spacing="5">
+                        <Label text="Titre" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #3A7D6B;"/>
+                        <TextField fx:id="title" prefHeight="38" promptText="Titre de la review"
+                                   style="-fx-background-color: rgba(255,255,255,0.9); -fx-border-color: #B5D6CC; -fx-border-radius: 8; -fx-background-radius: 8;"/>
+                    </VBox>
 
-        <Label text="Commentaire"/>
-        <TextArea fx:id="comment" prefRowCount="4" wrapText="true"/>
+                    <!-- Rating -->
+                    <VBox spacing="5">
+                        <Label text="Rating (1 a 5) *" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #3A7D6B;"/>
+                        <TextField fx:id="rating" prefHeight="38" promptText="Ex: 4"
+                                   style="-fx-background-color: rgba(255,255,255,0.9); -fx-border-color: #B5D6CC; -fx-border-radius: 8; -fx-background-radius: 8;"/>
+                    </VBox>
 
-        <HBox spacing="10" alignment="CENTER_RIGHT">
-            <Button text="✅ Enregistrer" onAction="#handleUpdate"
-                    prefWidth="160"
-                    style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-background-radius: 8;"/>
+                    <!-- Date review -->
+                    <VBox spacing="5">
+                        <Label text="Date review *" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #3A7D6B;"/>
+                        <DatePicker fx:id="reviewDate" prefHeight="38" prefWidth="460"
+                                    style="-fx-background-color: rgba(255,255,255,0.9); -fx-border-color: #B5D6CC; -fx-border-radius: 8; -fx-background-radius: 8;"/>
+                    </VBox>
 
-            <Button text="❌ Annuler" onAction="#closeWindow"
-                    prefWidth="120"
-                    style="-fx-background-radius: 8;"/>
-        </HBox>
-    </VBox>
-</AnchorPane>
+                    <!-- Commentaire -->
+                    <VBox spacing="5">
+                        <Label text="Commentaire" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #3A7D6B;"/>
+                        <TextArea fx:id="comment" prefRowCount="4" wrapText="true" promptText="Votre commentaire..."
+                                  style="-fx-background-color: rgba(255,255,255,0.9); -fx-border-color: #B5D6CC; -fx-border-radius: 8; -fx-background-radius: 8;"/>
+                    </VBox>
+
+                    <!-- Boutons -->
+                    <HBox spacing="12" alignment="CENTER" style="-fx-padding: 15 0 5 0;">
+                        <Button text="Enregistrer" onAction="#handleUpdate" styleClass="button-primary"
+                                prefWidth="200" prefHeight="40"/>
+                        <Button text="Annuler" onAction="#closeWindow" styleClass="button-secondary"
+                                prefWidth="140" prefHeight="40"/>
+                    </HBox>
+
+                </VBox>
+            </ScrollPane>
+        </center>
+
+        <!-- Footer -->
+        <bottom>
+            <HBox alignment="CENTER" style="-fx-padding: 15 0 10 0;">
+                <VBox alignment="CENTER" spacing="5">
+                    <Label text="Bienveillance - Respect - Organisation"
+                           style="-fx-font-size: 13; -fx-text-fill: #3A7D6B;"/>
+                    <Label text="PsyCoach Pro - Gestion des reviews"
+                           style="-fx-font-size: 11; -fx-text-fill: #6F9A8D;"/>
+                </VBox>
+            </HBox>
+        </bottom>
+
+    </BorderPane>
+</StackPane>

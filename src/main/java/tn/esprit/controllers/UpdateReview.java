@@ -1,5 +1,8 @@
 package tn.esprit.controllers;
 
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -20,9 +23,13 @@ public class UpdateReview {
     @FXML private TextArea comment;
 
     private Review review;
-
     private final ServiceReview serviceReview = new ServiceReview();
     private final ServiceEvent serviceEvent = new ServiceEvent();
+    private AdminDashboardController dashboard;
+
+    public void setDashboardController(AdminDashboardController dashboard) {
+        this.dashboard = dashboard;
+    }
 
     @FXML
     public void initialize() {
@@ -53,12 +60,12 @@ public class UpdateReview {
         try {
             r = Integer.parseInt(rating.getText());
         } catch (NumberFormatException ex) {
-            new Alert(Alert.AlertType.ERROR, "Rating doit être un nombre !").show();
+            new Alert(Alert.AlertType.ERROR, "Rating doit etre un nombre !").show();
             return;
         }
 
         if (r < 1 || r > 5) {
-            new Alert(Alert.AlertType.ERROR, "Rating doit être entre 1 et 5").show();
+            new Alert(Alert.AlertType.ERROR, "Rating doit etre entre 1 et 5").show();
             return;
         }
 
@@ -70,8 +77,26 @@ public class UpdateReview {
 
         serviceReview.update(review);
 
-        new Alert(Alert.AlertType.INFORMATION, "Review modifiée ✅").show();
-        closeWindow();
+        new Alert(Alert.AlertType.INFORMATION, "Review modifiee avec succes !").show();
+
+        // Retour au DisplayReview avec sidebar intact
+        if (dashboard != null) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/DisplayReview.fxml"));
+                Parent root = loader.load();
+
+                DisplayReview controller = loader.getController();
+                controller.setDashboardController(dashboard);
+
+                dashboard.setContent(root);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } else {
+            // Fallback : fermer la fenetre si pas de dashboard (popup mode)
+            Stage stage = (Stage) title.getScene().getWindow();
+            stage.close();
+        }
     }
 
     @FXML

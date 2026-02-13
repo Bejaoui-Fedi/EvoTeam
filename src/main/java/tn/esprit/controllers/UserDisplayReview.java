@@ -1,42 +1,55 @@
 package tn.esprit.controllers;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import tn.esprit.entities.Event;
 import tn.esprit.entities.Review;
 import tn.esprit.services.ServiceReview;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class DisplayReview {
+public class UserDisplayReview {
 
     @FXML private FlowPane cardsContainer;
     @FXML private Label lblCount;
+    @FXML private Label lblHeaderTitle;
+    @FXML private Label lblHeaderSubtitle;
     @FXML private TextField searchField;
 
     private final ServiceReview serviceReview = new ServiceReview();
-    private Image imgEdit, imgDelete;
 
-    private AdminDashboardController dashboard;
+    // Reference vers le UserDashboardController
+    private UserDashboardController userDashboard;
 
-    public void setDashboardController(AdminDashboardController dashboard) {
-        this.dashboard = dashboard;
+    // L'event pour lequel on affiche les reviews
+    private Event currentEvent;
+
+    public void setUserDashboardController(UserDashboardController userDashboard) {
+        this.userDashboard = userDashboard;
+    }
+
+    /**
+     * Definir l'event et charger ses reviews
+     */
+    public void setEvent(Event event) {
+        this.currentEvent = event;
+        if (event != null) {
+            lblHeaderTitle.setText("Reviews - " + event.getName());
+            lblHeaderSubtitle.setText("Avis pour l'evenement : " + event.getName());
+        }
+        loadCards();
     }
 
     @FXML
     public void initialize() {
-        imgEdit = new Image(getClass().getResource("/images/edit.png").toExternalForm());
-        imgDelete = new Image(getClass().getResource("/images/delete.png").toExternalForm());
-        loadCards();
+        // Les cards seront chargees apres setEvent()
     }
 
     @FXML
@@ -49,7 +62,7 @@ public class DisplayReview {
     private void handleSearch() {
         String text = searchField.getText().toLowerCase().trim();
         cardsContainer.getChildren().clear();
-        List<Review> reviews = serviceReview.getAll();
+        List<Review> reviews = getFilteredReviews();
         if (!text.isEmpty()) {
             reviews.removeIf(r ->
                     (r.getTitle() == null || !r.getTitle().toLowerCase().contains(text)) &&
@@ -62,30 +75,59 @@ public class DisplayReview {
         }
     }
 
+    // =====================================================
+    // Retour vers la liste des evenements (dans le sidebar)
+    // =====================================================
     @FXML
-    private void goToDisplayEvent(ActionEvent event) {
+    private void goBackToEvents() {
         try {
-            if (dashboard != null) {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/DisplayEvent.fxml"));
-                Parent root = loader.load();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/UserDisplayEvent.fxml"));
+            Parent root = loader.load();
 
-                DisplayEvent controller = loader.getController();
-                controller.setDashboardController(dashboard);
+            UserDisplayEvent controller = loader.getController();
+            controller.setUserDashboardController(userDashboard);
 
-                dashboard.setContent(root);
-            } else {
-                Parent root = FXMLLoader.load(getClass().getResource("/DisplayEvent.fxml"));
-                Stage stage = (Stage) cardsContainer.getScene().getWindow();
-                stage.setScene(new Scene(root));
-                stage.setTitle("Events");
-                stage.show();
+            if (userDashboard != null) {
+                userDashboard.setContent(root);
             }
         } catch (IOException e) {
             e.printStackTrace();
-            new Alert(Alert.AlertType.ERROR, "Impossible d'ouvrir DisplayEvent.fxml").show();
+            new Alert(Alert.AlertType.ERROR, "Impossible d'ouvrir UserDisplayEvent.fxml").show();
         }
     }
 
+    // =====================================================
+    // Ouvrir le formulaire d'ajout de review (popup)
+    // =====================================================
+    @FXML
+    private void goToAddReview() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AddReview.fxml"));
+            Parent root = loader.load();
+
+            // Si ton AddReview a un champ eventId, on le pre-remplit
+            Object controller = loader.getController();
+            if (controller instanceof AddReview) {
+                // Si tu as une methode setEventId dans AddReview, decommente :
+                // ((AddReview) controller).setEventId(currentEvent.getEventId());
+            }
+
+            Stage stage = new Stage();
+            stage.setTitle("Ajouter une Review");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+            // Quand le popup se ferme, on recharge les cards
+            stage.setOnHidden(e -> loadCards());
+        } catch (IOException e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Impossible d'ouvrir AddReview.fxml").show();
+        }
+    }
+
+    // =====================================================
+    // Cree une carte review (avec edit + delete pour l'utilisateur)
+    // =====================================================
     private VBox createCard(Review r) {
         VBox card = new VBox(12);
         card.setPrefWidth(300);
@@ -125,9 +167,6 @@ public class DisplayReview {
         Label dates = new Label("📅 " + r.getReviewDate());
         dates.getStyleClass().add("event-info");
 
-        Label eventInfo = new Label("🎉 Event ID: " + r.getEventId());
-        eventInfo.getStyleClass().add("event-info");
-
         Label ratingLabel = new Label("⭐ Note: " + r.getRating() + "/5");
         ratingLabel.getStyleClass().add("event-info");
 
@@ -139,10 +178,13 @@ public class DisplayReview {
         Separator sep = new Separator();
         sep.getStyleClass().add("event-separator");
 
-        card.getChildren().addAll(header, sep, dates, eventInfo, ratingLabel, desc);
+        card.getChildren().addAll(header, sep, dates, ratingLabel, desc);
         return card;
     }
 
+    // =====================================================
+    // Suppression avec confirmation
+    // =====================================================
     private void confirmAndDelete(Review r) {
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
                 "Supprimer la review : " + r.getTitle() + " ?", ButtonType.OK, ButtonType.CANCEL);
@@ -150,11 +192,14 @@ public class DisplayReview {
             if (resp == ButtonType.OK) {
                 serviceReview.delete(r.getReviewId());
                 loadCards();
-                new Alert(Alert.AlertType.INFORMATION, "Review supprimee ✅").show();
+                new Alert(Alert.AlertType.INFORMATION, "Review supprimee !").show();
             }
         });
     }
 
+    // =====================================================
+    // Ouvrir le formulaire de modification (popup)
+    // =====================================================
     private void openUpdateWindow(Review r) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/UpdateReview.fxml"));
@@ -175,25 +220,22 @@ public class DisplayReview {
         }
     }
 
-    @FXML
-    private void goToAddReview() {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/AddReview.fxml"));
-            Stage stage = new Stage();
-            stage.setTitle("Ajouter Review");
-            stage.setScene(new Scene(root));
-            stage.show();
-
-            stage.setOnHidden(e -> loadCards());
-        } catch (IOException e) {
-            e.printStackTrace();
-            new Alert(Alert.AlertType.ERROR, "Impossible d'ouvrir AddReview.fxml").show();
+    // =====================================================
+    // Charger les reviews filtrees par event
+    // =====================================================
+    private List<Review> getFilteredReviews() {
+        List<Review> allReviews = serviceReview.getAll();
+        if (currentEvent != null) {
+            return allReviews.stream()
+                    .filter(r -> r.getEventId() == currentEvent.getEventId())
+                    .collect(Collectors.toList());
         }
+        return allReviews;
     }
 
     private void loadCards() {
         cardsContainer.getChildren().clear();
-        List<Review> reviews = serviceReview.getAll();
+        List<Review> reviews = getFilteredReviews();
         lblCount.setText(reviews.size() + " review(s)");
         for (Review r : reviews) {
             cardsContainer.getChildren().add(createCard(r));

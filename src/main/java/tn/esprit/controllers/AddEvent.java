@@ -4,12 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
-import javafx.stage.Stage;
+import javafx.scene.control.*;
 import tn.esprit.entities.Event;
 import tn.esprit.services.ServiceEvent;
 
@@ -22,16 +17,19 @@ public class AddEvent {
     @FXML private DatePicker startDate;
     @FXML private DatePicker endDate;
     @FXML private TextField maxParticipants;
-    @FXML private TextField description;
+    @FXML private TextArea description;
     @FXML private TextField fee;
-
-    // ✅ OK
     @FXML private TextField tfLocation;
+
+    private AdminDashboardController dashboard; // 🔹 Référence dashboard
+
+    public void setDashboardController(AdminDashboardController dashboard) {
+        this.dashboard = dashboard;
+    }
 
     @FXML
     void handleAddEvent(ActionEvent event) {
 
-        // Validation simple
         if (name.getText().isEmpty()
                 || startDate.getValue() == null
                 || endDate.getValue() == null
@@ -68,7 +66,6 @@ public class AddEvent {
             ServiceEvent service = new ServiceEvent();
             service.ajouter(e);
 
-            // ✅ Message + navigation
             Alert ok = new Alert(Alert.AlertType.INFORMATION,
                     "Événement ajouté avec succès !\nVoulez-vous afficher la liste ?",
                     ButtonType.YES, ButtonType.NO);
@@ -88,15 +85,18 @@ public class AddEvent {
         }
     }
 
-    // ✅ Bouton "Afficher les événements" (si tu l’ajoutes dans FXML)
     @FXML
     private void goToDisplay() {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/DisplayEvent.fxml"));
-            Stage stage = (Stage) name.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Events - CardView");
-            stage.show();
+            if (dashboard != null) {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/DisplayEvent.fxml"));
+                Parent root = loader.load();
+
+                DisplayEvent controller = loader.getController();
+                controller.setDashboardController(dashboard);
+
+                dashboard.setContent(root); // 🔹 navigation via dashboard
+            }
         } catch (IOException e) {
             e.printStackTrace();
             new Alert(Alert.AlertType.ERROR, "Impossible d'ouvrir DisplayEvent.fxml").show();
