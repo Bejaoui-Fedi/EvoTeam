@@ -1,5 +1,7 @@
 package tn.esprit.controllers;
 
+import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,6 +13,7 @@ import tn.esprit.services.UserService;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 public class AdminFormController {
 
@@ -29,7 +32,15 @@ public class AdminFormController {
 
     @FXML
     public void initialize() {
-        userService = new UserService();
+        try {
+            userService = new UserService();
+        } catch (Exception e) {
+            System.err.println("❌ Erreur critique : Impossible d'initialiser UserService dans AdminFormController");
+            e.printStackTrace();
+            if (messageLabel != null) {
+                showMessage("❌ Erreur système : Base de données inaccessible", "error");
+            }
+        }
     }
 
     private boolean validateInput() {
@@ -188,4 +199,6 @@ public class AdminFormController {
             } catch (InterruptedException e) {}
         }).start();
     }
+
+
 }

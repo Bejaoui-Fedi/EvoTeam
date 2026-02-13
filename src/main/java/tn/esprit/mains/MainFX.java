@@ -7,7 +7,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class MainFX extends Application {
-
     @Override
     public void start(Stage primaryStage) {
         try {
@@ -15,7 +14,7 @@ public class MainFX extends Application {
             Parent root = loader.load();
 
             Scene scene = new Scene(root, 1000, 600);
-            primaryStage.setTitle("PsyCoach Pro - Accueil");
+            primaryStage.setTitle("Evolia");
             primaryStage.setScene(scene);
             primaryStage.centerOnScreen();
             primaryStage.show();

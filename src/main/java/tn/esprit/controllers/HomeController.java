@@ -1,12 +1,16 @@
 package tn.esprit.controllers;
 
+import javafx.animation.ScaleTransition;
+import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import java.io.IOException;
 
 public class HomeController {
@@ -18,6 +22,12 @@ public class HomeController {
     private Button adminButton;
 
     @FXML
+    private VBox adminCard;
+
+    @FXML
+    private VBox userCard;
+
+    @FXML
     private void handleUserAccess() {
         redirectToLogin("Espace Utilisateur", "USER");
     }
@@ -25,6 +35,44 @@ public class HomeController {
     @FXML
     private void handleAdminAccess() {
         redirectToLogin("Espace Administrateur", "ADMIN");
+    }
+
+    @FXML
+    private void onAdminCardEntered() {
+        animateCard(adminCard, true);
+    }
+
+    @FXML
+    private void onAdminCardExited() {
+        animateCard(adminCard, false);
+    }
+
+    @FXML
+    private void onUserCardEntered() {
+        animateCard(userCard, true);
+    }
+
+    @FXML
+    private void onUserCardExited() {
+        animateCard(userCard, false);
+    }
+
+    private void animateCard(VBox card, boolean enter) {
+        ScaleTransition scale = new ScaleTransition(Duration.millis(200), card);
+        TranslateTransition translate = new TranslateTransition(Duration.millis(200), card);
+
+        if (enter) {
+            scale.setToX(1.03);
+            scale.setToY(1.03);
+            translate.setToY(-5);
+        } else {
+            scale.setToX(1.0);
+            scale.setToY(1.0);
+            translate.setToY(0);
+        }
+
+        scale.play();
+        translate.play();
     }
 
     private void redirectToLogin(String espace, String role) {

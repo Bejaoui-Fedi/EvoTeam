@@ -40,7 +40,15 @@ public class UserFormController {
 
     @FXML
     public void initialize() {
-        userService = new UserService();
+        try {
+            userService = new UserService();
+        } catch (Exception e) {
+            System.err.println("❌ Erreur critique : Impossible d'initialiser UserService dans UserFormController");
+            e.printStackTrace();
+            if (messageLabel != null) {
+                showMessage("❌ Erreur système : Base de données inaccessible", "error");
+            }
+        }
 
         if (patientRadio != null) {
             patientRadio.setSelected(true);
@@ -283,7 +291,7 @@ public class UserFormController {
             closeWindow();
         } else {
             showSuccessMessage("✅ Compte créé avec succès !");
-            redirectToProfile(newUser); // ✅ Redirection vers le profil
+            redirectToDashboard(newUser); // ✅ Redirection vers le Dashboard
         }
     }
 
@@ -315,48 +323,37 @@ public class UserFormController {
         closeWindow();
     }
 
-    // ✅ NOUVELLE MÉTHODE - Redirection vers le profil
-    private void redirectToProfile(User user) {
+    // ✅ Redirection vers le Dashboard
+    private void redirectToDashboard(User user) {
         try {
-            System.out.println("🚀 Redirection vers le profil pour: " + user.getEmail());
+            System.out.println("🚀 Redirection vers le Dashboard pour: " + user.getEmail());
 
-            // ✅ Vérifier que le FXML existe
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/UserProfileView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/UserDashboard.fxml"));
             if (loader.getLocation() == null) {
-                System.out.println("❌ ERREUR: UserProfileView.fxml introuvable!");
-                showMessage("❌ Erreur: Fichier de profil introuvable", "error");
+                showMessage("❌ Erreur: Fichier UserDashboard.fxml introuvable", "error");
                 return;
             }
 
             Parent root = loader.load();
-            System.out.println("✅ FXML chargé avec succès");
-
-            UserProfileController controller = loader.getController();
-            if (controller == null) {
-                System.out.println("❌ ERREUR: Controller est null!");
-                return;
+            
+            // ✅ Utiliser le bon contrôleur
+            UserDashboardController controller = loader.getController();
+            if (controller != null) {
+                controller.setCurrentUser(user);
+                System.out.println("✅ User passé au UserDashboardController");
+            } else {
+                System.err.println("⚠️ Le contrôleur du Dashboard est null !");
             }
 
-            // ✅ Passer l'utilisateur
-            controller.setUser(user);
-            System.out.println("✅ User passé au controller");
-
             Stage stage = (Stage) nomField.getScene().getWindow();
-            stage.setScene(new Scene(root, 600, 700));
-            stage.setTitle("Profil de " + user.getNom());
+            stage.setScene(new Scene(root, 1400, 800)); // Taille adaptée au Dashboard
+            stage.setTitle("Mon Espace - " + user.getNom());
             stage.centerOnScreen();
             stage.show();
 
-            System.out.println("✅ Redirection réussie!");
-
         } catch (IOException e) {
-            System.out.println("❌ IOException: " + e.getMessage());
             e.printStackTrace();
-            showMessage("❌ Impossible d'ouvrir votre profil: " + e.getMessage(), "error");
-        } catch (Exception e) {
-            System.out.println("❌ Exception: " + e.getMessage());
-            e.printStackTrace();
-            showMessage("❌ Erreur inattendue: " + e.getMessage(), "error");
+            showMessage("❌ Impossible d'ouvrir le tableau de bord: " + e.getMessage(), "error");
         }
     }
 

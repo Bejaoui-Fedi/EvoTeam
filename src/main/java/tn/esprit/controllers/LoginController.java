@@ -120,24 +120,30 @@ public class LoginController {
             String title;
 
             if ("ADMIN".equals(user.getRole())) {
-                // ✅ ADMIN → UserListView (Gestion des utilisateurs)
-                loader = new FXMLLoader(getClass().getResource("/UserListView.fxml"));
+                // ✅ ADMIN → AdminDashboard
+                loader = new FXMLLoader(getClass().getResource("/AdminDashboard.fxml"));
                 root = loader.load();
-                title = "Gestion des Utilisateurs - Administration";
+
+                // Si vous voulez passer l'utilisateur admin au contrôleur
+                // AdminDashboardController adminController = loader.getController();
+                // adminController.setCurrentUser(user);
+
+                title = "Administration - PsyCoach Pro";
+
             } else {
-                // ✅ PATIENT ou PSY_COACH → Profil utilisateur
-                loader = new FXMLLoader(getClass().getResource("/UserProfileView.fxml"));
+                // ✅ PATIENT ou PSY_COACH → UserDashboard
+                loader = new FXMLLoader(getClass().getResource("/UserDashboard.fxml"));
                 root = loader.load();
 
-                // Passer l'utilisateur au contrôleur du profil
-                UserProfileController profileController = loader.getController();
-                profileController.setUser(user);
+                // ✅ CORRECTION ICI ! UserDashboardController au lieu de UserProfileController
+                UserDashboardController dashboardController = loader.getController();
+                dashboardController.setCurrentUser(user);  // Passer l'utilisateur au dashboard
 
-                title = "Profil de " + user.getNom();
+                title = "Mon espace - " + user.getNom();
             }
 
             Stage stage = (Stage) emailField.getScene().getWindow();
-            stage.setScene(new Scene(root, 600, 700)); // Taille pour le profil
+            stage.setScene(new Scene(root, 1400, 800)); // Taille pour le dashboard
             stage.setTitle(title);
             stage.centerOnScreen();
             stage.show();
@@ -184,8 +190,8 @@ public class LoginController {
             stage.show();
 
         } catch (IOException e) {
-            showMessage("❌ Impossible d'ouvrir le formulaire d'inscription", "error");
             e.printStackTrace();
+            showMessage("❌ Erreur : " + e.getMessage(), "error");
         }
     }
 
