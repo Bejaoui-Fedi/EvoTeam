@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import javafx.stage.Modality;
 import tn.esprit.entities.Appointment;
 import tn.esprit.services.AppointmentService;
 
@@ -26,52 +27,27 @@ public class UserMesRdvController {
     @FXML private TableColumn<Appointment, String> colType;
     @FXML private TableColumn<Appointment, String> colStatut;
 
-    // Formulaire de modification
-    @FXML private DatePicker modifierDatePicker;
-    @FXML private ComboBox<String> modifierHeureCombo;
-    @FXML private TextField modifierMotifField;
-    @FXML private ChoiceBox<String> modifierTypeChoice;
-
     @FXML private Button modifierButton;
     @FXML private Button annulerButton;
     @FXML private Button supprimerButton;
     @FXML private Button nouveauRdvButton;
-    @FXML private Button validerModificationButton;
-    @FXML private Button annulerModificationButton;
 
     @FXML private Label infoLabel;
     @FXML private Label compteurLabel;
-    @FXML private TitledPane modificationPane;
 
     private AppointmentService service = new AppointmentService();
     private ObservableList<Appointment> rdvList = FXCollections.observableArrayList();
-    private int currentUserId = 1; // Simulation
+    private int currentUserId = 1;
     private Appointment selectedAppointment;
 
     @FXML
     public void initialize() {
         setupTableColumns();
         setupCellFactories();
-        setupModificationForm();
         loadMesRendezVous();
         setupSelectionListener();
-
-        // Initialiser le panneau de modification
-        modificationPane.setExpanded(false);
-        modificationPane.setVisible(false);
-
-        // ✅ FORCER L'ACTIVATION DES CHAMDS DÈS LE DÉPART
-        modifierDatePicker.setDisable(false);
-        modifierHeureCombo.setDisable(false);
-        modifierMotifField.setDisable(false);
-        modifierTypeChoice.setDisable(false);
-        validerModificationButton.setDisable(false);
-
-        // Rendre les champs éditables
-        modifierDatePicker.setEditable(true);
-        modifierHeureCombo.setEditable(true);
-        modifierMotifField.setEditable(true);
     }
+
     private void setupTableColumns() {
         colDate.setCellValueFactory(new PropertyValueFactory<>("dateRdv"));
         colHeure.setCellValueFactory(new PropertyValueFactory<>("heureRdv"));
@@ -87,10 +63,15 @@ public class UserMesRdvController {
                 super.updateItem(date, empty);
                 if (empty || date == null) {
                     setText(null);
+                    setStyle("");
                 } else {
                     setText(date.toString());
                     if (date.isBefore(LocalDate.now())) {
-                        setStyle("-fx-text-fill: #7f8c8d;");
+                        setStyle("-fx-text-fill: #7f8c8d; -fx-font-style: italic;");
+                    } else if (date.isEqual(LocalDate.now())) {
+                        setStyle("-fx-text-fill: #e67e22; -fx-font-weight: bold;");
+                    } else {
+                        setStyle("-fx-text-fill: #2c3e50;");
                     }
                 }
             }
@@ -107,59 +88,26 @@ public class UserMesRdvController {
                     setText(statut);
                     switch (statut) {
                         case "confirmé":
-                            setStyle("-fx-text-fill: #27ae60; -fx-font-weight: bold;");
+                            setStyle("-fx-background-color: #d4edda; -fx-text-fill: #155724; -fx-font-weight: bold; -fx-alignment: CENTER;");
                             break;
                         case "annulé":
-                            setStyle("-fx-text-fill: #e74c3c; -fx-font-weight: bold;");
+                            setStyle("-fx-background-color: #f8d7da; -fx-text-fill: #721c24; -fx-font-weight: bold; -fx-alignment: CENTER;");
                             break;
                         case "terminé":
-                            setStyle("-fx-text-fill: #3498db; -fx-font-weight: bold;");
+                            setStyle("-fx-background-color: #cce5ff; -fx-text-fill: #004085; -fx-font-weight: bold; -fx-alignment: CENTER;");
                             break;
                         default:
-                            setStyle("-fx-text-fill: #f39c12; -fx-font-weight: bold;");
+                            setStyle("-fx-background-color: #fff3cd; -fx-text-fill: #856404; -fx-font-weight: bold; -fx-alignment: CENTER;");
                     }
                 }
             }
         });
     }
 
-    private void setupModificationForm() {
-        // Créneaux disponibles (9h-17h)
-        ObservableList<String> creneaux = FXCollections.observableArrayList();
-        for (int i = 9; i <= 17; i++) {
-            creneaux.add(String.format("%02d:00", i));
-            creneaux.add(String.format("%02d:30", i));
-        }
-        modifierHeureCombo.setItems(creneaux);
-
-        // Type de rendez-vous
-        modifierTypeChoice.setItems(FXCollections.observableArrayList(
-                "Présentiel", "Téléconsultation"
-        ));
-
-        // Date minimale = aujourd'hui
-        modifierDatePicker.setDayCellFactory(picker -> new DateCell() {
-            @Override
-            public void updateItem(LocalDate date, boolean empty) {
-                super.updateItem(date, empty);
-                setDisable(empty || date.isBefore(LocalDate.now()));
-            }
-        });
-
-        // S'assurer que les champs sont éditables
-        modifierDatePicker.setEditable(true);
-        modifierHeureCombo.setEditable(true);
-        modifierMotifField.setEditable(true);
-    }
-
     private void loadMesRendezVous() {
         try {
             rdvList.clear();
-            for (Appointment a : service.getAll()) {
-                if (a.getUserId() == currentUserId) {
-                    rdvList.add(a);
-                }
-            }
+            rdvList.addAll(service.getByUserId(currentUserId));
             tableView.setItems(rdvList);
             updateStatistics();
         } catch (SQLException e) {
@@ -170,220 +118,209 @@ public class UserMesRdvController {
 
     private void updateStatistics() {
         int total = rdvList.size();
+
         long aVenir = rdvList.stream()
-                .filter(a -> a.getDateRdv().isAfter(LocalDate.now())
-                        || (a.getDateRdv().isEqual(LocalDate.now())
-                        && a.getHeureRdv().isAfter(LocalTime.now())))
+                .filter(a -> a.getDateRdv().isAfter(LocalDate.now()) ||
+                        (a.getDateRdv().isEqual(LocalDate.now()) &&
+                                a.getHeureRdv().isAfter(LocalTime.now())))
                 .count();
+
         long confirmes = rdvList.stream()
                 .filter(a -> "confirmé".equals(a.getStatut()))
                 .count();
+
         long enAttente = rdvList.stream()
                 .filter(a -> "en attente".equals(a.getStatut()))
                 .count();
 
+        long termines = rdvList.stream()
+                .filter(a -> "terminé".equals(a.getStatut()))
+                .count();
+
+        long annules = rdvList.stream()
+                .filter(a -> "annulé".equals(a.getStatut()))
+                .count();
+
         if (total == 0) {
             infoLabel.setText("📋 Vous n'avez aucun rendez-vous.");
-            compteurLabel.setText("");
+            compteurLabel.setText("👋 Prenez votre premier rendez-vous !");
         } else {
             infoLabel.setText(String.format("📋 Vous avez %d rendez-vous", total));
-            compteurLabel.setText(String.format("✅ %d confirmés | ⏳ %d en attente | 📅 %d à venir",
-                    confirmes, enAttente, aVenir));
+            compteurLabel.setText(String.format(
+                    "✅ Confirmés: %d | ⏳ En attente: %d | ✅ Terminés: %d | ❌ Annulés: %d | 📅 À venir: %d",
+                    confirmes, enAttente, termines, annules, aVenir));
         }
     }
 
     private void setupSelectionListener() {
         tableView.getSelectionModel().selectedItemProperty().addListener((obs, old, newSel) -> {
             selectedAppointment = newSel;
+
             if (newSel != null) {
-                String statut = newSel.getStatut();
-                LocalDate date = newSel.getDateRdv();
-                LocalTime heure = newSel.getHeureRdv();
-
-                // Peut MODIFIER si : statut = "en attente" ET date pas encore passée
-                boolean peutModifier = statut.equals("en attente")
-                        && (date.isAfter(LocalDate.now())
-                        || (date.isEqual(LocalDate.now()) && heure.isAfter(LocalTime.now())));
-
-                // Peut ANNULER si : en attente ou confirmé ET date pas encore passée
-                boolean peutAnnuler = (statut.equals("en attente") || statut.equals("confirmé"))
-                        && (date.isAfter(LocalDate.now())
-                        || (date.isEqual(LocalDate.now()) && heure.isAfter(LocalTime.now())));
-
-                // Peut SUPPRIMER si : déjà annulé OU date passée
-                boolean peutSupprimer = statut.equals("annulé") ||
-                        date.isBefore(LocalDate.now()) ||
-                        (date.isEqual(LocalDate.now()) && heure.isBefore(LocalTime.now()));
-
-                modifierButton.setDisable(!peutModifier);
-                annulerButton.setDisable(!peutAnnuler);
-                supprimerButton.setDisable(!peutSupprimer);
-
-                // Pré-remplir le formulaire de modification
-                fillModificationForm(newSel);
-
+                updateButtonStates(newSel);
             } else {
-                modifierButton.setDisable(true);
-                annulerButton.setDisable(true);
-                supprimerButton.setDisable(true);
-                modificationPane.setExpanded(false);
-                modificationPane.setVisible(false);
+                disableAllButtons();
             }
         });
     }
 
-    private void fillModificationForm(Appointment a) {
+    private void updateButtonStates(Appointment a) {
+        String statut = a.getStatut();
+        LocalDate date = a.getDateRdv();
+        LocalTime heure = a.getHeureRdv();
+        LocalDate aujourdHui = LocalDate.now();
+        LocalTime maintenant = LocalTime.now();
 
-        modifierDatePicker.setValue(a.getDateRdv());
+        boolean peutModifier = "en attente".equals(statut) &&
+                (date.isAfter(aujourdHui) || (date.isEqual(aujourdHui) && heure.isAfter(maintenant)));
 
-        String heure = a.getHeureRdv().toString();
+        boolean peutAnnuler = ("en attente".equals(statut) || "confirmé".equals(statut)) &&
+                (date.isAfter(aujourdHui) || (date.isEqual(aujourdHui) && heure.isAfter(maintenant)));
 
-        // 🔥 AJOUT IMPORTANT
-        if (!modifierHeureCombo.getItems().contains(heure)) {
-            modifierHeureCombo.getItems().add(heure);
+        boolean peutSupprimer = "annulé".equals(statut) || "terminé".equals(statut) ||
+                date.isBefore(aujourdHui) || (date.isEqual(aujourdHui) && heure.isBefore(maintenant));
+
+        modifierButton.setDisable(!peutModifier);
+        annulerButton.setDisable(!peutAnnuler);
+        supprimerButton.setDisable(!peutSupprimer);
+
+        if (!peutModifier) {
+            Tooltip.install(modifierButton, new Tooltip(
+                    "Modification impossible :\n- Le rendez-vous doit être en attente\n- La date ne doit pas être passée"));
+        } else {
+            Tooltip.uninstall(modifierButton, null);
         }
 
-        modifierHeureCombo.setValue(heure);
+        if (!peutAnnuler) {
+            Tooltip.install(annulerButton, new Tooltip(
+                    "Annulation impossible :\n- Le rendez-vous doit être en attente ou confirmé\n- La date ne doit pas être passée"));
+        } else {
+            Tooltip.uninstall(annulerButton, null);
+        }
+    }
 
-        modifierMotifField.setText(a.getMotif());
-        modifierTypeChoice.setValue(a.getTypeRdv());
+    private void disableAllButtons() {
+        modifierButton.setDisable(true);
+        annulerButton.setDisable(true);
+        supprimerButton.setDisable(true);
     }
 
     @FXML
     private void modifierRendezVous() {
-        modificationPane.setDisable(false);
-        if (selectedAppointment == null) return;
-
-        // Remplir le formulaire avec les données actuelles
-        fillModificationForm(selectedAppointment);
-
-        // ✅ FORCER L'ACTIVATION DES CHAMPS (À AJOUTER !)
-        modifierDatePicker.setDisable(false);
-        modifierHeureCombo.setDisable(false);
-        modifierMotifField.setDisable(false);
-        modifierTypeChoice.setDisable(false);
-        validerModificationButton.setDisable(false);
-
-        // Rendre les champs éditables
-        modifierDatePicker.setEditable(true);
-        modifierHeureCombo.setEditable(true);
-        modifierMotifField.setEditable(true);
-        modifierTypeChoice.setDisable(false);
-
-        // Afficher et développer le panneau
-        modificationPane.setVisible(true);
-        modificationPane.setExpanded(true);
-
-        // Donner le focus au premier champ
-        modifierDatePicker.requestFocus();
-    }
-
-    @FXML
-    private void validerModification() {
         if (selectedAppointment == null) {
-            showAlert(Alert.AlertType.WARNING, "Attention", "Aucun rendez-vous sélectionné");
+            showAlert(Alert.AlertType.WARNING, "Attention",
+                    "Veuillez sélectionner un rendez-vous à modifier.");
             return;
         }
 
-        if (!validateModification()) return;
-
         try {
-            // Vérifier que tous les champs sont remplis
-            LocalDate newDate = modifierDatePicker.getValue();
-            String newHeure = modifierHeureCombo.getValue();
-            String newMotif = modifierMotifField.getText().trim();
-            String newType = modifierTypeChoice.getValue();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/user/modifier_rdv_dialog.fxml"));
 
-            if (newDate == null || newHeure == null || newMotif.isEmpty() || newType == null) {
-                showAlert(Alert.AlertType.WARNING, "Validation", "Tous les champs doivent être remplis");
+            if (loader.getLocation() == null) {
+                showAlert(Alert.AlertType.ERROR, "Erreur",
+                        "Fichier FXML introuvable : /fxml/user/modifier_rdv_dialog.fxml");
                 return;
             }
 
-            // Mettre à jour le rendez-vous
-            selectedAppointment.setDateRdv(newDate);
-            selectedAppointment.setHeureRdv(LocalTime.parse(newHeure));
-            selectedAppointment.setMotif(newMotif);
-            selectedAppointment.setTypeRdv(newType);
-            // Le statut reste "en attente"
+            Parent root = loader.load();
 
-            service.update(selectedAppointment);
+            ModifierRdvDialogController controller = loader.getController();
+            controller.setAppointment(selectedAppointment);
 
-            // Recharger et fermer le panneau
-            loadMesRendezVous();
-            annulerModification();
+            Stage stage = new Stage();
+            controller.setStage(stage);
 
-            showAlert(Alert.AlertType.INFORMATION, "Succès",
-                    "Votre rendez-vous a été modifié avec succès !");
+            stage.setTitle("Modifier le rendez-vous");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(modifierButton.getScene().getWindow());
+            stage.setResizable(false);
 
-        } catch (SQLException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur",
-                    "Impossible de modifier le rendez-vous : " + e.getMessage());
-        } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur",
-                    "Format d'heure invalide. Utilisez HH:MM (ex: 14:30)");
+            stage.showAndWait();
+
+            if (controller.isModificationReussie()) {
+                loadMesRendezVous();
+            }
+
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur technique",
+                    "Impossible d'ouvrir la fenêtre de modification.\n" + e.getMessage());
+            e.printStackTrace();
         }
-    }
-
-    @FXML
-    private void annulerModification() {
-        modificationPane.setExpanded(false);
-        modificationPane.setVisible(false);
-        clearModificationForm();
-        tableView.getSelectionModel().clearSelection();
     }
 
     @FXML
     private void annulerRendezVous() {
-        Appointment selected = tableView.getSelectionModel().getSelectedItem();
-        if (selected == null) return;
+        if (selectedAppointment == null) return;
 
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
         confirm.setTitle("Confirmation d'annulation");
         confirm.setHeaderText("Annuler le rendez-vous ?");
         confirm.setContentText(String.format(
-                "Voulez-vous vraiment annuler le rendez-vous du %s à %s ?",
-                selected.getDateRdv(), selected.getHeureRdv()
+                "Voulez-vous vraiment annuler le rendez-vous suivant ?\n\n" +
+                        "📅 Date : %s\n" +
+                        "⏰ Heure : %s\n" +
+                        "📝 Motif : %s\n" +
+                        "🖥️ Type : %s\n\n" +
+                        "⚠️ Cette action est réversible.",
+                selectedAppointment.getDateRdv(),
+                selectedAppointment.getHeureRdv(),
+                selectedAppointment.getMotif(),
+                selectedAppointment.getTypeRdv()
         ));
 
         if (confirm.showAndWait().get() == ButtonType.OK) {
             try {
-                selected.setStatut("annulé");
-                service.update(selected);
+                int userId = selectedAppointment.getUserId();
+                selectedAppointment.setStatut("annulé");
+                selectedAppointment.setUserId(userId);
+
+                service.update(selectedAppointment);
                 loadMesRendezVous();
+
                 showAlert(Alert.AlertType.INFORMATION, "Succès",
-                        "Votre rendez-vous a été annulé.");
+                        "✅ Votre rendez-vous a été annulé avec succès.");
+
             } catch (SQLException e) {
                 showAlert(Alert.AlertType.ERROR, "Erreur",
                         "Impossible d'annuler le rendez-vous : " + e.getMessage());
+                e.printStackTrace();
             }
         }
     }
 
     @FXML
     private void supprimerRendezVous() {
-        Appointment selected = tableView.getSelectionModel().getSelectedItem();
-        if (selected == null) return;
+        if (selectedAppointment == null) return;
 
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
         confirm.setTitle("Confirmation de suppression");
         confirm.setHeaderText("Supprimer définitivement le rendez-vous ?");
         confirm.setContentText(String.format(
-                "RDV #%d - %s %s\nMotif: %s\n\nCette action est irréversible !",
-                selected.getId(),
-                selected.getDateRdv(),
-                selected.getHeureRdv(),
-                selected.getMotif()
+                "‼️ ATTENTION ‼️\n\n" +
+                        "Vous êtes sur le point de supprimer DÉFINITIVEMENT ce rendez-vous :\n\n" +
+                        "📅 Date : %s %s\n" +
+                        "📝 Motif : %s\n" +
+                        "📊 Statut : %s\n\n" +
+                        "⚠️ Cette action est IRREVERSIBLE !",
+                selectedAppointment.getDateRdv(),
+                selectedAppointment.getHeureRdv(),
+                selectedAppointment.getMotif(),
+                selectedAppointment.getStatut()
         ));
 
         if (confirm.showAndWait().get() == ButtonType.OK) {
             try {
-                service.delete(selected);
+                service.delete(selectedAppointment);
                 loadMesRendezVous();
+
                 showAlert(Alert.AlertType.INFORMATION, "Succès",
-                        "Le rendez-vous a été supprimé définitivement.");
+                        "🗑️ Le rendez-vous a été supprimé définitivement.");
+
             } catch (SQLException e) {
                 showAlert(Alert.AlertType.ERROR, "Erreur",
-                        "Impossible de supprimer : " + e.getMessage());
+                        "Impossible de supprimer le rendez-vous : " + e.getMessage());
+                e.printStackTrace();
             }
         }
     }
@@ -393,40 +330,31 @@ public class UserMesRdvController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/user/user_prendre_rdv.fxml"));
             Parent root = loader.load();
+
+            UserPrendreRdvController controller = loader.getController();
+            controller.setUserId(currentUserId);
+
             Stage stage = (Stage) nouveauRdvButton.getScene().getWindow();
             stage.setScene(new Scene(root));
-            stage.setTitle("Prendre rendez-vous");
+            stage.setTitle("Prendre un rendez-vous");
+
         } catch (IOException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur",
                     "Impossible d'ouvrir le formulaire de rendez-vous");
+            e.printStackTrace();
         }
     }
 
-    private boolean validateModification() {
-        if (modifierDatePicker.getValue() == null) {
-            showAlert(Alert.AlertType.WARNING, "Validation", "Veuillez choisir une date");
-            return false;
-        }
-        if (modifierHeureCombo.getValue() == null) {
-            showAlert(Alert.AlertType.WARNING, "Validation", "Veuillez choisir une heure");
-            return false;
-        }
-        if (modifierMotifField.getText().trim().isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Validation", "Veuillez saisir le motif");
-            return false;
-        }
-        if (modifierTypeChoice.getValue() == null) {
-            showAlert(Alert.AlertType.WARNING, "Validation", "Veuillez choisir le type");
-            return false;
-        }
-        return true;
+    @FXML
+    private void refresh() {
+        loadMesRendezVous();
+        showAlert(Alert.AlertType.INFORMATION, "Actualisation",
+                "✅ La liste des rendez-vous a été actualisée.");
     }
 
-    private void clearModificationForm() {
-        modifierDatePicker.setValue(null);
-        modifierHeureCombo.setValue(null);
-        modifierMotifField.clear();
-        modifierTypeChoice.setValue(null);
+    public void setUserId(int userId) {
+        this.currentUserId = userId;
+        loadMesRendezVous();
     }
 
     private void showAlert(Alert.AlertType type, String title, String msg) {

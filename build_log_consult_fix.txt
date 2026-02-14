@@ -1,0 +1,33 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------< org.example:PIDevUserManagement >-------------------
+[INFO] Building PIDevUserManagement 1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[WARNING] The artifact mysql:mysql-connector-java:jar:8.0.33 has been relocated to com.mysql:mysql-connector-j:jar:8.0.33: MySQL Connector/J artifacts moved to reverse-DNS compliant Maven 2+ coordinates.
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ PIDevUserManagement ---
+[INFO] Deleting C:\Users\Lenovo\Desktop\Esprit\Semestre 2\Projet Integr├®\PIDevAppointmentManagement\PIDevAppointmentManagement\target
+[INFO] 
+[INFO] >>> javafx:0.0.8:run (default-cli) > process-classes @ PIDevUserManagement >>>
+[WARNING] The artifact mysql:mysql-connector-java:jar:8.0.33 has been relocated to com.mysql:mysql-connector-j:jar:8.0.33: MySQL Connector/J artifacts moved to reverse-DNS compliant Maven 2+ coordinates.
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ PIDevUserManagement ---
+[INFO] Copying 10 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ PIDevUserManagement ---
+[INFO] Changes detected - recompiling the module! :source
+[INFO] Compiling 18 source files with javac [debug target 17] to target\classes
+[WARNING] system modules path not set in conjunction with -source 17
+[INFO] 
+[INFO] <<< javafx:0.0.8:run (default-cli) < process-classes @ PIDevUserManagement <<<
+[INFO] 
+[INFO] 
+[INFO] --- javafx:0.0.8:run (default-cli) @ PIDevUserManagement ---
+Connexion MySQL rÚussie !
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  01:12 min
+[INFO] Finished at: 2026-02-14T03:15:05+01:00
+[INFO] ------------------------------------------------------------------------

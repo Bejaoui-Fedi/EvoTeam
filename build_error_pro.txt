@@ -1,0 +1,51 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------< org.example:PIDevUserManagement >-------------------
+[INFO] Building PIDevUserManagement 1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[WARNING] The artifact mysql:mysql-connector-java:jar:8.0.33 has been relocated to com.mysql:mysql-connector-j:jar:8.0.33: MySQL Connector/J artifacts moved to reverse-DNS compliant Maven 2+ coordinates.
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ PIDevUserManagement ---
+[INFO] Copying 12 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ PIDevUserManagement ---
+[INFO] Changes detected - recompiling the module! :source
+[INFO] Compiling 18 source files with javac [debug target 17] to target\classes
+[INFO] -------------------------------------------------------------
+[WARNING] COMPILATION WARNING : 
+[INFO] -------------------------------------------------------------
+[WARNING] system modules path not set in conjunction with -source 17
+[INFO] 1 warning
+[INFO] -------------------------------------------------------------
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] /C:/Users/Lenovo/Desktop/Esprit/Semestre 2/Projet Integr├®/PIDevAppointmentManagement/PIDevAppointmentManagement/src/main/java/tn/esprit/mains/MainFX.java:[6,20] cannot find symbol
+  symbol:   class Stage
+  location: package javafx.scene
+[ERROR] /C:/Users/Lenovo/Desktop/Esprit/Semestre 2/Projet Integr├®/PIDevAppointmentManagement/PIDevAppointmentManagement/src/main/java/tn/esprit/mains/MainFX.java:[11,23] cannot find symbol
+  symbol:   class Stage
+  location: class tn.esprit.mains.MainFX
+[INFO] 2 errors 
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  2.554 s
+[INFO] Finished at: 2026-02-14T04:25:24+01:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.11.0:compile (default-compile) on project PIDevUserManagement: Compilation failure: Compilation failure: 
+[ERROR] /C:/Users/Lenovo/Desktop/Esprit/Semestre 2/Projet Integr├®/PIDevAppointmentManagement/PIDevAppointmentManagement/src/main/java/tn/esprit/mains/MainFX.java:[6,20] cannot find symbol
+[ERROR]   symbol:   class Stage
+[ERROR]   location: package javafx.scene
+[ERROR] /C:/Users/Lenovo/Desktop/Esprit/Semestre 2/Projet Integr├®/PIDevAppointmentManagement/PIDevAppointmentManagement/src/main/java/tn/esprit/mains/MainFX.java:[11,23] cannot find symbol
+[ERROR]   symbol:   class Stage
+[ERROR]   location: class tn.esprit.mains.MainFX
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException

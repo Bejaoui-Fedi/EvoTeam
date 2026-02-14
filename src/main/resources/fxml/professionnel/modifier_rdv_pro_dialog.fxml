@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="tn.esprit.controllers.professionnel.ModifierRdvProDialogController"
+            stylesheets="@../../css/nature-theme.css"
+            prefWidth="750" prefHeight="700"
+            styleClass="card" style="-fx-padding: 0;">
+
+            <top>
+                <VBox spacing="10" style="-fx-padding: 20;">
+                    <Label fx:id="titleLabel" text="MODIFICATION DU RENDEZ-VOUS"
+                           styleClass="header-label" style="-fx-font-size: 20px;"/>
+                    <Label fx:id="rdvInfoLabel" styleClass="subheader-label"/>
+                    <Separator/>
+                </VBox>
+            </top>
+
+            <center>
+                <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-border-color: transparent;">
+                    <VBox spacing="20" style="-fx-padding: 0 20 20 20;">
+
+                        <!-- Anciennes informations -->
+                        <TitledPane text="INFORMATIONS ACTUELLES" expanded="true" styleClass="normal-label">
+                            <GridPane hgap="20" vgap="10" style="-fx-padding: 15;">
+
+                                <Label text="ID Patient :" GridPane.rowIndex="0" GridPane.columnIndex="0"
+                                       styleClass="normal-label" style="-fx-font-weight: bold;"/>
+                                <Label fx:id="ancienUserIdLabel" GridPane.rowIndex="0" GridPane.columnIndex="1"
+                                       style="-fx-text-fill: #e74c3c; -fx-font-size: 14px;"/>
+
+                                <Label text="Date :" GridPane.rowIndex="1" GridPane.columnIndex="0"
+                                       styleClass="normal-label" style="-fx-font-weight: bold;"/>
+                                <Label fx:id="ancienneDateLabel" GridPane.rowIndex="1" GridPane.columnIndex="1"
+                                       style="-fx-text-fill: #e74c3c; -fx-font-size: 14px;"/>
+
+                                <Label text="Heure :" GridPane.rowIndex="2" GridPane.columnIndex="0"
+                                       styleClass="normal-label" style="-fx-font-weight: bold;"/>
+                                <Label fx:id="ancienneHeureLabel" GridPane.rowIndex="2" GridPane.columnIndex="1"
+                                       style="-fx-text-fill: #e74c3c; -fx-font-size: 14px;"/>
+
+                                <Label text="Motif :" GridPane.rowIndex="3" GridPane.columnIndex="0"
+                                       styleClass="normal-label" style="-fx-font-weight: bold;"/>
+                                <Label fx:id="ancienMotifLabel" GridPane.rowIndex="3" GridPane.columnIndex="1"
+                                       style="-fx-text-fill: #e74c3c; -fx-font-size: 14px;"/>
+
+                                <Label text="Type :" GridPane.rowIndex="4" GridPane.columnIndex="0"
+                                       styleClass="normal-label" style="-fx-font-weight: bold;"/>
+                                <Label fx:id="ancienTypeLabel" GridPane.rowIndex="4" GridPane.columnIndex="1"
+                                       style="-fx-text-fill: #e74c3c; -fx-font-size: 14px;"/>
+
+                                <Label text="Statut :" GridPane.rowIndex="5" GridPane.columnIndex="0"
+                                       styleClass="normal-label" style="-fx-font-weight: bold;"/>
+                                <Label fx:id="ancienStatutLabel" GridPane.rowIndex="5" GridPane.columnIndex="1"
+                                       style="-fx-text-fill: #e74c3c; -fx-font-size: 14px;"/>
+
+                            </GridPane>
+                        </TitledPane>
+
+                        <!-- Nouvelles informations -->
+                        <TitledPane text="NOUVELLES INFORMATIONS" expanded="true" styleClass="normal-label">
+                            <GridPane hgap="20" vgap="15" style="-fx-padding: 15;">
+
+                                <Label text="🆔 ID Patient :" GridPane.rowIndex="0" GridPane.columnIndex="0"
+                                       styleClass="normal-label" style="-fx-font-weight: bold;"/>
+                                <TextField fx:id="userIdField" GridPane.rowIndex="0" GridPane.columnIndex="1"
+                                           prefWidth="300" editable="false" styleClass="text-field"/>
+
+                                <Label text="📅 Date :" GridPane.rowIndex="1" GridPane.columnIndex="0"
+                                       styleClass="normal-label" style="-fx-font-weight: bold;"/>
+                                <DatePicker fx:id="datePicker" GridPane.rowIndex="1" GridPane.columnIndex="1"
+                                            prefWidth="300" promptText="Choisissez une date" styleClass="text-field"/>
+
+                                <Label text="⏰ Heure (HH:MM) :" GridPane.rowIndex="2" GridPane.columnIndex="0"
+                                       styleClass="normal-label" style="-fx-font-weight: bold;"/>
+                                <TextField fx:id="heureField" GridPane.rowIndex="2" GridPane.columnIndex="1"
+                                           prefWidth="300" promptText="14:30" styleClass="text-field"/>
+
+                                <Label text="📝 Motif :" GridPane.rowIndex="3" GridPane.columnIndex="0"
+                                       styleClass="normal-label" style="-fx-font-weight: bold;"/>
+                                <TextField fx:id="motifField" GridPane.rowIndex="3" GridPane.columnIndex="1"
+                                           prefWidth="300" promptText="Motif de la consultation" styleClass="text-field"/>
+
+                                <Label text="🖥️ Type :" GridPane.rowIndex="4" GridPane.columnIndex="0"
+                                       styleClass="normal-label" style="-fx-font-weight: bold;"/>
+                                <ChoiceBox fx:id="typeChoice" GridPane.rowIndex="4" GridPane.columnIndex="1"
+                                           prefWidth="300" styleClass="text-field"/>
+
+                                <Label text="📊 Statut :" GridPane.rowIndex="5" GridPane.columnIndex="0"
+                                       styleClass="normal-label" style="-fx-font-weight: bold;"/>
+                                <ChoiceBox fx:id="statutChoice" GridPane.rowIndex="5" GridPane.columnIndex="1"
+                                           prefWidth="300" styleClass="text-field"/>
+
+                            </GridPane>
+                        </TitledPane>
+
+                        <!-- Message d'erreur -->
+                        <Label fx:id="messageLabel" style="-fx-text-fill: #e74c3c; -fx-font-size: 13px; -fx-font-weight: bold;" alignment="CENTER"/>
+
+                    </VBox>
+                </ScrollPane>
+            </center>
+
+            <bottom>
+                <HBox spacing="20" alignment="CENTER" style="-fx-padding: 20;">
+                    <Button fx:id="confirmerButton" text="✓ CONFIRMER LA MODIFICATION"
+                            onAction="#handleConfirmer" styleClass="button-success"
+                            prefWidth="250" prefHeight="40"/>
+                    <Button fx:id="annulerButton" text="✗ ANNULER"
+                            onAction="#handleAnnuler" styleClass="button-danger"
+                            prefWidth="150" prefHeight="40"/>
+                </HBox>
+            </bottom>
+
+</BorderPane>

@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import javafx.stage.Modality;
 import tn.esprit.entities.Appointment;
 import tn.esprit.services.AppointmentService;
 
@@ -30,12 +31,6 @@ public class ProGestionRdvController {
     @FXML private TableColumn<Appointment, String> colType;
     @FXML private TableColumn<Appointment, String> colStatut;
     @FXML private TableColumn<Appointment, Integer> colUserId;
-
-    @FXML private DatePicker datePicker;
-    @FXML private TextField heureField;
-    @FXML private TextField motifField;
-    @FXML private ChoiceBox<String> typeChoice;
-    @FXML private ChoiceBox<String> statutChoice;
 
     @FXML private Button modifierButton;
     @FXML private Button supprimerButton;
@@ -67,6 +62,7 @@ public class ProGestionRdvController {
         colStatut.setCellValueFactory(new PropertyValueFactory<>("statut"));
         colUserId.setCellValueFactory(new PropertyValueFactory<>("userId"));
 
+        // Colorer le statut
         colStatut.setCellFactory(column -> new TableCell<Appointment, String>() {
             @Override
             protected void updateItem(String statut, boolean empty) {
@@ -78,16 +74,16 @@ public class ProGestionRdvController {
                     setText(statut);
                     switch (statut) {
                         case "confirmé":
-                            setStyle("-fx-background-color: #d4edda; -fx-text-fill: #155724; -fx-font-weight: bold;");
+                            setStyle("-fx-background-color: #d4edda; -fx-text-fill: #155724; -fx-font-weight: bold; -fx-alignment: CENTER;");
                             break;
                         case "annulé":
-                            setStyle("-fx-background-color: #f8d7da; -fx-text-fill: #721c24; -fx-font-weight: bold;");
+                            setStyle("-fx-background-color: #f8d7da; -fx-text-fill: #721c24; -fx-font-weight: bold; -fx-alignment: CENTER;");
                             break;
                         case "terminé":
-                            setStyle("-fx-background-color: #cce5ff; -fx-text-fill: #004085; -fx-font-weight: bold;");
+                            setStyle("-fx-background-color: #cce5ff; -fx-text-fill: #004085; -fx-font-weight: bold; -fx-alignment: CENTER;");
                             break;
                         default:
-                            setStyle("-fx-background-color: #fff3cd; -fx-text-fill: #856404; -fx-font-weight: bold;");
+                            setStyle("-fx-background-color: #fff3cd; -fx-text-fill: #856404; -fx-font-weight: bold; -fx-alignment: CENTER;");
                     }
                 }
             }
@@ -106,8 +102,6 @@ public class ProGestionRdvController {
     }
 
     private void setupChoiceBoxes() {
-        typeChoice.setItems(FXCollections.observableArrayList("Présentiel", "Téléconsultation"));
-        statutChoice.setItems(FXCollections.observableArrayList("en attente", "confirmé", "terminé", "annulé"));
         statutUpdateChoice.setItems(FXCollections.observableArrayList("confirmé", "terminé", "annulé"));
     }
 
@@ -160,13 +154,11 @@ public class ProGestionRdvController {
         tableView.getSelectionModel().selectedItemProperty().addListener((obs, old, newSel) -> {
             selectedAppointment = newSel;
             if (newSel != null) {
-                fillForm(newSel);
                 statutUpdateChoice.setValue(newSel.getStatut());
                 modifierButton.setDisable(false);
                 supprimerButton.setDisable(false);
                 updateStatusButton.setDisable(false);
             } else {
-                clearForm();
                 modifierButton.setDisable(true);
                 supprimerButton.setDisable(true);
                 updateStatusButton.setDisable(true);
@@ -174,49 +166,47 @@ public class ProGestionRdvController {
         });
     }
 
-    private void fillForm(Appointment a) {
-        datePicker.setValue(a.getDateRdv());
-        heureField.setText(a.getHeureRdv().toString());
-        motifField.setText(a.getMotif());
-        typeChoice.setValue(a.getTypeRdv());
-        statutChoice.setValue(a.getStatut());
-    }
-
-    @FXML
-    private void clearForm() {
-        datePicker.setValue(null);
-        heureField.clear();
-        motifField.clear();
-        typeChoice.setValue(null);
-        statutChoice.setValue(null);
-        statutUpdateChoice.setValue(null);
-        selectedAppointment = null;
-        modifierButton.setDisable(true);
-        supprimerButton.setDisable(true);
-        updateStatusButton.setDisable(true);
-        tableView.getSelectionModel().clearSelection();
-    }
-
     @FXML
     private void modifierRendezVous() {
-        if (selectedAppointment == null) return;
-        if (!validateModification()) return;
+        if (selectedAppointment == null) {
+            showAlert(Alert.AlertType.WARNING, "Attention",
+                    "Veuillez sélectionner un rendez-vous à modifier.");
+            return;
+        }
 
         try {
-            selectedAppointment.setDateRdv(datePicker.getValue());
-            selectedAppointment.setHeureRdv(LocalTime.parse(heureField.getText()));
-            selectedAppointment.setMotif(motifField.getText());
-            selectedAppointment.setTypeRdv(typeChoice.getValue());
-            selectedAppointment.setStatut(statutChoice.getValue());
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/professionnel/modifier_rdv_pro_dialog.fxml"));
 
-            service.update(selectedAppointment);
-            loadAllAppointments();
-            clearForm();
-            showAlert(Alert.AlertType.INFORMATION, "Succès", "Rendez-vous modifié avec succès");
-        } catch (SQLException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Échec de la modification : " + e.getMessage());
-        } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Format d'heure invalide. Utilisez HH:MM");
+            if (loader.getLocation() == null) {
+                showAlert(Alert.AlertType.ERROR, "Erreur",
+                        "Fichier FXML introuvable : /fxml/professionnel/modifier_rdv_pro_dialog.fxml");
+                return;
+            }
+
+            Parent root = loader.load();
+
+            ModifierRdvProDialogController controller = loader.getController();
+            controller.setAppointment(selectedAppointment);
+
+            Stage stage = new Stage();
+            controller.setStage(stage);
+
+            stage.setTitle("Modifier le rendez-vous");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(modifierButton.getScene().getWindow());
+            stage.setResizable(false);
+
+            stage.showAndWait();
+
+            if (controller.isModificationReussie()) {
+                loadAllAppointments();
+            }
+
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur technique",
+                    "Impossible d'ouvrir la fenêtre de modification.\n" + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -228,11 +218,17 @@ public class ProGestionRdvController {
         confirm.setTitle("Confirmation de suppression");
         confirm.setHeaderText("Supprimer le rendez-vous ?");
         confirm.setContentText(String.format(
-                "RDV #%d - %s %s\nPatient ID: %d\nMotif: %s\n\nCette action est irréversible !",
+                "‼️ ATTENTION ‼️\n\n" +
+                        "Vous êtes sur le point de supprimer DÉFINITIVEMENT ce rendez-vous :\n\n" +
+                        "📋 RDV #%d\n" +
+                        "👤 Patient ID: %d\n" +
+                        "📅 Date : %s %s\n" +
+                        "📝 Motif : %s\n\n" +
+                        "⚠️ Cette action est IRREVERSIBLE !",
                 selectedAppointment.getId(),
+                selectedAppointment.getUserId(),
                 selectedAppointment.getDateRdv(),
                 selectedAppointment.getHeureRdv(),
-                selectedAppointment.getUserId(),
                 selectedAppointment.getMotif()
         ));
 
@@ -240,10 +236,11 @@ public class ProGestionRdvController {
             try {
                 service.delete(selectedAppointment);
                 loadAllAppointments();
-                clearForm();
-                showAlert(Alert.AlertType.INFORMATION, "Succès", "Rendez-vous supprimé avec succès");
+                showAlert(Alert.AlertType.INFORMATION, "Succès",
+                        "🗑️ Rendez-vous supprimé avec succès");
             } catch (SQLException e) {
-                showAlert(Alert.AlertType.ERROR, "Erreur", "Échec de la suppression : " + e.getMessage());
+                showAlert(Alert.AlertType.ERROR, "Erreur",
+                        "Échec de la suppression : " + e.getMessage());
             }
         }
     }
@@ -283,30 +280,6 @@ public class ProGestionRdvController {
         }
     }
 
-    private boolean validateModification() {
-        if (datePicker.getValue() == null) {
-            showAlert(Alert.AlertType.WARNING, "Validation", "La date est requise");
-            return false;
-        }
-        if (heureField.getText().trim().isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Validation", "L'heure est requise");
-            return false;
-        }
-        if (motifField.getText().trim().isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Validation", "Le motif est requis");
-            return false;
-        }
-        if (typeChoice.getValue() == null) {
-            showAlert(Alert.AlertType.WARNING, "Validation", "Le type est requis");
-            return false;
-        }
-        if (statutChoice.getValue() == null) {
-            showAlert(Alert.AlertType.WARNING, "Validation", "Le statut est requis");
-            return false;
-        }
-        return true;
-    }
-
     @FXML
     private void gererConsultations() {
         try {
@@ -317,7 +290,7 @@ public class ProGestionRdvController {
             stage.setTitle("Gestion des consultations");
         } catch (IOException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur",
-                    "Impossible d'ouvrir la gestion des consultations");
+                    "Impossible d'ouvrir la gestion des consultations: " + e.getMessage());
         }
     }
 

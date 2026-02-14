@@ -10,11 +10,7 @@ public class Appointment {
     private String statut;
     private String motif;
     private String typeRdv;
-
-
-
     private int userId;
-
 
     public Appointment() {}
 
@@ -26,6 +22,7 @@ public class Appointment {
         this.typeRdv = typeRdv;
     }
 
+    // Getters et Setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
@@ -44,21 +41,11 @@ public class Appointment {
     public String getTypeRdv() { return typeRdv; }
     public void setTypeRdv(String typeRdv) { this.typeRdv = typeRdv; }
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public Appointment(int userId) {
-        this.userId = userId;
-    }
-
+    public int getUserId() { return userId; }
+    public void setUserId(int userId) { this.userId = userId; }
 
     @Override
     public String toString() {
-        return "Appointment{id=" + id + ", date=" + dateRdv + ", heure=" + heureRdv + ", statut='" + statut + "'}";
+        return String.format("RDV #%d - %s %s - %s", id, dateRdv, heureRdv, motif);
     }
 }

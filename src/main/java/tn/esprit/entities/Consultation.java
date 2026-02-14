@@ -27,6 +27,7 @@ public class Consultation {
         this.statutConsultation = statutConsultation;
     }
 
+    // Getters et Setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
@@ -56,6 +57,6 @@ public class Consultation {
 
     @Override
     public String toString() {
-        return "Consultation{id=" + id + ", appointmentId=" + appointmentId + ", diagnostic='" + diagnostic + "'}";
+        return "Consultation #" + id + " - RDV #" + appointmentId + " - " + diagnostic;
     }
 }

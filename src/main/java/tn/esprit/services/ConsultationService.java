@@ -34,14 +34,12 @@ public class ConsultationService implements IService<Consultation> {
 
         ResultSet rs = ps.getGeneratedKeys();
         if (rs.next()) c.setId(rs.getInt(1));
-
-        System.out.println("Consultation ajoutée : " + c);
     }
 
     @Override
     public List<Consultation> getAll() throws SQLException {
         List<Consultation> list = new ArrayList<>();
-        String sql = "SELECT * FROM consultation";
+        String sql = "SELECT * FROM consultation ORDER BY id DESC";
 
         Statement st = connection.createStatement();
         ResultSet rs = st.executeQuery(sql);
@@ -50,12 +48,17 @@ public class ConsultationService implements IService<Consultation> {
             Consultation c = new Consultation();
             c.setId(rs.getInt("id"));
             c.setAppointmentId(rs.getInt("appointment_id"));
+
+            Date date = rs.getDate("date_consultation");
+            if (date != null) c.setDateConsultation(date.toLocalDate());
+
             c.setDiagnostic(rs.getString("diagnostic"));
             c.setObservation(rs.getString("observation"));
             c.setTraitement(rs.getString("traitement"));
             c.setOrdonnance(rs.getString("ordonnance"));
             c.setDuree(rs.getInt("duree"));
             c.setStatutConsultation(rs.getString("statut_consultation"));
+
             list.add(c);
         }
 
@@ -76,7 +79,6 @@ public class ConsultationService implements IService<Consultation> {
         ps.setInt(7, c.getId());
 
         ps.executeUpdate();
-        System.out.println("Consultation modifiée !");
     }
 
     @Override
@@ -86,7 +88,34 @@ public class ConsultationService implements IService<Consultation> {
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setInt(1, c.getId());
         ps.executeUpdate();
+    }
 
-        System.out.println("Consultation supprimée !");
+    public List<Consultation> getByAppointmentId(int appointmentId) throws SQLException {
+        List<Consultation> list = new ArrayList<>();
+        String sql = "SELECT * FROM consultation WHERE appointment_id = ?";
+
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setInt(1, appointmentId);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            Consultation c = new Consultation();
+            c.setId(rs.getInt("id"));
+            c.setAppointmentId(rs.getInt("appointment_id"));
+
+            Date date = rs.getDate("date_consultation");
+            if (date != null) c.setDateConsultation(date.toLocalDate());
+
+            c.setDiagnostic(rs.getString("diagnostic"));
+            c.setObservation(rs.getString("observation"));
+            c.setTraitement(rs.getString("traitement"));
+            c.setOrdonnance(rs.getString("ordonnance"));
+            c.setDuree(rs.getInt("duree"));
+            c.setStatutConsultation(rs.getString("statut_consultation"));
+
+            list.add(c);
+        }
+
+        return list;
     }
 }

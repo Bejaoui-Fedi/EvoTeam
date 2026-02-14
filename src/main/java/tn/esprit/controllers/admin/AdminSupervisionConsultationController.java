@@ -62,7 +62,6 @@ public class AdminSupervisionConsultationController {
         colDuree.setCellValueFactory(new PropertyValueFactory<>("duree"));
         colStatut.setCellValueFactory(new PropertyValueFactory<>("statutConsultation"));
 
-        // Formatage de la date
         colDate.setCellFactory(column -> new TableCell<Consultation, LocalDate>() {
             @Override
             protected void updateItem(LocalDate date, boolean empty) {
@@ -75,7 +74,6 @@ public class AdminSupervisionConsultationController {
             }
         });
 
-        // Colorer le statut
         colStatut.setCellFactory(column -> new TableCell<Consultation, String>() {
             @Override
             protected void updateItem(String statut, boolean empty) {
@@ -176,8 +174,6 @@ public class AdminSupervisionConsultationController {
         });
     }
 
-    // ================ CRUD OPERATIONS ================
-
     @FXML
     private void deleteConsultation() {
         Consultation selected = tableView.getSelectionModel().getSelectedItem();
@@ -186,12 +182,7 @@ public class AdminSupervisionConsultationController {
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
         confirm.setTitle("Confirmation de suppression");
         confirm.setHeaderText("Supprimer la consultation ?");
-        confirm.setContentText(String.format(
-                "Consultation #%d\nRDV #%d\nDiagnostic: %s\n\nCette action est irréversible !",
-                selected.getId(),
-                selected.getAppointmentId(),
-                selected.getDiagnostic()
-        ));
+        confirm.setContentText("Cette action est irréversible !");
 
         if (confirm.showAndWait().get() == ButtonType.OK) {
             try {
@@ -216,7 +207,7 @@ public class AdminSupervisionConsultationController {
             stage.setTitle("Supervision des rendez-vous");
         } catch (IOException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur",
-                    "Impossible de retourner à la supervision des rendez-vous");
+                    "Impossible de retourner à la supervision des rendez-vous: " + e.getMessage());
         }
     }
 

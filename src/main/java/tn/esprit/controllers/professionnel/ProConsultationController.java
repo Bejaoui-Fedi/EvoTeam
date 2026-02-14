@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import javafx.stage.Modality;
 import tn.esprit.entities.Appointment;
 import tn.esprit.entities.Consultation;
 import tn.esprit.services.AppointmentService;
@@ -71,7 +72,6 @@ public class ProConsultationController {
         colStatut.setCellValueFactory(new PropertyValueFactory<>("statutConsultation"));
         colDuree.setCellValueFactory(new PropertyValueFactory<>("duree"));
 
-        // Formatage de la date
         colDate.setCellFactory(column -> new TableCell<Consultation, LocalDate>() {
             @Override
             protected void updateItem(LocalDate date, boolean empty) {
@@ -84,7 +84,6 @@ public class ProConsultationController {
             }
         });
 
-        // Colorer le statut
         colStatut.setCellFactory(column -> new TableCell<Consultation, String>() {
             @Override
             protected void updateItem(String statut, boolean empty) {
@@ -95,9 +94,9 @@ public class ProConsultationController {
                 } else {
                     setText(statut);
                     if ("en cours".equals(statut)) {
-                        setStyle("-fx-text-fill: #f39c12; -fx-font-weight: bold;");
+                        setStyle("-fx-background-color: #fff3cd; -fx-text-fill: #856404; -fx-font-weight: bold; -fx-alignment: CENTER;");
                     } else {
-                        setStyle("-fx-text-fill: #27ae60; -fx-font-weight: bold;");
+                        setStyle("-fx-background-color: #d4edda; -fx-text-fill: #155724; -fx-font-weight: bold; -fx-alignment: CENTER;");
                     }
                 }
             }
@@ -128,17 +127,16 @@ public class ProConsultationController {
             }
             rdvCombo.setItems(appointmentList);
 
-            // Affichage personnalisé dans la combo
             rdvCombo.setConverter(new javafx.util.StringConverter<Appointment>() {
                 @Override
                 public String toString(Appointment a) {
                     if (a == null) return "";
-                    return String.format("RDV #%d - %s %s - %s",
+                    return String.format("RDV #%d - %s %s - %s (Patient #%d)",
                             a.getId(),
                             a.getDateRdv(),
                             a.getHeureRdv(),
-                            a.getMotif().length() > 20 ?
-                                    a.getMotif().substring(0, 20) + "..." : a.getMotif()
+                            a.getMotif().length() > 20 ? a.getMotif().substring(0, 20) + "..." : a.getMotif(),
+                            a.getUserId()
                     );
                 }
                 @Override
@@ -195,8 +193,6 @@ public class ProConsultationController {
         messageLabel.setText("");
     }
 
-    // ================ CRUD OPERATIONS ================
-
     @FXML
     private void handleSave() {
         if (!validateInputs()) return;
@@ -208,7 +204,6 @@ public class ProConsultationController {
             return;
         }
 
-        // Vérifier si une consultation existe déjà
         boolean exists = consultationList.stream()
                 .anyMatch(c -> c.getAppointmentId() == selectedRdv.getId());
 
@@ -236,11 +231,10 @@ public class ProConsultationController {
             showAlert(Alert.AlertType.INFORMATION, "Succès",
                     "Consultation ajoutée avec succès");
 
-            // Mettre à jour le statut du RDV si nécessaire
             if (selectedRdv.getStatut().equals("confirmé")) {
                 selectedRdv.setStatut("terminé");
                 appointmentService.update(selectedRdv);
-                loadAppointments(); // Recharger la liste des RDV
+                loadAppointments();
             }
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur",
@@ -250,26 +244,46 @@ public class ProConsultationController {
 
     @FXML
     private void handleUpdate() {
-        if (selectedConsultation == null) return;
-        if (!validateInputs()) return;
-
-        selectedConsultation.setDateConsultation(dateConsultationPicker.getValue());
-        selectedConsultation.setDiagnostic(diagnosticField.getText().trim());
-        selectedConsultation.setObservation(observationArea.getText().trim());
-        selectedConsultation.setTraitement(traitementField.getText().trim());
-        selectedConsultation.setOrdonnance(ordonnanceArea.getText().trim());
-        selectedConsultation.setDuree(dureeSpinner.getValue());
-        selectedConsultation.setStatutConsultation(statutConsultationChoice.getValue());
+        if (selectedConsultation == null) {
+            showAlert(Alert.AlertType.WARNING, "Attention",
+                    "Veuillez sélectionner une consultation à modifier.");
+            return;
+        }
 
         try {
-            consultationService.update(selectedConsultation);
-            loadConsultations();
-            clearForm();
-            showAlert(Alert.AlertType.INFORMATION, "Succès",
-                    "Consultation modifiée avec succès");
-        } catch (SQLException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur",
-                    "Échec de la modification : " + e.getMessage());
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/professionnel/modifier_consultation_pro_dialog.fxml"));
+
+            if (loader.getLocation() == null) {
+                showAlert(Alert.AlertType.ERROR, "Erreur",
+                        "Fichier FXML introuvable : /fxml/professionnel/modifier_consultation_pro_dialog.fxml");
+                return;
+            }
+
+            Parent root = loader.load();
+
+            ModifierConsultationProDialogController controller = loader.getController();
+            controller.setConsultation(selectedConsultation);
+
+            Stage stage = new Stage();
+            controller.setStage(stage);
+
+            stage.setTitle("Modifier la consultation");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(updateButton.getScene().getWindow());
+            stage.setResizable(false);
+
+            stage.showAndWait();
+
+            if (controller.isModificationReussie()) {
+                loadConsultations();
+                clearForm();
+            }
+
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur technique",
+                    "Impossible d'ouvrir la fenêtre de modification.\n" + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -281,7 +295,12 @@ public class ProConsultationController {
         confirm.setTitle("Confirmation de suppression");
         confirm.setHeaderText("Supprimer la consultation ?");
         confirm.setContentText(String.format(
-                "Consultation #%d\nRDV #%d\nDiagnostic: %s\n\nCette action est irréversible !",
+                "‼️ ATTENTION ‼️\n\n" +
+                        "Vous êtes sur le point de supprimer DÉFINITIVEMENT cette consultation :\n\n" +
+                        "📋 Consultation #%d\n" +
+                        "📅 RDV #%d\n" +
+                        "🔍 Diagnostic: %s\n\n" +
+                        "⚠️ Cette action est IRREVERSIBLE !",
                 selectedConsultation.getId(),
                 selectedConsultation.getAppointmentId(),
                 selectedConsultation.getDiagnostic()
@@ -350,7 +369,7 @@ public class ProConsultationController {
             stage.setTitle("Gestion des rendez-vous");
         } catch (IOException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur",
-                    "Impossible de retourner à la gestion des rendez-vous");
+                    "Impossible de retourner à la gestion des rendez-vous: " + e.getMessage());
         }
     }
 

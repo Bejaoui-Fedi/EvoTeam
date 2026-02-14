@@ -1,0 +1,27 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------< org.example:PIDevUserManagement >-------------------
+[INFO] Building PIDevUserManagement 1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[WARNING] The artifact mysql:mysql-connector-java:jar:8.0.33 has been relocated to com.mysql:mysql-connector-j:jar:8.0.33: MySQL Connector/J artifacts moved to reverse-DNS compliant Maven 2+ coordinates.
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ PIDevUserManagement ---
+[INFO] Copying 12 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ PIDevUserManagement ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- exec:3.1.0:java (default-cli) @ PIDevUserManagement ---
+Connexion MySQL r├®ussie !
+ÔÅ│ Insertion de 20 rendez-vous...
+Ô£à Insertion termin├®e.
+[WARNING] thread Thread[#34,mysql-cj-abandoned-connection-cleanup,5,tn.esprit.utils.DataInitializer] was interrupted but is still alive after waiting at least 15000msecs
+[WARNING] thread Thread[#34,mysql-cj-abandoned-connection-cleanup,5,tn.esprit.utils.DataInitializer] will linger despite being asked to die via interruption
+[WARNING] NOTE: 1 thread(s) did not finish despite being asked to via interruption. This is not a problem with exec:java, it is a problem with the running code. Although not serious, it should be remedied.
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  16.555 s
+[INFO] Finished at: 2026-02-14T04:35:23+01:00
+[INFO] ------------------------------------------------------------------------

@@ -1,0 +1,185 @@
+/* Evolia Theme - Admin Interface */
+.root {
+    -primary-color: #396f5b; /* Dark Green */
+    -secondary-color: #5F9B8A; /* Muted Green */
+    -bg-color: #f1f8f3; /* Light Mint/Beige */
+    -text-color: #2c3e50;
+    -white: #ffffff;
+    -accent-color: #e8f5e9;
+    -fx-font-family: 'Segoe UI', sans-serif;
+}
+
+/* Background */
+.root-pane {
+    -fx-background-color: -bg-color;
+}
+
+/* Sidebar */
+.sidebar {
+    -fx-background-color: -primary-color;
+    -fx-padding: 30 20;
+    -fx-spacing: 15;
+}
+
+.sidebar-logo {
+    -fx-text-fill: -white;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 1);
+}
+
+.sidebar-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: -white;
+    -fx-font-size: 14px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 10 15;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+
+.sidebar-button:hover {
+    -fx-background-color: rgba(255,255,255,0.1);
+}
+
+.sidebar-button-active {
+    -fx-background-color: rgba(255,255,255,0.2);
+    -fx-text-fill: -white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-border-color: -white;
+    -fx-border-width: 0 0 0 4; /* Left border indicator */
+    -fx-padding: 10 15;
+}
+
+/* Main Content Area */
+.content-area {
+    -fx-background-color: -bg-color;
+    -fx-padding: 30;
+}
+
+.card {
+    -fx-background-color: -white;
+    -fx-background-radius: 15;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 5);
+    -fx-padding: 20;
+}
+
+/* Headers */
+.header-label {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -primary-color;
+}
+
+.subheader-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #7f8c8d;
+    -fx-font-style: italic;
+}
+
+/* Search Bar & Filters */
+.search-box {
+    -fx-background-color: -white;
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-border-color: #dfe6e9;
+    -fx-padding: 5;
+}
+
+.text-field {
+    -fx-background-color: -white;
+    -fx-border-color: #ced6e0;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-padding: 8;
+}
+
+.text-field:focused {
+    -fx-border-color: -primary-color;
+}
+
+/* Buttons */
+.button-primary {
+    -fx-background-color: -primary-color;
+    -fx-text-fill: -white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 20;
+    -fx-padding: 8 20;
+    -fx-cursor: hand;
+}
+
+.button-primary:hover {
+    -fx-background-color: derive(-primary-color, 10%);
+}
+
+.button-secondary {
+    -fx-background-color: #95a5a6;
+    -fx-text-fill: -white;
+    -fx-background-radius: 20;
+    -fx-padding: 8 20;
+    -fx-cursor: hand;
+}
+
+.button-action {
+    -fx-font-size: 12px;
+    -fx-padding: 5 10;
+    -fx-background-radius: 5;
+}
+
+.button-danger {
+    -fx-background-color: #e74c3c;
+    -fx-text-fill: white;
+    -fx-background-radius: 20;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+/* Table */
+.table-view {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #dfe6e9;
+    -fx-background-radius: 5 5 0 0;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-size: 40px;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: #2d3436;
+    -fx-font-weight: bold;
+}
+
+.table-row-cell {
+    -fx-background-color: -white;
+    -fx-border-color: transparent transparent #f1f2f6 transparent;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: -accent-color;
+    -fx-text-fill: -primary-color;
+}
+
+/* ScrollBar */
+.scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #b2bec3;
+    -fx-background-radius: 5;
+}
+
+/* Stats */
+.stats-card {
+    -fx-background-color: -accent-color;
+    -fx-border-color: -primary-color;
+    -fx-border-width: 0 0 0 5;
+    -fx-padding: 15;
+    -fx-background-radius: 5;
+}

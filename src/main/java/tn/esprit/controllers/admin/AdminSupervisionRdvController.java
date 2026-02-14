@@ -59,7 +59,6 @@ public class AdminSupervisionRdvController {
         colType.setCellValueFactory(new PropertyValueFactory<>("typeRdv"));
         colUserId.setCellValueFactory(new PropertyValueFactory<>("userId"));
 
-        // Colorer le statut
         colStatut.setCellFactory(column -> new TableCell<Appointment, String>() {
             @Override
             protected void updateItem(String statut, boolean empty) {
@@ -170,8 +169,6 @@ public class AdminSupervisionRdvController {
         });
     }
 
-    // ================ CRUD OPERATIONS ================
-
     @FXML
     private void deleteRendezVous() {
         Appointment selected = tableView.getSelectionModel().getSelectedItem();
@@ -180,14 +177,7 @@ public class AdminSupervisionRdvController {
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
         confirm.setTitle("Confirmation de suppression");
         confirm.setHeaderText("Supprimer le rendez-vous ?");
-        confirm.setContentText(String.format(
-                "ID: %d\nDate: %s %s\nPatient ID: %d\nMotif: %s\n\nCette action est irréversible !",
-                selected.getId(),
-                selected.getDateRdv(),
-                selected.getHeureRdv(),
-                selected.getUserId(),
-                selected.getMotif()
-        ));
+        confirm.setContentText("Cette action est irréversible !");
 
         if (confirm.showAndWait().get() == ButtonType.OK) {
             try {
@@ -212,7 +202,7 @@ public class AdminSupervisionRdvController {
             stage.setTitle("Supervision des consultations");
         } catch (IOException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur",
-                    "Impossible d'ouvrir la supervision des consultations");
+                    "Impossible d'ouvrir la supervision des consultations: " + e.getMessage());
         }
     }
 
