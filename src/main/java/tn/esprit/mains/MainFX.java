@@ -23,7 +23,7 @@ public class MainFX extends Application {
         // FXMLLoader.load(getClass().getResource("/fxml/admin/admin_supervision_consultation.fxml"));
 
         primaryStage.setTitle("Evolution Management System - Professional Space");
-        primaryStage.setScene(new Scene(root, 1280, 850));
+        primaryStage.setScene(new Scene(root, 1400, 850));
         primaryStage.show();
     }
 

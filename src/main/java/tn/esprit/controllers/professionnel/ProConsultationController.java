@@ -21,29 +21,50 @@ import java.time.LocalDate;
 
 public class ProConsultationController {
 
-    @FXML private ComboBox<Appointment> rdvCombo;
-    @FXML private DatePicker dateConsultationPicker;
-    @FXML private TextField diagnosticField;
-    @FXML private TextArea observationArea;
-    @FXML private TextField traitementField;
-    @FXML private TextArea ordonnanceArea;
-    @FXML private Spinner<Integer> dureeSpinner;
-    @FXML private ChoiceBox<String> statutConsultationChoice;
+    @FXML
+    private ComboBox<Appointment> rdvCombo;
+    @FXML
+    private DatePicker dateConsultationPicker;
+    @FXML
+    private TextField diagnosticField;
+    @FXML
+    private TextArea observationArea;
+    @FXML
+    private TextField traitementField;
+    @FXML
+    private TextArea ordonnanceArea;
+    @FXML
+    private Spinner<Integer> dureeSpinner;
+    @FXML
+    private ChoiceBox<String> statutConsultationChoice;
 
-    @FXML private TableView<Consultation> tableView;
-    @FXML private TableColumn<Consultation, Integer> colId;
-    @FXML private TableColumn<Consultation, Integer> colAppointmentId;
-    @FXML private TableColumn<Consultation, LocalDate> colDate;
-    @FXML private TableColumn<Consultation, String> colDiagnostic;
-    @FXML private TableColumn<Consultation, String> colStatut;
-    @FXML private TableColumn<Consultation, Integer> colDuree;
+    @FXML
+    private TableView<Consultation> tableView;
+    @FXML
+    private TableColumn<Consultation, Integer> colId;
+    @FXML
+    private TableColumn<Consultation, Integer> colAppointmentId;
+    @FXML
+    private TableColumn<Consultation, LocalDate> colDate;
+    @FXML
+    private TableColumn<Consultation, String> colDiagnostic;
+    @FXML
+    private TableColumn<Consultation, String> colStatut;
+    @FXML
+    private TableColumn<Consultation, Integer> colDuree;
 
-    @FXML private Button saveButton;
-    @FXML private Button updateButton;
-    @FXML private Button deleteButton;
-    @FXML private Button clearButton;
-    @FXML private Button retourButton;
-    @FXML private Label messageLabel;
+    @FXML
+    private Button saveButton;
+    @FXML
+    private Button updateButton;
+    @FXML
+    private Button deleteButton;
+    @FXML
+    private Button clearButton;
+    @FXML
+    private Button retourButton;
+    @FXML
+    private Label messageLabel;
 
     private ConsultationService consultationService = new ConsultationService();
     private AppointmentService appointmentService = new AppointmentService();
@@ -60,7 +81,15 @@ public class ProConsultationController {
         loadConsultations();
         setupSelectionListener();
 
+        // Auto-remplissage de la date de consultation à partir du RDV sélectionné
+        rdvCombo.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                dateConsultationPicker.setValue(newVal.getDateRdv());
+            }
+        });
+
         dateConsultationPicker.setValue(LocalDate.now());
+        dateConsultationPicker.setDisable(true);
         messageLabel.setText("");
     }
 
@@ -93,28 +122,36 @@ public class ProConsultationController {
                     setStyle("");
                 } else {
                     setText(statut);
-                    if ("en cours".equals(statut)) {
-                        setStyle("-fx-background-color: #fff3cd; -fx-text-fill: #856404; -fx-font-weight: bold; -fx-alignment: CENTER;");
-                    } else {
-                        setStyle("-fx-background-color: #d4edda; -fx-text-fill: #155724; -fx-font-weight: bold; -fx-alignment: CENTER;");
+                    String lowerStatut = statut.toLowerCase();
+                    if (lowerStatut.equals("en cours")) {
+                        setStyle(
+                                "-fx-background-color: #d1ecf1; -fx-text-fill: #0c5460; -fx-font-weight: bold; -fx-alignment: CENTER;");
+                    } else if (lowerStatut.equals("attente")) {
+                        setStyle(
+                                "-fx-background-color: #fff3cd; -fx-text-fill: #856404; -fx-font-weight: bold; -fx-alignment: CENTER;");
+                    } else if (lowerStatut.equals("clôturée") || lowerStatut.equals("cloturée")) {
+                        setStyle(
+                                "-fx-background-color: #d4edda; -fx-text-fill: #155724; -fx-font-weight: bold; -fx-alignment: CENTER;");
+                    } else if (lowerStatut.equals("annulée")) {
+                        setStyle(
+                                "-fx-background-color: #f8d7da; -fx-text-fill: #721c24; -fx-font-weight: bold; -fx-alignment: CENTER;");
                     }
                 }
             }
         });
+
     }
 
     private void setupSpinner() {
         dureeSpinner.setValueFactory(
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 120, 30)
-        );
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 120, 30));
         dureeSpinner.setEditable(true);
     }
 
     private void setupChoiceBoxes() {
         statutConsultationChoice.setItems(
-                FXCollections.observableArrayList("en cours", "clôturée")
-        );
-        statutConsultationChoice.setValue("en cours");
+                FXCollections.observableArrayList("attente", "en cours", "clôturée", "annulée"));
+        statutConsultationChoice.setValue("attente");
     }
 
     private void loadAppointments() {
@@ -130,17 +167,20 @@ public class ProConsultationController {
             rdvCombo.setConverter(new javafx.util.StringConverter<Appointment>() {
                 @Override
                 public String toString(Appointment a) {
-                    if (a == null) return "";
+                    if (a == null)
+                        return "";
                     return String.format("RDV #%d - %s %s - %s (Patient #%d)",
                             a.getId(),
                             a.getDateRdv(),
                             a.getHeureRdv(),
                             a.getMotif().length() > 20 ? a.getMotif().substring(0, 20) + "..." : a.getMotif(),
-                            a.getUserId()
-                    );
+                            a.getUserId());
                 }
+
                 @Override
-                public Appointment fromString(String s) { return null; }
+                public Appointment fromString(String s) {
+                    return null;
+                }
             });
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur",
@@ -195,7 +235,8 @@ public class ProConsultationController {
 
     @FXML
     private void handleSave() {
-        if (!validateInputs()) return;
+        if (!validateInputs())
+            return;
 
         Appointment selectedRdv = rdvCombo.getValue();
         if (selectedRdv == null) {
@@ -221,8 +262,7 @@ public class ProConsultationController {
                 traitementField.getText().trim(),
                 ordonnanceArea.getText().trim(),
                 dureeSpinner.getValue(),
-                statutConsultationChoice.getValue()
-        );
+                statutConsultationChoice.getValue());
 
         try {
             consultationService.add(consultation);
@@ -251,7 +291,8 @@ public class ProConsultationController {
         }
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/professionnel/modifier_consultation_pro_dialog.fxml"));
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/fxml/professionnel/modifier_consultation_pro_dialog.fxml"));
 
             if (loader.getLocation() == null) {
                 showAlert(Alert.AlertType.ERROR, "Erreur",
@@ -289,7 +330,8 @@ public class ProConsultationController {
 
     @FXML
     private void handleDelete() {
-        if (selectedConsultation == null) return;
+        if (selectedConsultation == null)
+            return;
 
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
         confirm.setTitle("Confirmation de suppression");
@@ -303,8 +345,7 @@ public class ProConsultationController {
                         "⚠️ Cette action est IRREVERSIBLE !",
                 selectedConsultation.getId(),
                 selectedConsultation.getAppointmentId(),
-                selectedConsultation.getDiagnostic()
-        ));
+                selectedConsultation.getDiagnostic()));
 
         if (confirm.showAndWait().get() == ButtonType.OK) {
             try {

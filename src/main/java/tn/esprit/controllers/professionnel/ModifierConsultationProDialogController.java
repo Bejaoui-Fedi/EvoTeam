@@ -16,33 +16,54 @@ import java.time.format.DateTimeParseException;
 
 public class ModifierConsultationProDialogController {
 
-    @FXML private Label titleLabel;
-    @FXML private Label consultationInfoLabel;
+    @FXML
+    private Label titleLabel;
+    @FXML
+    private Label consultationInfoLabel;
 
     // Informations actuelles
-    @FXML private Label ancienRdvLabel;
-    @FXML private Label ancienneDateLabel;
-    @FXML private Label ancienDiagnosticLabel;
-    @FXML private Label ancienneObservationLabel;
-    @FXML private Label ancienTraitementLabel;
-    @FXML private Label ancienneOrdonnanceLabel;
-    @FXML private Label ancienneDureeLabel;
-    @FXML private Label ancienStatutLabel;
+    @FXML
+    private Label ancienRdvLabel;
+    @FXML
+    private Label ancienneDateLabel;
+    @FXML
+    private Label ancienDiagnosticLabel;
+    @FXML
+    private Label ancienneObservationLabel;
+    @FXML
+    private Label ancienTraitementLabel;
+    @FXML
+    private Label ancienneOrdonnanceLabel;
+    @FXML
+    private Label ancienneDureeLabel;
+    @FXML
+    private Label ancienStatutLabel;
 
     // Formulaire de modification
-    @FXML private ComboBox<Appointment> rdvCombo;
-    @FXML private DatePicker dateConsultationPicker;
-    @FXML private TextField diagnosticField;
-    @FXML private TextArea observationArea;
-    @FXML private TextField traitementField;
-    @FXML private TextArea ordonnanceArea;
-    @FXML private Spinner<Integer> dureeSpinner;
-    @FXML private ChoiceBox<String> statutConsultationChoice;
+    @FXML
+    private ComboBox<Appointment> rdvCombo;
+    @FXML
+    private DatePicker dateConsultationPicker;
+    @FXML
+    private TextField diagnosticField;
+    @FXML
+    private TextArea observationArea;
+    @FXML
+    private TextField traitementField;
+    @FXML
+    private TextArea ordonnanceArea;
+    @FXML
+    private Spinner<Integer> dureeSpinner;
+    @FXML
+    private ChoiceBox<String> statutConsultationChoice;
 
-    @FXML private Label messageLabel;
+    @FXML
+    private Label messageLabel;
 
-    @FXML private Button confirmerButton;
-    @FXML private Button annulerButton;
+    @FXML
+    private Button confirmerButton;
+    @FXML
+    private Button annulerButton;
 
     private Consultation consultation;
     private ConsultationService consultationService = new ConsultationService();
@@ -57,20 +78,52 @@ public class ModifierConsultationProDialogController {
         setupChoiceBoxes();
         setupDatePicker();
         loadAppointments();
+
+        // Auto-remplissage et désactivation de la date
+        dateConsultationPicker.setDisable(true);
+        rdvCombo.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                dateConsultationPicker.setValue(newVal.getDateRdv());
+            }
+        });
+
+        // Gestion de la couleur du statut
+        statutConsultationChoice.valueProperty().addListener((obs, oldVal, newVal) -> {
+            updateStatusStyle(statutConsultationChoice, newVal);
+        });
+
         messageLabel.setText("");
+    }
+
+    private void updateStatusStyle(Control control, String status) {
+        if (status == null)
+            return;
+
+        String lowerStatus = status.toLowerCase();
+        if (lowerStatus.equals("en cours")) {
+            control.setStyle(
+                    "-fx-background-color: #d1ecf1; -fx-text-fill: #0c5460; -fx-font-weight: bold; -fx-border-color: #bee5eb; -fx-border-radius: 25; -fx-background-radius: 25;");
+        } else if (lowerStatus.equals("attente")) {
+            control.setStyle(
+                    "-fx-background-color: #fff3cd; -fx-text-fill: #856404; -fx-font-weight: bold; -fx-border-color: #ffeeba; -fx-border-radius: 25; -fx-background-radius: 25;");
+        } else if (lowerStatus.equals("clôturée") || lowerStatus.equals("cloturée")) {
+            control.setStyle(
+                    "-fx-background-color: #d4edda; -fx-text-fill: #155724; -fx-font-weight: bold; -fx-border-color: #c3e6cb; -fx-border-radius: 25; -fx-background-radius: 25;");
+        } else if (lowerStatus.equals("annulée")) {
+            control.setStyle(
+                    "-fx-background-color: #f8d7da; -fx-text-fill: #721c24; -fx-font-weight: bold; -fx-border-color: #f5c6cb; -fx-border-radius: 25; -fx-background-radius: 25;");
+        }
     }
 
     private void setupSpinner() {
         dureeSpinner.setValueFactory(
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 120, 30)
-        );
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 120, 30));
         dureeSpinner.setEditable(true);
     }
 
     private void setupChoiceBoxes() {
         statutConsultationChoice.setItems(
-                FXCollections.observableArrayList("en cours", "clôturée")
-        );
+                FXCollections.observableArrayList("attente", "en cours", "clôturée", "annulée"));
     }
 
     private void setupDatePicker() {
@@ -96,17 +149,20 @@ public class ModifierConsultationProDialogController {
             rdvCombo.setConverter(new javafx.util.StringConverter<Appointment>() {
                 @Override
                 public String toString(Appointment a) {
-                    if (a == null) return "";
+                    if (a == null)
+                        return "";
                     return String.format("RDV #%d - %s %s - %s (Patient #%d)",
                             a.getId(),
                             a.getDateRdv(),
                             a.getHeureRdv(),
                             a.getMotif().length() > 20 ? a.getMotif().substring(0, 20) + "..." : a.getMotif(),
-                            a.getUserId()
-                    );
+                            a.getUserId());
                 }
+
                 @Override
-                public Appointment fromString(String s) { return null; }
+                public Appointment fromString(String s) {
+                    return null;
+                }
             });
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur",
@@ -127,20 +183,23 @@ public class ModifierConsultationProDialogController {
     private void afficherInfosAnciennes() {
         if (consultation != null) {
             titleLabel.setText("MODIFICATION DE LA CONSULTATION #" + consultation.getId());
-            consultationInfoLabel.setText(String.format("Consultation liée au RDV #%d", consultation.getAppointmentId()));
+            consultationInfoLabel
+                    .setText(String.format("Consultation liée au RDV #%d", consultation.getAppointmentId()));
 
             ancienRdvLabel.setText(String.valueOf(consultation.getAppointmentId()));
-            ancienneDateLabel.setText(consultation.getDateConsultation() != null ?
-                    consultation.getDateConsultation().toString() : "Non définie");
+            ancienneDateLabel
+                    .setText(consultation.getDateConsultation() != null ? consultation.getDateConsultation().toString()
+                            : "Non définie");
             ancienDiagnosticLabel.setText(consultation.getDiagnostic());
-            ancienneObservationLabel.setText(consultation.getObservation() != null ?
-                    consultation.getObservation() : "Aucune observation");
-            ancienTraitementLabel.setText(consultation.getTraitement() != null ?
-                    consultation.getTraitement() : "Aucun traitement");
-            ancienneOrdonnanceLabel.setText(consultation.getOrdonnance() != null ?
-                    consultation.getOrdonnance() : "Aucune ordonnance");
+            ancienneObservationLabel.setText(
+                    consultation.getObservation() != null ? consultation.getObservation() : "Aucune observation");
+            ancienTraitementLabel
+                    .setText(consultation.getTraitement() != null ? consultation.getTraitement() : "Aucun traitement");
+            ancienneOrdonnanceLabel
+                    .setText(consultation.getOrdonnance() != null ? consultation.getOrdonnance() : "Aucune ordonnance");
             ancienneDureeLabel.setText(consultation.getDuree() + " minutes");
             ancienStatutLabel.setText(consultation.getStatutConsultation());
+            updateStatusStyle(ancienStatutLabel, consultation.getStatutConsultation());
         }
     }
 
@@ -161,12 +220,14 @@ public class ModifierConsultationProDialogController {
             ordonnanceArea.setText(consultation.getOrdonnance());
             dureeSpinner.getValueFactory().setValue(consultation.getDuree());
             statutConsultationChoice.setValue(consultation.getStatutConsultation());
+            updateStatusStyle(statutConsultationChoice, consultation.getStatutConsultation());
         }
     }
 
     @FXML
     private void handleConfirmer() {
-        if (!validateInputs()) return;
+        if (!validateInputs())
+            return;
 
         try {
             Appointment selectedRdv = rdvCombo.getValue();

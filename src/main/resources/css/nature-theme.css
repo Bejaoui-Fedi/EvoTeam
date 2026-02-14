@@ -65,6 +65,15 @@
     -fx-border-width: 2;
 }
 
+/* Ensure disabled fields remain readable */
+.text-field:disabled,
+.date-picker:disabled,
+.date-picker:disabled>.text-field {
+    -fx-opacity: 1.0;
+    -fx-text-fill: -text-color;
+    -fx-background-color: #f8f9fa;
+}
+
 /* Buttons */
 .button-primary {
     -fx-background-color: linear-gradient(to right, -accent-color, -primary-color);
@@ -194,7 +203,8 @@
     -fx-background-radius: 10 10 0 0;
 }
 
-.table-view .column-header, .table-view .filler {
+.table-view .column-header,
+.table-view .filler {
     -fx-background-color: transparent;
     -fx-size: 40;
 }
@@ -223,7 +233,7 @@
     -fx-background-color: transparent;
 }
 
-.scroll-pane > .viewport {
+.scroll-pane>.viewport {
     -fx-background-color: transparent;
 }
 
@@ -239,16 +249,16 @@
     -fx-font-weight: bold;
 }
 
-.titled-pane > .title {
+.titled-pane>.title {
     -fx-background-color: -primary-color;
     -fx-background-radius: 10 10 0 0;
 }
 
-.titled-pane > .title > .text {
+.titled-pane>.title>.text {
     -fx-fill: white;
 }
 
-.titled-pane > .content {
+.titled-pane>.content {
     -fx-background-color: rgba(255, 255, 255, 0.8);
     -fx-border-color: -secondary-color;
     -fx-border-width: 0 2 2 2;

@@ -4,63 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2fdc5dd2-0b6c-48eb-ac70-606abe8b8421" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/build_error_pro.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build_log.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build_log_2.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build_log_3.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build_log_4.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build_log_5.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build_log_6.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build_log_7.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build_log_admin.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build_log_admin_consult_fix.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build_log_admin_redesign.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build_log_admin_run.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build_log_admin_run_retry.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build_log_consult_fix.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build_log_data_insert.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build_log_evoteam_adaptation.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build_log_final.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build_log_final_fix.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build_log_final_pro.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build_log_navbar_colors.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build_log_run_pro.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build_log_uniform_navbar.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build_output.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pro_run_log.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/seed_log.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/controllers/professionnel/ModifierConsultationProDialogController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/controllers/professionnel/ModifierRdvProDialogController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/controllers/user/ModifierRdvDialogController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/utils/DataInitializer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/css/evolia-theme.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/css/nature-theme.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/css/styles.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/fxml/professionnel/modifier_consultation_pro_dialog.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/fxml/professionnel/modifier_rdv_pro_dialog.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/fxml/user/modifier_rdv_dialog.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/controllers/admin/AdminSupervisionConsultationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/controllers/admin/AdminSupervisionConsultationController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/controllers/admin/AdminSupervisionRdvController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/controllers/admin/AdminSupervisionRdvController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/controllers/professionnel/ProConsultationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/controllers/professionnel/ProConsultationController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/controllers/professionnel/ProGestionRdvController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/controllers/professionnel/ProGestionRdvController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/controllers/user/UserMesRdvController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/controllers/user/UserMesRdvController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/controllers/user/UserPrendreRdvController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/controllers/user/UserPrendreRdvController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/entities/Appointment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/entities/Appointment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/entities/Consultation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/entities/Consultation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/mains/MainFX.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/mains/MainFX.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/services/AppointmentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/services/AppointmentService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/services/ConsultationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/services/ConsultationService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/services/IService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/services/IService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/admin/admin_supervision_consultation.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/admin/admin_supervision_consultation.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/admin/admin_supervision_rdv.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/admin/admin_supervision_rdv.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/professionnel/pro_gestion_consultation.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/professionnel/pro_gestion_consultation.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/professionnel/pro_gestion_rdv.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/professionnel/pro_gestion_rdv.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/user/user_mes_rdv.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/user/user_mes_rdv.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/user/user_prendre_rdv.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/user/user_prendre_rdv.fxml" afterDir="false" />
-    </list>
+    <list default="true" id="2fdc5dd2-0b6c-48eb-ac70-606abe8b8421" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -138,6 +82,7 @@
       <workItem from="1770836138007" duration="27621000" />
       <workItem from="1771030445464" duration="2106000" />
       <workItem from="1771040314161" duration="118000" />
+      <workItem from="1771040942276" duration="64000" />
     </task>
     <servers />
   </component>
