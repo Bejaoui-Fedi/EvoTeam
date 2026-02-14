@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.tn.esprit.controllers.DetailExerciceController"
+            prefWidth="1150" prefHeight="600"
+            stylesheets="@styles.css">
+
+    <children>
+        <VBox spacing="20" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="0">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+            <children>
+                <!-- Header -->
+                <Label text="Détails de l'Exercice" styleClass="header-label"/>
+
+                <HBox spacing="20" VBox.vgrow="ALWAYS">
+                    <children>
+                        <!-- Left side: Media Container -->
+                        <VBox spacing="10" HBox.hgrow="ALWAYS" maxWidth="700">
+                             <Label text="Aperçu Média" styleClass="form-label"/>
+                             <StackPane fx:id="mediaContainer" prefHeight="400" 
+                                        styleClass="media-container">
+                                 <children>
+                                     <Label text="Aucun média disponible" styleClass="media-placeholder"/>
+                                 </children>
+                             </StackPane>
+                        </VBox>
+
+                        <!-- Right side: Content Details -->
+                        <VBox spacing="15" HBox.hgrow="ALWAYS">
+                            <children>
+                                <!-- Main Details Card -->
+                                <VBox styleClass="card" VBox.vgrow="ALWAYS" spacing="15">
+                                    <children>
+                                        <Label fx:id="lblTitle" text="Titre de l'exercice" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: -color-primary-green;"/>
+                                        
+                                        <Separator />
+                                        
+                                        <HBox spacing="10">
+                                            <Label text="Description :" styleClass="form-label"/>
+                                            <Label fx:id="lblDescription" text="Description du contenu..." wrapText="true" styleClass="text-body" VBox.vgrow="ALWAYS"/>
+                                        </HBox>
+        
+                                        <GridPane hgap="20" vgap="10">
+                                            <columnConstraints>
+                                                <ColumnConstraints minWidth="120"/>
+                                                <ColumnConstraints hgrow="ALWAYS"/>
+                                            </columnConstraints>
+        
+                                            <Label text="Type :" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label"/>
+                                            <Label fx:id="lblType" text="Type" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="badge, badge-info"/>
+        
+                                            <Label text="Durée :" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label"/>
+                                            <Label fx:id="lblDuration" text="0 min" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="text-body" style="-fx-font-weight: bold;"/>
+        
+                                            <Label text="Difficulté :" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label"/>
+                                            <Label fx:id="lblDifficulty" text="Difficulté" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="badge, badge-warning"/>
+        
+                                            <Label text="Média URL :" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="form-label"/>
+                                            <Label fx:id="lblMedia" text="http://..." GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="text-body" style="-fx-text-fill: -color-primary-blue; -fx-underline: true;"/>
+        
+                                            <Label text="Statut :" GridPane.rowIndex="4" GridPane.columnIndex="0" styleClass="form-label"/>
+                                            <Label fx:id="lblStatus" text="Statut" GridPane.rowIndex="4" GridPane.columnIndex="1" styleClass="badge, badge-success"/>
+                                        </GridPane>
+                                        
+                                        <Separator />
+                                        
+                                        <VBox spacing="5">
+                                            <Label fx:id="lblUser" text="User ID: -" styleClass="text-body" style="-fx-text-fill: -color-text-light;"/>
+                                            <Label fx:id="lblDates" text="Dates..." styleClass="text-body" style="-fx-text-fill: -color-text-light;"/>
+                                        </VBox>
+                                    </children>
+                                </VBox>
+        
+                                <!-- Actions -->
+                                <VBox spacing="10" style="-fx-padding: 10;">
+                                     <HBox spacing="15">
+                                         <Button fx:id="btnBack" text="← Retour Liste" styleClass="button" prefWidth="150"/>
+                                         <Region HBox.hgrow="ALWAYS"/>
+                                         <HBox fx:id="boxAdminActions" spacing="10">
+                                             <Button fx:id="btnEdit" text="Modifier" styleClass="button, btn-secondary" prefWidth="120"/>
+                                             <Button fx:id="btnDelete" text="Supprimer" styleClass="button" prefWidth="120" style="-fx-background-color: #ffdddd; -fx-text-fill: #d32f2f;"/>
+                                         </HBox>
+                                     </HBox>
+                                </VBox>
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </children>
+
+</AnchorPane>

@@ -1,0 +1,63 @@
+=== OBJECTIVES WITH MEDIA URLs ===
+1. Réduction du stress
+   Icon: https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800
+
+2. Améliorer le sommeil
+   Icon: https://images.unsplash.com/photo-1545389336-cf090694435e?w=800
+
+19. Gestion anxiété
+   Icon: moon
+
+24. Perte de poids intensive
+   Icon: fire
+
+25. Yoga Matinal
+   Icon: sun
+
+26. Prise de masse musculaire
+   Icon: dumbbell
+
+27. FlexibilitÃ© et MobilitÃ©
+   Icon: human-handsup
+
+28. PrÃ©paration Marathon
+   Icon: run
+
+29. Renforcement du Dos
+   Icon: human
+
+30. MÃ©ditation Anti-stress
+   Icon: leaf
+
+
+=== EXERCISES WITH MEDIA URLs ===
+4. Yoga
+   Media: https://images.unsplash.com/photo-1508672019048-805c876b67e2?w=800
+
+7. Mountain Climbers
+   Media: https://images.unsplash.com/photo-1455390582262-044cdead277a?w=800
+
+8. Salutation au Soleil
+   Media: https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800
+
+9. Chien Tete en Bas
+   Media: https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=800
+
+10. Respiration Profonde
+   Media: https://images.unsplash.com/photo-1517842645767-c639042777db?w=800
+
+11. Respiration 4-7-8
+   Media: https://youtube.com/478breathing
+
+12. Respiration Alternee
+   Media: https://youtube.com/alternatebreathing
+
+13. Meditation Guidee
+   Media: https://youtube.com/guidedmeditation
+
+14. Relaxation Musculaire
+   Media: https://youtube.com/musclerelaxation
+
+15. Meditation Avancee
+   Media: https://youtube.com/advancedmeditation
+
