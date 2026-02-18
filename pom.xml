@@ -44,6 +44,19 @@
             <version>21.0.2</version>
         </dependency>
 
+
+        <!-- ZXing pour les QR codes -->
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+            <version>3.5.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>javase</artifactId>
+            <version>3.5.1</version>
+        </dependency>
+
         <!-- JUnit (Tests) -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -70,6 +83,12 @@
             <groupId>commons-validator</groupId>
             <artifactId>commons-validator</artifactId>
             <version>1.7</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-web</artifactId>
+            <version>21.0.2</version>
         </dependency>
 
     </dependencies>

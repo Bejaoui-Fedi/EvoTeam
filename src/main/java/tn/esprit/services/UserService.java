@@ -131,4 +131,18 @@ public class UserService {
         ps.setInt(1, user.getId());
         ps.executeUpdate();
     }
+    // ================== GET ALL USER IDs ==================
+    public List<Integer> getAllUsersIds() throws SQLException {
+        List<Integer> userIds = new ArrayList<>();
+        String sql = "SELECT id FROM user ORDER BY id";
+
+        try (PreparedStatement ps = cnx.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                userIds.add(rs.getInt("id"));
+            }
+        }
+        return userIds;
+    }
 }

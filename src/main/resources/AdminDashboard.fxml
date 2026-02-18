@@ -76,7 +76,7 @@
                                -fx-padding: 0 0 0 20; -fx-background-radius: 10; -fx-cursor: hand;"
                         onAction="#handleEvents"/>
 
-                <Button fx:id="btnExercises" text="🧘 Exercices"
+                <Button fx:id="btnExercises" text="💪 Exercices"
                         style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 15;
                                -fx-alignment: CENTER_LEFT; -fx-pref-width: 230; -fx-pref-height: 40;
                                -fx-padding: 0 0 0 20; -fx-background-radius: 10; -fx-cursor: hand;"

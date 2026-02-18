@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détail de l'événement</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 25px;
+            padding: 35px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #4a4a4a;
+            font-size: 32px;
+            margin-bottom: 10px;
+            word-break: break-word;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .badge-free {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .badge-paid {
+            background: linear-gradient(135deg, #FF9800, #f57c00);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 152, 0, 0.3);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .info-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .info-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .info-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .info-label {
+            font-size: 12px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .description {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .description h3 {
+            color: #666;
+            margin-bottom: 10px;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .description p {
+            color: #333;
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #f0f0f0;
+            color: #999;
+            font-size: 14px;
+        }
+
+        @media (max-width: 500px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="card">
+    <div class="header">
+        <h1 id="event-name">Chargement...</h1>
+        <span id="event-badge" class="badge badge-free">Gratuit</span>
+    </div>
+
+    <div class="info-grid">
+        <div class="info-item">
+            <div class="info-icon">📅</div>
+            <div class="info-label">Date début</div>
+            <div class="info-value" id="event-start">-</div>
+        </div>
+
+        <div class="info-item">
+            <div class="info-icon">🏁</div>
+            <div class="info-label">Date fin</div>
+            <div class="info-value" id="event-end">-</div>
+        </div>
+
+        <div class="info-item">
+            <div class="info-icon">📍</div>
+            <div class="info-label">Lieu</div>
+            <div class="info-value" id="event-location">-</div>
+        </div>
+
+        <div class="info-item">
+            <div class="info-icon">👥</div>
+            <div class="info-label">Participants</div>
+            <div class="info-value" id="event-participants">-</div>
+        </div>
+
+        <div class="info-item">
+            <div class="info-icon">💰</div>
+            <div class="info-label">Prix</div>
+            <div class="info-value" id="event-fee">-</div>
+        </div>
+
+        <div class="info-item">
+            <div class="info-icon">🆔</div>
+            <div class="info-label">ID</div>
+            <div class="info-value" id="event-id">-</div>
+        </div>
+    </div>
+
+    <div class="description">
+        <h3>📝 Description</h3>
+        <p id="event-description">-</p>
+    </div>
+
+    <div class="footer">
+        <p>Scanné depuis l'application Evolia</p>
+        <p style="font-size: 12px;">© 2026 Evolia - Tous droits réservés</p>
+    </div>
+</div>
+
+<script>
+    // Récupérer les paramètres de l'URL
+    const params = new URLSearchParams(window.location.search);
+
+    // Mettre à jour tous les champs
+    document.getElementById('event-name').textContent = params.get('name') || 'Événement sans nom';
+    document.getElementById('event-start').textContent = params.get('start') || 'Non spécifié';
+    document.getElementById('event-end').textContent = params.get('end') || 'Non spécifié';
+    document.getElementById('event-location').textContent = params.get('location') || 'Non spécifié';
+    document.getElementById('event-participants').textContent = params.get('max') || '0';
+    document.getElementById('event-id').textContent = '#' + (params.get('id') || '0');
+
+    // Prix
+    const fee = params.get('fee');
+    if (fee) {
+        document.getElementById('event-fee').textContent = fee + ' DT';
+    } else {
+        document.getElementById('event-fee').textContent = 'Gratuit';
+    }
+
+    // Description
+    const desc = params.get('desc');
+    if (desc) {
+        document.getElementById('event-description').textContent = decodeURIComponent(desc);
+    }
+
+    // Badge gratuit/payant
+    const badge = document.getElementById('event-badge');
+    if (fee == '0' || fee == '0.0' || !fee) {
+        badge.textContent = 'Gratuit';
+        badge.className = 'badge badge-free';
+    } else {
+        badge.textContent = 'Payant';
+        badge.className = 'badge badge-paid';
+    }
+</script>
+</body>
+</html>

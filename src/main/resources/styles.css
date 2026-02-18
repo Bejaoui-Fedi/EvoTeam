@@ -180,3 +180,182 @@
     -fx-border-color: -secondary-color;
     -fx-border-radius: 25;
 }
+
+/* Boutons utilisateurs (ou events) */
+.button-edit {
+    -fx-background-color: #3498DB;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+    -fx-padding: 5 10;
+}
+
+.button-profile {
+    -fx-background-color: #9B59B6;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+    -fx-padding: 5 10;
+}
+
+.button-delete {
+    -fx-background-color: #E74C3C;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+    -fx-padding: 5 10;
+}
+
+/* Hover effet */
+.button-edit:hover { -fx-background-color: #2980B9; }
+.button-profile:hover { -fx-background-color: #8E44AD; }
+.button-delete:hover { -fx-background-color: #C0392B; }
+
+
+/* =======================
+   EVENT CARD STYLE PRO
+======================= */
+
+.event-card {
+    -fx-background-color: linear-gradient(to bottom right, #ffffff, #f3f9f6);
+    -fx-background-radius: 18;
+    -fx-border-radius: 18;
+    -fx-border-color: rgba(0,0,0,0.05);
+    -fx-padding: 18;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 15, 0.2, 0, 4);
+    -fx-cursor: hand;
+    -fx-transition: all 0.3s ease-in-out;
+}
+
+/* Hover animation */
+.event-card:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.18), 25, 0.3, 0, 8);
+    -fx-translate-y: -4;
+}
+
+/* Titre */
+.event-title {
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2F6F5E;
+}
+
+/* Informations */
+.event-info {
+    -fx-font-size: 13px;
+    -fx-text-fill: #555555;
+}
+
+/* Description */
+.event-description {
+    -fx-font-size: 13px;
+    -fx-text-fill: #333333;
+}
+
+/* Ligne séparatrice douce */
+.event-separator {
+    -fx-opacity: 0.3;
+}
+/* Button danger style */
+.button-danger {
+    -fx-background-color: #E74C3C;
+    -fx-text-fill: white;
+    -fx-background-radius: 8;
+    -fx-font-size: 14;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 2);
+}
+
+.button-danger:hover {
+    -fx-background-color: #C0392B;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Task card styles - with dark text */
+.task-card {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, 2);
+    -fx-padding: 15;
+    -fx-pref-width: 280;
+}
+
+.task-card .label {
+    -fx-text-fill: #2C3E50;  /* Dark color for all labels inside cards */
+}
+
+.task-card .title-label {
+    -fx-font-size: 16;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2C3E50;
+}
+
+.task-card .status-label {
+    -fx-font-size: 13;
+    -fx-font-weight: bold;
+}
+
+/* Status-specific colors */
+.status-completed {
+    -fx-text-fill: #27AE60;  /* Green for completed */
+}
+
+.status-pending {
+    -fx-text-fill: #E67E22;  /* Orange for pending */
+}
+
+/* Metadata text */
+.task-card .meta-label {
+    -fx-text-fill: #7F8C8D;  /* Gray for metadata */
+    -fx-font-size: 11;
+}
+
+/* Button styles inside cards */
+.task-card .button {
+    -fx-font-size: 11;
+    -fx-padding: 5 10;
+}
+
+
+
+
+/* Force all text in cardsContainer to be dark */
+#cardsContainer .label {
+    -fx-text-fill: #2C3E50 !important;
+}
+
+#cardsContainer .text {
+    -fx-fill: #2C3E50 !important;
+}
+
+
+
+
+

@@ -9,7 +9,7 @@ public class DBConnection {
 
     private DBConnection() {
         try {
-            String url = "jdbc:mysql://localhost:3306/pidevusermanagement";
+            String url = "jdbc:mysql://localhost:3306/pidevusermanagment";
             String user = "root";
             String password = "";
 

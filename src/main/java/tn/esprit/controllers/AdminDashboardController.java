@@ -7,6 +7,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Separator;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
@@ -54,6 +56,14 @@ public class AdminDashboardController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         System.out.println("✅ AdminDashboardController initialisé");
+
+        // Ensure session is active
+        if (tn.esprit.utils.Session.currentUser == null) {
+            System.err.println("⚠️ AdminDashboard loaded but Session.currentUser is null!");
+        } else {
+            System.out.println("👤 Admin connecté: " + tn.esprit.utils.Session.currentUser.getNom());
+        }
+
         // Afficher la vue par défaut (Utilisateurs)
         handleDashboard();
     }
@@ -92,12 +102,41 @@ public class AdminDashboardController implements Initializable {
         }
     }
 
+    // =====================================================
+    // TES MODIFICATIONS : handleEvents() avec passage du dashboard
+    // =====================================================
     @FXML
     private void handleEvents() {
-        System.out.println("Navigation vers Événements");
+        System.out.println("Navigation vers Evenements");
         resetButtonStyles();
         setActiveButton(btnEvents);
-        showPlaceholder("Événements");
+
+        try {
+            // Vérifier que le fichier existe avant de charger
+            URL fxmlUrl = getClass().getResource("/DisplayEvent.fxml");
+            if (fxmlUrl == null) {
+                System.err.println("❌ Fichier FXML introuvable : /DisplayEvent.fxml");
+                showError("Fichier DisplayEvent.fxml introuvable !");
+                return;
+            }
+
+            FXMLLoader loader = new FXMLLoader(fxmlUrl);
+            Parent eventView = loader.load();
+
+            // IMPORTANT : passer la reference du dashboard au DisplayEvent
+            DisplayEvent controller = loader.getController();
+            if (controller != null) {
+                controller.setDashboardController(this);
+            }
+
+            contentArea.getChildren().clear();
+            contentArea.getChildren().add(eventView);
+
+        } catch (IOException e) {
+            System.err.println("❌ Erreur détaillée: " + e.getMessage());
+            e.printStackTrace();
+            showError("Impossible de charger la page Evenements: " + e.getMessage());
+        }
     }
 
     @FXML
@@ -105,15 +144,94 @@ public class AdminDashboardController implements Initializable {
         System.out.println("Navigation vers Exercices");
         resetButtonStyles();
         setActiveButton(btnExercises);
-        showPlaceholder("Exercices");
+
+        try {
+            // Charger le NewTemplateController qui contient la gestion des exercices
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/NewTemplate.fxml"));
+            Parent exerciseView = loader.load();
+
+            // Remplacer le contenu
+            contentArea.getChildren().clear();
+            contentArea.getChildren().add(exerciseView);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showError("Impossible de charger la page Exercices");
+        } catch (NullPointerException e) {
+            System.err.println("❌ Fichier FXML non trouvé ! Vérifiez le chemin : /NewTemplate.fxml");
+            showError("Fichier NewTemplate.fxml introuvable !");
+        }
     }
 
     @FXML
     private void handleWellness() {
-        System.out.println("Navigation vers Bien-être");
+        System.out.println("Navigation vers Bien-etre");
         resetButtonStyles();
         setActiveButton(btnWellness);
-        showPlaceholder("Bien-être");
+
+        try {
+            // Create a VBox to hold both views
+            VBox combinedView = new VBox(20);
+            combinedView.setStyle("-fx-padding: 20; -fx-background-color: transparent;");
+
+            // Header
+            Label headerLabel = new Label("🌿 Espace Bien-être");
+            headerLabel.setStyle("-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #3A7D6B;");
+
+            // Load WellbeingTracker view
+            FXMLLoader wellbeingLoader = new FXMLLoader(getClass().getResource("/DisplayWellbeingTracker.fxml"));
+            Parent wellbeingView = wellbeingLoader.load();
+
+            // Add separator
+            Separator separator1 = new Separator();
+            separator1.setStyle("-fx-background-color: #3A7D6B; -fx-opacity: 0.3;");
+
+            // Label for Daily Tasks
+            Label tasksLabel = new Label("✅ Tâches quotidiennes");
+            tasksLabel.setStyle("-fx-font-size: 22; -fx-font-weight: bold; -fx-text-fill: #3A7D6B; -fx-padding: 10 0 0 0;");
+
+            // Load DailyRoutineTask view (once you have the file)
+            Parent dailyTasksView = null;
+            try {
+                FXMLLoader tasksLoader = new FXMLLoader(getClass().getResource("/DisplayDailyRoutineTask.fxml"));
+                dailyTasksView = tasksLoader.load();
+            } catch (Exception e) {
+                // Create placeholder if file doesn't exist
+                VBox placeholder = new VBox(10);
+                placeholder.setStyle("""
+                -fx-background-color: rgba(255,255,255,0.7);
+                -fx-background-radius: 15;
+                -fx-border-radius: 15;
+                -fx-border-color: #3A7D6B;
+                -fx-border-width: 1;
+                -fx-padding: 20;
+                """);
+                placeholder.getChildren().add(new Label("📋 Vue des tâches quotidiennes"));
+                dailyTasksView = placeholder;
+            }
+
+            // Add everything to combined view
+            combinedView.getChildren().addAll(
+                    headerLabel,
+                    wellbeingView,
+                    separator1,
+                    tasksLabel,
+                    dailyTasksView
+            );
+
+            // Wrap in ScrollPane for scrolling
+            ScrollPane scrollPane = new ScrollPane(combinedView);
+            scrollPane.setFitToWidth(true);
+            scrollPane.setStyle("-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;");
+
+            // Clear and add to content area
+            contentArea.getChildren().clear();
+            contentArea.getChildren().add(scrollPane);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showError("Impossible de charger la vue Bien-etre");
+        }
     }
 
     @FXML
@@ -233,5 +351,29 @@ public class AdminDashboardController implements Initializable {
 
         contentArea.getChildren().clear();
         contentArea.getChildren().add(errorBox);
+    }
+
+    // ================ CONTENT MANAGEMENT METHODS ================
+
+    /**
+     * Sets the content of the main content area
+     * @param content The Parent node to display in the content area
+     */
+    public void setContent(Parent content) {
+        if (contentArea != null) {
+            contentArea.getChildren().clear();
+            contentArea.getChildren().add(content);
+            System.out.println("✅ Content updated in AdminDashboardController");
+        } else {
+            System.err.println("❌ contentArea is null - cannot set content");
+        }
+    }
+
+    /**
+     * Gets the current content area (useful for debugging)
+     * @return The StackPane content area
+     */
+    public StackPane getContentArea() {
+        return contentArea;
     }
 }

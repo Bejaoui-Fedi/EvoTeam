@@ -81,8 +81,15 @@ public class UserDashboardController implements Initializable {
             return;
         }
         this.currentUser = user;
+        // IMPORTANT: Set the global session so other controllers (like NewTemplate) can access it
+        tn.esprit.utils.Session.currentUser = user;
+
         updateUserInfo();
         System.out.println("👤 Utilisateur connecté: " + user.getNom() + " (" + user.getRole() + ")");
+    }
+
+    public User getCurrentUser() {
+        return this.currentUser;
     }
 
     private void updateUserInfo() {
@@ -130,20 +137,56 @@ public class UserDashboardController implements Initializable {
         return dashboard;
     }
 
+    // =====================================================
+    // TES MODIFICATIONS : handleEvents() avec passage du currentUser
+    // =====================================================
     @FXML
     private void handleEvents() {
-        System.out.println("📅 Navigation vers Événements");
+        System.out.println("Navigation vers Evenements (mode utilisateur)");
         resetButtonStyles();
         setActiveButton(btnEvents);
-        showPlaceholder("Événements");
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/UserDisplayEvent.fxml"));
+            Parent root = loader.load();
+
+            // Passer la reference du dashboard ET le currentUser au controller
+            UserDisplayEvent controller = loader.getController();
+            controller.setUserDashboardController(this);
+            controller.setCurrentUser(currentUser);  // ✅ AJOUTÉ : passage du currentUser
+
+            contentArea.getChildren().clear();
+            contentArea.getChildren().add(root);
+
+        } catch (IOException e) {
+            System.err.println("Erreur chargement UserDisplayEvent.fxml: " + e.getMessage());
+            e.printStackTrace();
+            showError("Page Evenements non trouvee");
+        }
     }
 
     @FXML
     private void handleExercises() {
-        System.out.println("🧘 Navigation vers Exercices");
+        System.out.println("Navigation vers Exercices");
         resetButtonStyles();
         setActiveButton(btnExercises);
-        showPlaceholder("Exercices");
+
+        try {
+            // Charger le NewTemplateController qui contient la gestion des exercices
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/NewTemplate.fxml"));
+            Parent exerciseView = loader.load();
+
+            // Remplacer le contenu
+            contentArea.getChildren().clear();
+            contentArea.getChildren().add(exerciseView);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showError("Impossible de charger la page Exercices");
+        } catch (NullPointerException e) {
+            System.err.println("❌ Fichier FXML non trouvé ! Vérifiez le chemin : /NewTemplate.fxml");
+            showError("Fichier NewTemplate.fxml introuvable !");
+        }
     }
 
     @FXML
@@ -234,12 +277,10 @@ public class UserDashboardController implements Initializable {
         btnAppointments.setStyle(INACTIVE_BUTTON_STYLE);
         btnProfile.setStyle(INACTIVE_BUTTON_STYLE);
         btnNotifications.setStyle(INACTIVE_BUTTON_STYLE);
-        // ✅ CORRIGÉ ! MÊME STYLE QUE LES AUTRES !
         btnLogout.setStyle(INACTIVE_BUTTON_STYLE);
     }
 
     private void setActiveButton(Button button) {
-        // ✅ CORRIGÉ ! MÊME STYLE ACTIF POUR TOUS !
         button.setStyle(ACTIVE_BUTTON_STYLE);
     }
 
@@ -289,5 +330,18 @@ public class UserDashboardController implements Initializable {
         errorBox.getChildren().addAll(errorIcon, errorMessage);
         contentArea.getChildren().clear();
         contentArea.getChildren().add(errorBox);
+    }
+
+    /**
+     * Sets the content of the main content area
+     * @param content The Parent node to display in the content area
+     */
+    public void setContent(Parent content) {
+        if (contentArea != null) {
+            contentArea.getChildren().clear();
+            contentArea.getChildren().add(content);
+        } else {
+            System.err.println("⚠️ contentArea is null in UserDashboardController");
+        }
     }
 }

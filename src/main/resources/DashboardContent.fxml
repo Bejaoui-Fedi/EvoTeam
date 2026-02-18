@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="tn.esprit.controllers.DashboardContentController"
+            fitToWidth="true"
+            style="-fx-background-color: transparent; -fx-background: transparent;">
+
+    <VBox spacing="35" style="-fx-padding: 40; -fx-background-color: transparent;">
+
+        <!-- ==================== HEADER MODERNE ==================== -->
+        <HBox alignment="CENTER_LEFT" spacing="25" styleClass="modern-header">
+            <!-- Avatar avec cercle -->
+            <StackPane>
+                <Circle radius="60" fill="white" style="-fx-effect: dropshadow(gaussian, rgba(58,125,107,0.3), 20, 0, 0, 8);"/>
+                <ImageView fx:id="profileAvatar" fitWidth="100" fitHeight="100" preserveRatio="true">
+                    <Image url="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"/>
+                </ImageView>
+            </StackPane>
+
+            <!-- Texte de bienvenue -->
+            <VBox spacing="8">
+                <Label fx:id="welcomeLabel" text="Bonjour, " styleClass="welcome-title"/>
+                <Label text="Prêt pour une nouvelle séance de bien-être ?" styleClass="welcome-subtitle"/>
+                <HBox spacing="15" style="-fx-padding: 15 0 0 0;">
+                    <Label text="🌟 12 séances complétées" styleClass="badge"/>
+                    <Label text="🔥 5 jours d'affilée" styleClass="badge"/>
+                </HBox>
+            </VBox>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <!-- Date du jour -->
+            <VBox alignment="CENTER_RIGHT" spacing="5">
+                <Label fx:id="dateLabel" text="14 Fév 2026" styleClass="date-label"/>
+                <Label text="Super Samedi" styleClass="day-label"/>
+            </VBox>
+        </HBox>
+
+        <!-- ==================== STATS CARDS MODERNES ==================== -->
+        <HBox spacing="20" alignment="CENTER">
+            <VBox styleClass="stat-card" alignment="CENTER" spacing="10" HBox.hgrow="ALWAYS">
+                <Label text="🧘" style="-fx-font-size: 32px;"/>
+                <Label text="12" styleClass="stat-number"/>
+                <Label text="Séances" styleClass="stat-label"/>
+            </VBox>
+
+            <VBox styleClass="stat-card" alignment="CENTER" spacing="10" HBox.hgrow="ALWAYS">
+                <Label text="📅" style="-fx-font-size: 32px;"/>
+                <Label text="3" styleClass="stat-number"/>
+                <Label text="Événements" styleClass="stat-label"/>
+            </VBox>
+
+            <VBox styleClass="stat-card" alignment="CENTER" spacing="10" HBox.hgrow="ALWAYS">
+                <Label text="📝" style="-fx-font-size: 32px;"/>
+                <Label text="8" styleClass="stat-number"/>
+                <Label text="Journal" styleClass="stat-label"/>
+            </VBox>
+
+            <VBox styleClass="stat-card" alignment="CENTER" spacing="10" HBox.hgrow="ALWAYS">
+                <Label text="🏆" style="-fx-font-size: 32px;"/>
+                <Label text="15" styleClass="stat-number"/>
+                <Label text="Objectifs" styleClass="stat-label"/>
+            </VBox>
+        </HBox>
+
+        <!-- ==================== SECTION VIDÉOS ==================== -->
+        <VBox spacing="20">
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="🎥" style="-fx-font-size: 28px;"/>
+                <Label text="Recommandations du jour" styleClass="section-title"/>
+            </HBox>
+
+            <GridPane fx:id="videoGrid" hgap="20" vgap="20" alignment="CENTER">
+                <!-- Les vidéos seront ajoutées dynamiquement -->
+            </GridPane>
+        </VBox>
+
+        <!-- ==================== SECTION GALLERIE ==================== -->
+        <VBox spacing="20">
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="🖼️" style="-fx-font-size: 28px;"/>
+                <Label text="Inspiration bien-être" styleClass="section-title"/>
+            </HBox>
+
+            <HBox fx:id="imageGallery" spacing="20" alignment="CENTER">
+                <!-- Les images seront ajoutées dynamiquement -->
+            </HBox>
+        </VBox>
+
+        <!-- ==================== SECTION ACTIVITÉS RÉCENTES ==================== -->
+        <VBox spacing="20">
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="⚡" style="-fx-font-size: 28px;"/>
+                <Label text="Activités récentes" styleClass="section-title"/>
+            </HBox>
+
+            <VBox spacing="15" styleClass="activities-container">
+                <HBox styleClass="activity-item" alignment="CENTER_LEFT" spacing="15">
+                    <Label text="🧘" style="-fx-font-size: 20px;"/>
+                    <VBox spacing="3">
+                        <Label text="Méditation guidée" styleClass="activity-title"/>
+                        <Label text="Il y a 2 heures" styleClass="activity-time"/>
+                    </VBox>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label text="Terminé" styleClass="activity-badge"/>
+                </HBox>
+
+                <HBox styleClass="activity-item" alignment="CENTER_LEFT" spacing="15">
+                    <Label text="📝" style="-fx-font-size: 20px;"/>
+                    <VBox spacing="3">
+                        <Label text="Journal de gratitude" styleClass="activity-title"/>
+                        <Label text="Hier" styleClass="activity-time"/>
+                    </VBox>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label text="Complété" styleClass="activity-badge"/>
+                </HBox>
+
+                <HBox styleClass="activity-item" alignment="CENTER_LEFT" spacing="15">
+                    <Label text="🏃" style="-fx-font-size: 20px;"/>
+                    <VBox spacing="3">
+                        <Label text="Marche de 30min" styleClass="activity-title"/>
+                        <Label text="Hier" styleClass="activity-time"/>
+                    </VBox>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label text="5 km" styleClass="activity-badge" style="-fx-background-color: #3A7D6B;"/>
+                </HBox>
+            </VBox>
+        </VBox>
+    </VBox>
+</ScrollPane>

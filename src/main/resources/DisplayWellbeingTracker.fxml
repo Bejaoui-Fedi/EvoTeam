@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.effect.GaussianBlur?>
+
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="tn.esprit.controllers.DisplayWellbeingTracker"
+           prefWidth="1150" prefHeight="800"
+           stylesheets="@styles.css">
+
+    <!-- 🌿 Background nature apaisant -->
+    <ImageView fitWidth="1150" fitHeight="800" preserveRatio="false" styleClass="nature-background">
+        <image>
+            <Image url="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?w=1600&amp;q=80"
+                   backgroundLoading="true"/>
+        </image>
+        <effect>
+            <GaussianBlur radius="5"/>
+        </effect>
+    </ImageView>
+
+    <!-- 🌿 Overlay vert pistache -->
+    <Region styleClass="overlay"/>
+
+    <!-- Contenu principal -->
+    <BorderPane style="-fx-background-color: transparent; -fx-padding: 20;">
+
+        <!-- Header avec Dashboard -->
+        <top>
+            <VBox alignment="CENTER" spacing="10" style="-fx-padding: 20 0 20 0;">
+                <HBox alignment="CENTER" spacing="15">
+                    <Label text="🧘" style="-fx-font-size: 40; -fx-text-fill: #3A7D6B;"/>
+                    <Label text="Suivi Bien-être" styleClass="header-label" style="-fx-font-size: 32;"/>
+                    <Label text="🌿" style="-fx-font-size: 40; -fx-text-fill: #3A7D6B;"/>
+                </HBox>
+                <Label text="Suivez votre humeur, stress et sommeil au quotidien" styleClass="subheader-label"/>
+            </VBox>
+        </top>
+
+        <!-- Centre -->
+        <center>
+            <VBox spacing="15" styleClass="card" style="-fx-padding: 20; -fx-background-color: rgba(255,255,255,0.7);"
+                  VBox.vgrow="ALWAYS">
+
+                <!-- Barre d'actions -->
+                <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 0 0 10 0;">
+                    <Button text="➕ Nouveau suivi"
+                            onAction="#goToAdd"
+                            styleClass="button-primary"/>
+
+                    <Button text="🔄 Rafraîchir"
+                            onAction="#refresh"
+                            styleClass="button-secondary"/>
+
+
+                    <Region HBox.hgrow="ALWAYS"/>
+
+                    <!-- Statistiques -->
+                    <Label fx:id="lblAvgMood" text="😊 Humeur moyenne: -"
+                           style="-fx-text-fill: #3A7D6B; -fx-font-size: 14; -fx-background-color: rgba(255,255,255,0.5); -fx-padding: 5 10; -fx-background-radius: 20;"/>
+                    <Label fx:id="lblAvgSleep" text="😴 Sommeil moyen: -"
+                           style="-fx-text-fill: #3A7D6B; -fx-font-size: 14; -fx-background-color: rgba(255,255,255,0.5); -fx-padding: 5 10; -fx-background-radius: 20;"/>
+                </HBox>
+
+                <!-- Compteur -->
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label fx:id="lblCount" text="0 suivi(s)"
+                           styleClass="subheader-label" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+                    <Label text="entrées enregistrées" style="-fx-text-fill: #6F9A8D; -fx-font-size: 14;"/>
+                </HBox>
+
+                <!-- Cards Container -->
+                <ScrollPane fitToWidth="true" prefHeight="550"
+                            style="-fx-background-color: transparent; -fx-border-color: transparent;">
+                    <content>
+                        <FlowPane fx:id="cardsContainer"
+                                  hgap="20" vgap="20"
+                                  prefWrapLength="1000"
+                                  styleClass="flow-pane"
+                                  style="-fx-padding: 10;" />
+                    </content>
+                </ScrollPane>
+
+            </VBox>
+        </center>
+
+        <!-- Footer -->
+        <bottom>
+            <HBox alignment="CENTER" style="-fx-padding: 20 0 10 0;">
+                <VBox alignment="CENTER" spacing="5">
+                    <Label text="🌿 Prenez soin de vous - Écoutez votre corps 💚"
+                           style="-fx-font-size: 14; -fx-text-fill: #3A7D6B;"/>
+                    <Label text="(c) 2026 EVOLIA - Espace bien-être"
+                           style="-fx-font-size: 12; -fx-text-fill: #6F9A8D;"/>
+                </VBox>
+            </HBox>
+        </bottom>
+
+    </BorderPane>
+</StackPane>

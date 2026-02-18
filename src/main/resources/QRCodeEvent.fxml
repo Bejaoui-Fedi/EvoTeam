@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="tn.esprit.controllers.QRCodeEventController"
+           prefWidth="700" prefHeight="600"
+           stylesheets="@styles.css">
+
+    <VBox spacing="20" alignment="CENTER" style="-fx-padding: 30; -fx-background-color: rgba(255,255,255,0.9); -fx-background-radius: 15;">
+
+        <Label text="📱 QR Code de l'événement" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #3A7D6B;"/>
+
+        <Separator prefWidth="400"/>
+
+        <ImageView fx:id="qrImageView" fitWidth="300" fitHeight="300" preserveRatio="true"/>
+
+        <Label fx:id="eventInfoLabel" wrapText="true" style="-fx-font-size: 14; -fx-padding: 10; -fx-background-color: #f5f5f5; -fx-background-radius: 8;"/>
+
+        <Button text="Fermer" onAction="#closeWindow" styleClass="button-primary" prefWidth="200"/>
+
+    </VBox>
+</StackPane>
