@@ -24,8 +24,8 @@ public class QRCodeEventController {
 
     public void setEventData(Event event) {
         try {
-            // Construire l'URL avec tous les paramètres
-            String baseUrl = "http://localhost:8080/event_detail.html"; // Change selon ton hébergement
+            // ✅ CORRIGÉ : URL correcte pour XAMPP (port 80 par défaut)
+            String baseUrl = "http://192.168.1.14/event_detail.html";
 
             String url = baseUrl + "?"
                     + "id=" + event.getEventId()
