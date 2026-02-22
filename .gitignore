@@ -1,38 +1,28 @@
+# Fichiers sensibles
+credentials.json
+*.json
+.env
+application.properties
+config.properties
+
+# Dossiers de build
 target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+out/
 
-### IntelliJ IDEA ###
-.idea/modules.xml
-.idea/jarRepositories.xml
-.idea/compiler.xml
-.idea/libraries/
-*.iws
+# Dossiers IDE
+.idea/
 *.iml
-*.ipr
-
-### Eclipse ###
-.apt_generated
 .classpath
-.factorypath
 .project
-.settings
-.springBeans
-.sts4-cache
+.settings/
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
+# Logs
+*.log
 
-### VS Code ###
-.vscode/
+# Uploads
+uploads/
 
-### Mac OS ###
-.DS_Store
+# Backup
+*.bak
+*.swp
+*~
