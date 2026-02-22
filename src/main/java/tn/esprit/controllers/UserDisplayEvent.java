@@ -11,7 +11,10 @@ import tn.esprit.services.ServiceEvent;
 
 import java.io.IOException;
 import java.util.List;
-
+import tn.esprit.services.GoogleCalendarService;  // ← AJOUTE CET IMPORT
+import tn.esprit.controllers.QRCodeEventController;
+import javafx.stage.Stage;
+import javafx.scene.Scene;
 public class UserDisplayEvent {
 
     @FXML private FlowPane cardsContainer;
@@ -69,6 +72,17 @@ public class UserDisplayEvent {
         Label title = new Label(e.getName());
         title.getStyleClass().add("event-title");
 
+
+        // ✅ BOUTON GOOGLE CALENDAR (NOUVEAU)
+        Button btnCalendar = new Button("📅");
+        btnCalendar.setStyle("-fx-background-color: #4285F4; -fx-text-fill: white; -fx-cursor: hand; -fx-font-weight: bold; -fx-padding: 6 10; -fx-background-radius: 15;");
+        btnCalendar.setOnAction(ev -> addToGoogleCalendar(e));
+
+        // ✅ Bouton QR code (à ajouter)
+        Button btnQR = new Button("📱");
+        btnQR.setStyle("-fx-background-color: #6A4E9B; -fx-text-fill: white; -fx-cursor: hand; -fx-font-weight: bold; -fx-padding: 4 8; -fx-background-radius: 8;");
+        btnQR.setOnAction(ev -> showQRCode(e));
+
         // Badge prix
         Label badge = new Label();
         if (e.getFee() == 0) {
@@ -91,7 +105,7 @@ public class UserDisplayEvent {
         );
         btnReviews.setOnAction(ev -> goToReviewsForEvent(e));
 
-        HBox header = new HBox(10, title, spacer, badge, btnReviews);
+        HBox header = new HBox(10, title, spacer, badge, btnQR, btnCalendar, btnReviews);
         header.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
 
         // Infos
@@ -115,6 +129,54 @@ public class UserDisplayEvent {
         card.getChildren().addAll(header, sep, dates, max, location, desc);
         return card;
     }
+
+
+    // ✅ NOUVELLE MÉTHODE POUR GOOGLE CALENDAR
+    // =====================================================
+    private void addToGoogleCalendar(Event event) {
+        try {
+            String eventLink = GoogleCalendarService.addEventToGoogleCalendar(event);
+
+            if (eventLink != null) {
+                // Formater la date (2026-02-19 → 20260219)
+                String dateStr = event.getStartDate().replace("-", "");
+
+                // URL SIMPLE et SANS caractères spéciaux
+                String calendarUrl = "https://calendar.google.com/calendar/r/month?tab=mc";
+
+                java.awt.Desktop.getDesktop().browse(new java.net.URI(calendarUrl));
+
+                new Alert(Alert.AlertType.INFORMATION,
+                        "Événement ajouté à Google Calendar !\nRegardez à la date du " + event.getStartDate()).show();
+            } else {
+                new Alert(Alert.AlertType.ERROR, "Erreur lors de l'ajout à Google Calendar").show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Erreur: " + e.getMessage()).show();
+        }
+    }
+
+
+    private void showQRCode(Event event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/QRCodeEvent.fxml"));
+            Parent root = loader.load();
+
+            QRCodeEventController controller = loader.getController();
+            controller.setEventData(event);
+
+            Stage stage = new Stage();
+            stage.setTitle("QR Code - " + event.getName());
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Impossible d'ouvrir la fenêtre QR code").show();
+        }
+    }
+
 
     // =====================================================
     // Naviguer vers UserDisplayReview -- on passe le user ET l'event
