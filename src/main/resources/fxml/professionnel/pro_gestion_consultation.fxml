@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!-- CHANGER StackPane en VBox comme racine -->
+<VBox spacing="20" style="-fx-padding: 20; -fx-background-color: transparent;"
+      xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="tn.esprit.controllers.professionnel.ProConsultationController"
+      prefWidth="1100" prefHeight="800">
+
+    <!-- Mini barre de navigation interne (gardée) -->
+    <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-padding: 0 0 10 0;">
+        <Button fx:id="retourButton" text="📅 Rendez-vous" onAction="#retourGestionRdv"
+                style="-fx-background-color: transparent; -fx-text-fill: #396f5b; -fx-border-color: #396f5b; -fx-border-radius: 8; -fx-padding: 8 15; -fx-cursor: hand;"/>
+        <Button text="📋 Consultations"
+                style="-fx-background-color: #396f5b; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 15; -fx-background-radius: 8; -fx-cursor: hand;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label text="Gestion des Consultations" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #396f5b;"/>
+    </HBox>
+
+    <!-- Formulaire Nouvelle Consultation -->
+    <VBox style="-fx-background-color: rgba(255,255,255,0.85); -fx-background-radius: 15; -fx-padding: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 10, 0, 0, 2);">
+        <Label text="🛠️ Nouvelle Consultation" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #396f5b;"/>
+        <Separator style="-fx-padding: 10 0;"/>
+
+        <GridPane hgap="20" vgap="12">
+            <Label text="Rendez-vous :" GridPane.rowIndex="0" GridPane.columnIndex="0" style="-fx-font-weight: bold; -fx-text-fill: #396f5b;"/>
+            <ComboBox fx:id="rdvCombo" GridPane.rowIndex="0" GridPane.columnIndex="1" prefWidth="500" promptText="Sélectionnez un rendez-vous..."/>
+
+            <Label text="Date consultation :" GridPane.rowIndex="1" GridPane.columnIndex="0" style="-fx-font-weight: bold; -fx-text-fill: #396f5b;"/>
+            <DatePicker fx:id="dateConsultationPicker" GridPane.rowIndex="1" GridPane.columnIndex="1" prefWidth="250"/>
+
+            <Label text="Diagnostic :" GridPane.rowIndex="2" GridPane.columnIndex="0" style="-fx-font-weight: bold; -fx-text-fill: #396f5b;"/>
+            <TextField fx:id="diagnosticField" GridPane.rowIndex="2" GridPane.columnIndex="1" prefWidth="500" promptText="Diagnostic établi"/>
+
+            <Label text="Observations :" GridPane.rowIndex="3" GridPane.columnIndex="0" style="-fx-font-weight: bold; -fx-text-fill: #396f5b;"/>
+            <TextArea fx:id="observationArea" GridPane.rowIndex="3" GridPane.columnIndex="1" prefRowCount="2" prefWidth="500" promptText="Observations médicales..."/>
+
+            <Label text="Traitement :" GridPane.rowIndex="4" GridPane.columnIndex="0" style="-fx-font-weight: bold; -fx-text-fill: #396f5b;"/>
+            <TextField fx:id="traitementField" GridPane.rowIndex="4" GridPane.columnIndex="1" prefWidth="500" promptText="Traitement prescrit"/>
+
+            <Label text="Ordonnance :" GridPane.rowIndex="5" GridPane.columnIndex="0" style="-fx-font-weight: bold; -fx-text-fill: #396f5b;"/>
+            <TextArea fx:id="ordonnanceArea" GridPane.rowIndex="5" GridPane.columnIndex="1" prefRowCount="2" prefWidth="500" promptText="Médicaments prescrits..."/>
+
+            <Label text="Durée (min) :" GridPane.rowIndex="6" GridPane.columnIndex="0" style="-fx-font-weight: bold; -fx-text-fill: #396f5b;"/>
+            <Spinner fx:id="dureeSpinner" GridPane.rowIndex="6" GridPane.columnIndex="1" prefWidth="120"/>
+
+            <Label text="Statut :" GridPane.rowIndex="7" GridPane.columnIndex="0" style="-fx-font-weight: bold; -fx-text-fill: #396f5b;"/>
+            <ChoiceBox fx:id="statutConsultationChoice" GridPane.rowIndex="7" GridPane.columnIndex="1" prefWidth="200"/>
+        </GridPane>
+
+        <!-- Boutons d'action -->
+        <HBox spacing="10" alignment="CENTER" style="-fx-padding: 15 0 0 0;">
+            <Button fx:id="saveButton" text="➕ AJOUTER" onAction="#handleSave" style="-fx-background-color: #27AE60; -fx-text-fill: white; -fx-padding: 10 20; -fx-background-radius: 5;"/>
+            <Button fx:id="updateButton" text="✏️ MODIFIER" onAction="#handleUpdate" disable="true" style="-fx-background-color: #F39C12; -fx-text-fill: white; -fx-padding: 10 20; -fx-background-radius: 5;"/>
+            <Button fx:id="deleteButton" text="🗑️ SUPPRIMER" onAction="#handleDelete" disable="true" style="-fx-background-color: #E74C3C; -fx-text-fill: white; -fx-padding: 10 20; -fx-background-radius: 5;"/>
+            <Button fx:id="clearButton" text="🧹 EFFACER" onAction="#handleClear" style="-fx-background-color: #7F8C8D; -fx-text-fill: white; -fx-padding: 10 20; -fx-background-radius: 5;"/>
+        </HBox>
+
+        <Label fx:id="messageLabel" style="-fx-text-fill: #e74c3c;" alignment="CENTER"/>
+    </VBox>
+
+    <!-- Liste des Consultations -->
+    <VBox style="-fx-background-color: rgba(255,255,255,0.85); -fx-background-radius: 15; -fx-padding: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 10, 0, 0, 2);" VBox.vgrow="ALWAYS">
+        <Label text="📜 Liste des Consultations" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #396f5b;"/>
+        <Separator style="-fx-padding: 10 0;"/>
+
+        <TableView fx:id="tableView" VBox.vgrow="ALWAYS" prefHeight="300">
+            <columns>
+                <TableColumn fx:id="colId" text="ID" prefWidth="60"/>
+                <TableColumn fx:id="colAppointmentId" text="RDV #" prefWidth="80"/>
+                <TableColumn fx:id="colDate" text="Date" prefWidth="120"/>
+                <TableColumn fx:id="colDiagnostic" text="Diagnostic" prefWidth="300"/>
+                <TableColumn fx:id="colStatut" text="Statut" prefWidth="130"/>
+                <TableColumn fx:id="colDuree" text="Durée" prefWidth="90"/>
+            </columns>
+        </TableView>
+    </VBox>
+
+</VBox>

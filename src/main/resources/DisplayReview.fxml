@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.effect.GaussianBlur?>
+<?import javafx.geometry.Insets?>
+
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="tn.esprit.controllers.DisplayReview"
+           prefWidth="1150" prefHeight="800"
+           stylesheets="@styles.css">
+
+    <!-- Background nature apaisant (meme que DisplayEvent) -->
+    <ImageView fitWidth="1150" fitHeight="800" preserveRatio="false" styleClass="nature-background">
+        <image>
+            <Image url="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?w=1600&amp;q=80"
+                   backgroundLoading="true"/>
+        </image>
+        <effect>
+            <GaussianBlur radius="5"/>
+        </effect>
+    </ImageView>
+
+    <!-- Overlay vert pistache tres doux -->
+    <Region styleClass="overlay"/>
+
+    <!-- Contenu principal -->
+    <BorderPane style="-fx-background-color: transparent; -fx-padding: 20;">
+
+        <!-- Header -->
+        <top>
+            <VBox alignment="CENTER" spacing="10" style="-fx-padding: 20 0 20 0;">
+                <HBox alignment="CENTER" spacing="15">
+                    <Label text="⭐" style="-fx-font-size: 40; -fx-text-fill: #3A7D6B;"/>
+                    <Label text="Gestion des Reviews" styleClass="header-label" style="-fx-font-size: 32;"/>
+                    <Label text="🌿" style="-fx-font-size: 40; -fx-text-fill: #3A7D6B;"/>
+                </HBox>
+                <Label text="Consultez et gerez les avis avec bienveillance" styleClass="subheader-label"/>
+            </VBox>
+        </top>
+
+        <!-- Centre -->
+        <center>
+            <VBox spacing="15" styleClass="card" style="-fx-padding: 20; -fx-background-color: rgba(255,255,255,0.7);"
+                  VBox.vgrow="ALWAYS">
+
+                <!-- Boutons actions -->
+                <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 0 0 10 0;">
+                    <Button text="➕ Ajouter" onAction="#goToAddReview" styleClass="button-primary"/>
+                    <Button text="🎉 Evenements" onAction="#goToDisplayEvent" styleClass="button-primary"/>
+                    <Button text="🔄 Rafraichir" onAction="#refresh" styleClass="button-secondary"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <!-- Search -->
+                    <TextField fx:id="searchField" promptText="Rechercher par titre ou commentaire..." prefWidth="280" styleClass="text-field"/>
+                    <Button text="🔎 Rechercher" onAction="#handleSearch" styleClass="button-primary"/>
+                </HBox>
+
+                <!-- Compteur -->
+                <Label fx:id="lblCount" text="0 review(s)" styleClass="subheader-label"/>
+
+                <!-- FlowPane pour les cartes -->
+                <ScrollPane fitToWidth="true" prefHeight="550" style="-fx-background-color:transparent;">
+                    <content>
+                        <FlowPane fx:id="cardsContainer"
+                                  hgap="16" vgap="16"
+                                  prefWrapLength="1000"
+                                  styleClass="flow-pane"/>
+                    </content>
+                </ScrollPane>
+
+            </VBox>
+        </center>
+
+        <!-- Footer -->
+        <bottom>
+            <HBox alignment="CENTER" style="-fx-padding: 20 0 10 0;">
+                <VBox alignment="CENTER" spacing="5">
+                    <Label text="🌿 Bienveillance - Respect - Organisation 💙"
+                           style="-fx-font-size: 14; -fx-text-fill: #3A7D6B;"/>
+                    <Label text="(c) 2026 PsyCoach Pro - Gestion des reviews"
+                           style="-fx-font-size: 12; -fx-text-fill: #6F9A8D;"/>
+                </VBox>
+            </HBox>
+        </bottom>
+
+    </BorderPane>
+</StackPane>

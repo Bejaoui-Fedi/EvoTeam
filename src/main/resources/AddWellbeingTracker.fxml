@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.effect.GaussianBlur?>
+<?import javafx.scene.shape.Circle?>
+
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="tn.esprit.controllers.AddWellbeingTracker"
+           prefWidth="600" prefHeight="700"
+           stylesheets="@styles.css">
+
+    <!-- 🌿 Background nature apaisant -->
+    <ImageView fitWidth="600" fitHeight="700" preserveRatio="false" styleClass="nature-background">
+        <image>
+            <Image url="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?w=1600&amp;q=80"
+                   backgroundLoading="true"/>
+        </image>
+        <effect>
+            <GaussianBlur radius="5"/>
+        </effect>
+    </ImageView>
+
+    <!-- 🌿 Overlay -->
+    <Region styleClass="overlay"/>
+
+    <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent; -fx-padding: 20;">
+        <VBox alignment="CENTER" spacing="20">
+
+            <VBox styleClass="card" maxWidth="500" spacing="20">
+
+                <!-- Header -->
+                <VBox alignment="CENTER" spacing="5">
+                    <Label text="🧘 Ajouter un suivi bien-être" styleClass="header-label"/>
+                    <Label text="Enregistrez votre état du jour" styleClass="subheader-label"/>
+
+                    <!-- Navigation buttons -->
+                    <HBox spacing="10" alignment="CENTER" style="-fx-padding: 10 0 0 0;">
+                        <Button text="📋 Liste des suivis"
+                                onAction="#goToDisplay"
+                                styleClass="button-secondary"/>
+                        <Button text="🏠 Dashboard"
+                                onAction="#goToDashboard"
+                                styleClass="button-secondary"/>
+                    </HBox>
+                </VBox>
+
+                <Separator/>
+
+                <!-- Utilisateur -->
+                <VBox spacing="5">
+                    <Label text="👤 Utilisateur *" styleClass="normal-label" style="-fx-font-weight: bold;"/>
+                    <ComboBox fx:id="cbUserId" promptText="Sélectionner un utilisateur" styleClass="text-field"/>
+                </VBox>
+
+                <!-- Tâche de routine -->
+                <VBox spacing="5">
+                    <Label text="✅ Tâche de routine *" styleClass="normal-label" style="-fx-font-weight: bold;"/>
+                    <ComboBox fx:id="cbRoutineTaskId" promptText="Sélectionner une tâche" styleClass="text-field"/>
+                </VBox>
+
+                <!-- Date -->
+                <VBox spacing="5">
+                    <Label text="📅 Date du suivi *" styleClass="normal-label" style="-fx-font-weight: bold;"/>
+                    <DatePicker fx:id="datePicker" styleClass="text-field" prefHeight="35"/>
+                </VBox>
+
+                <!-- Indicateurs (Humeur, Stress, Énergie) -->
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="😊 Humeur *" styleClass="normal-label" style="-fx-font-weight: bold;"/>
+                        <ComboBox fx:id="cbMood" promptText="1-5" styleClass="text-field" prefWidth="140"/>
+                    </VBox>
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="😰 Stress *" styleClass="normal-label" style="-fx-font-weight: bold;"/>
+                        <ComboBox fx:id="cbStress" promptText="1-5" styleClass="text-field" prefWidth="140"/>
+                    </VBox>
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="⚡ Énergie *" styleClass="normal-label" style="-fx-font-weight: bold;"/>
+                        <ComboBox fx:id="cbEnergy" promptText="1-5" styleClass="text-field" prefWidth="140"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Heures de sommeil -->
+                <VBox spacing="5">
+                    <Label text="😴 Heures de sommeil *" styleClass="normal-label" style="-fx-font-weight: bold;"/>
+                    <TextField fx:id="tfSleepHours" promptText="Ex: 7.5" styleClass="text-field"/>
+                </VBox>
+
+                <!-- Note optionnelle -->
+                <VBox spacing="5">
+                    <Label text="📝 Note (optionnelle)" styleClass="normal-label" style="-fx-font-weight: bold;"/>
+                    <TextArea fx:id="taNote" promptText="Comment vous sentez-vous aujourd'hui ?"
+                              prefRowCount="3" wrapText="true" styleClass="text-field"/>
+                </VBox>
+
+                <!-- Boutons d'action -->
+                <VBox spacing="10" alignment="CENTER" style="-fx-padding: 10 0 0 0;">
+                    <Button text="✅ Enregistrer"
+                            onAction="#handleAddTracker"
+                            prefWidth="300" prefHeight="40"
+                            styleClass="button-primary"/>
+
+                    <Button text="🔄 Réinitialiser"
+                            onAction="#resetForm"
+                            prefWidth="300" prefHeight="40"
+                            styleClass="button-secondary"/>
+                </VBox>
+
+                <!-- Champs obligatoires -->
+                <HBox alignment="CENTER">
+                    <Label text="* Champs obligatoires"
+                           style="-fx-text-fill: #E74C3C; -fx-font-size: 11; -fx-background-color: rgba(255,255,255,0.5); -fx-padding: 3 10; -fx-background-radius: 20;"/>
+                </HBox>
+
+            </VBox>
+        </VBox>
+    </ScrollPane>
+
+</StackPane>

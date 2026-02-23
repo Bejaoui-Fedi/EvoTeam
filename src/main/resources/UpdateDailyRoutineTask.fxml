@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.effect.GaussianBlur?>
+
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="tn.esprit.controllers.UpdateDailyRoutineTask"
+           prefWidth="600" prefHeight="700"
+           stylesheets="@styles.css">
+
+    <!-- 🌿 Background nature apaisant -->
+    <ImageView fitWidth="600" fitHeight="700" preserveRatio="false" styleClass="nature-background">
+        <image>
+            <Image url="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?w=1600&amp;q=80"
+                   backgroundLoading="true"/>
+        </image>
+        <effect>
+            <GaussianBlur radius="5"/>
+        </effect>
+    </ImageView>
+
+    <!-- 🌿 Overlay -->
+    <Region styleClass="overlay"/>
+
+    <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent; -fx-padding: 20;">
+        <VBox alignment="CENTER" spacing="20">
+
+            <VBox styleClass="card" maxWidth="500" spacing="20">
+
+                <!-- Header -->
+                <VBox alignment="CENTER" spacing="5">
+                    <HBox alignment="CENTER" spacing="10">
+                        <Label text="✏️" style="-fx-font-size: 32; -fx-text-fill: #3A7D6B;"/>
+                        <Label text="Modifier la tâche" styleClass="header-label" style="-fx-font-size: 24;"/>
+                    </HBox>
+                    <Label text="Modifiez votre tâche quotidienne" styleClass="subheader-label"/>
+
+                    <!-- ID Badge -->
+                    <Label fx:id="lblId" text="ID: -"
+                           style="-fx-text-fill: #7F8C8D; -fx-font-size: 12; -fx-font-weight: bold;
+                                  -fx-background-color: rgba(255,255,255,0.5); -fx-padding: 3 10;
+                                  -fx-background-radius: 20; -fx-margin: 5 0 0 0;"/>
+                </VBox>
+
+                <Separator/>
+
+                <!-- Utilisateur -->
+                <VBox spacing="5">
+                    <Label text="👤 Utilisateur *" styleClass="form-label" style="-fx-font-weight: bold;"/>
+                    <ComboBox fx:id="cbUserId" prefHeight="40" promptText="Sélectionner un utilisateur" styleClass="text-field"/>
+                </VBox>
+
+                <!-- Titre -->
+                <VBox spacing="5">
+                    <Label text="📌 Titre de la tâche *" styleClass="form-label" style="-fx-font-weight: bold;"/>
+                    <TextField fx:id="tfTitle" prefHeight="40" promptText="Entrez le titre de la tâche" styleClass="text-field"/>
+                </VBox>
+
+                <!-- Statut -->
+                <VBox spacing="5">
+                    <Label text="✅ Statut" styleClass="form-label" style="-fx-font-weight: bold;"/>
+                    <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-padding: 5 0;">
+                        <CheckBox fx:id="chkCompleted" text="Tâche complétée"
+                                  style="-fx-font-size: 14; -fx-text-fill: #2C3E50;"/>
+                    </HBox>
+                </VBox>
+
+                <!-- Dates -->
+                <VBox spacing="10" style="-fx-background-color: #F8F9FA; -fx-padding: 15; -fx-background-radius: 10;">
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="📅 Complétée le:" style="-fx-font-size: 13; -fx-font-weight: bold; -fx-text-fill: #555;"/>
+                        <Label fx:id="lblCompletedAt" text="-"
+                               style="-fx-font-size: 13; -fx-font-style: italic; -fx-text-fill: #7F8C8D;"/>
+                    </HBox>
+
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="📅 Créée le:" style="-fx-font-size: 13; -fx-font-weight: bold; -fx-text-fill: #555;"/>
+                        <Label fx:id="lblCreatedAt" text="-"
+                               style="-fx-font-size: 13; -fx-font-style: italic; -fx-text-fill: #7F8C8D;"/>
+                    </HBox>
+                </VBox>
+
+                <!-- Boutons d'action -->
+                <VBox spacing="10" alignment="CENTER" style="-fx-padding: 10 0 0 0;">
+                    <Button text="✅ Enregistrer les modifications"
+                            onAction="#handleUpdate"
+                            prefWidth="300" prefHeight="45"
+                            styleClass="button-primary"
+                            style="-fx-background-color: #F39C12;"/>
+
+                    <HBox spacing="10" alignment="CENTER">
+
+                        <Button text="❌ Annuler"
+                                onAction="#closeWindow"
+                                prefWidth="145" prefHeight="40"
+                                styleClass="button-secondary"/>
+                    </HBox>
+                </VBox>
+
+                <!-- Champs obligatoires -->
+                <HBox alignment="CENTER">
+                    <Label text="* Champs obligatoires"
+                           style="-fx-text-fill: #E74C3C; -fx-font-size: 11; -fx-background-color: rgba(255,255,255,0.5); -fx-padding: 3 10; -fx-background-radius: 20;"/>
+                </HBox>
+
+            </VBox>
+        </VBox>
+    </ScrollPane>
+
+</StackPane>
