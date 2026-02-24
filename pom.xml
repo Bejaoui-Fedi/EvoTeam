@@ -81,6 +81,12 @@
             <artifactId>httpclient</artifactId>
             <version>4.5.14</version>
         </dependency>
+        <!-- Gson for JSON parsing (needed for API responses) -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
+        </dependency>
     </dependencies>
 
     <build>

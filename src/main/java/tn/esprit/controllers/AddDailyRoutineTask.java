@@ -1,5 +1,8 @@
 package tn.esprit.controllers;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,18 +16,36 @@ import tn.esprit.entities.DailyRoutineTask;
 import tn.esprit.services.ServiceDailyRoutineTask;
 import tn.esprit.services.UserService;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import tn.esprit.services.QuoteService;
+import tn.esprit.services.QuoteService.Quote;
+import javafx.application.Platform;
+
+import static tn.esprit.services.QuoteService.API_KEY;
+import static tn.esprit.services.QuoteService.API_URL;
+
+import javafx.application.Platform;
+import tn.esprit.services.QuoteService;
+import javafx.scene.control.Button; // Make sure btnSuggestQuote is imported
 
 public class AddDailyRoutineTask {
 
     @FXML private ComboBox<Integer> cbUserId;
-    @FXML private TextField tfTitle;
+    @FXML private TextArea tfTitle;
     @FXML private CheckBox chkCompleted;
+    @FXML private Button btnSuggestQuote;
+
 
     private final ServiceDailyRoutineTask serviceTask = new ServiceDailyRoutineTask();
     private final UserService serviceUser = new UserService();
+    private final QuoteService quoteService = new QuoteService();
 
     @FXML
     public void initialize() {
@@ -125,5 +146,59 @@ public class AddDailyRoutineTask {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+
+
+    @FXML
+    private void suggestQuoteTask() {
+        // Disable button during API call
+        btnSuggestQuote.setDisable(true);
+        btnSuggestQuote.setText("⏳ Chargement...");
+
+        // Clear the field
+        tfTitle.clear();
+
+        new Thread(() -> {
+            try {
+                QuoteService quoteService = new QuoteService();
+                QuoteService.Quote quote = quoteService.getWellnessQuote();
+
+                Platform.runLater(() -> {
+                    try {
+                        if (quote != null && quote.quote != null) {
+                            // Format with quote, author, and category
+                            String taskTitle = "💭 " + quote.quote;
+
+                            if (quote.author != null && !quote.author.isEmpty() && !quote.author.equals("Unknown")) {
+                                taskTitle += "\n— " + quote.author;
+                            }
+
+                            if (quote.category != null && !quote.category.isEmpty()) {
+                                taskTitle += "\n🌿 " + quote.category.substring(0, 1).toUpperCase()
+                                        + quote.category.substring(1).toLowerCase();
+                            }
+
+                            tfTitle.setText(taskTitle);
+                        } else {
+                            // No quote found after MAX_ATTEMPTS
+                            tfTitle.setText("💭 Désolé, aucune citation bien-être trouvée pour le moment");
+                        }
+
+                    } finally {
+                        btnSuggestQuote.setDisable(false);
+                        btnSuggestQuote.setText("💡 Citation bien-être");
+                    }
+                });
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                Platform.runLater(() -> {
+                    btnSuggestQuote.setDisable(false);
+                    btnSuggestQuote.setText("💡 Citation bien-être");
+                    tfTitle.setText("💭 Erreur lors du chargement de la citation");
+                });
+            }
+        }).start();
     }
 }

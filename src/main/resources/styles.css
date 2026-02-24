@@ -356,6 +356,9 @@
 }
 
 
-
+.filter-radio {
+    -fx-text-fill: black;
+    -fx-font-size: 13;
+}
 
 

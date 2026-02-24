@@ -164,9 +164,6 @@ public class AdminDashboardController implements Initializable {
             Separator separator1 = new Separator();
             separator1.setStyle("-fx-background-color: #3A7D6B; -fx-opacity: 0.3;");
 
-            // Label for Daily Tasks
-            Label tasksLabel = new Label("✅ Tâches quotidiennes");
-            tasksLabel.setStyle("-fx-font-size: 22; -fx-font-weight: bold; -fx-text-fill: #3A7D6B; -fx-padding: 10 0 0 0;");
 
             // Load DailyRoutineTask view (once you have the file)
             Parent dailyTasksView = null;
@@ -193,7 +190,6 @@ public class AdminDashboardController implements Initializable {
                     headerLabel,
                     wellbeingView,
                     separator1,
-                    tasksLabel,
                     dailyTasksView
             );
 

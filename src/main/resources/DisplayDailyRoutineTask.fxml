@@ -39,7 +39,6 @@
                     <Label text="Tâches de routine" styleClass="header-label" style="-fx-font-size: 32;"/>
                     <Label text="🌿" style="-fx-font-size: 40; -fx-text-fill: #3A7D6B;"/>
                 </HBox>
-                <Label text="Organisez vos tâches quotidiennes" styleClass="subheader-label"/>
             </VBox>
         </top>
 
@@ -58,19 +57,21 @@
                             onAction="#refresh"
                             styleClass="button-secondary"/>
 
-
                     <Region HBox.hgrow="ALWAYS"/>
 
-                    <!-- Filtres -->
+                    <!-- Filtres avec texte en noir -->
                     <fx:define>
                         <ToggleGroup fx:id="filterGroup"/>
                     </fx:define>
 
                     <HBox spacing="10" alignment="CENTER" style="-fx-background-color: rgba(255,255,255,0.5); -fx-padding: 5 10; -fx-background-radius: 25;">
                         <Label text="Filtrer:" style="-fx-font-size: 13; -fx-font-weight: bold; -fx-text-fill: #3A7D6B;"/>
-                        <RadioButton text="Toutes" toggleGroup="$filterGroup" selected="true" styleClass="filter-radio"/>
-                        <RadioButton text="À faire" toggleGroup="$filterGroup" styleClass="filter-radio"/>
-                        <RadioButton text="Complétées" toggleGroup="$filterGroup" styleClass="filter-radio"/>
+                        <RadioButton text="Toutes" toggleGroup="$filterGroup" selected="true"
+                                     style="-fx-text-fill: black; -fx-font-size: 13;"/>
+                        <RadioButton text="À faire" toggleGroup="$filterGroup"
+                                     style="-fx-text-fill: black; -fx-font-size: 13;"/>
+                        <RadioButton text="Complétées" toggleGroup="$filterGroup"
+                                     style="-fx-text-fill: black; -fx-font-size: 13;"/>
                     </HBox>
                 </HBox>
 
