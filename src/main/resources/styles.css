@@ -423,3 +423,117 @@
 .list-cell:selected {
     -fx-background-color: rgba(58, 125, 107, 0.2);
 }
+/* Search Field */
+.search-field {
+    -fx-background-color: white;
+    -fx-background-radius: 25;
+    -fx-border-color: #3A7D6B;
+    -fx-border-radius: 25;
+    -fx-border-width: 1;
+    -fx-padding: 10 20;
+    -fx-font-size: 14;
+}
+
+.search-field:focused {
+    -fx-border-color: #2C3E50;
+    -fx-border-width: 2;
+}
+
+/* Suggestions List */
+.list-view {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-color: #3A7D6B;
+    -fx-border-radius: 10;
+    -fx-padding: 5;
+}
+
+.list-cell {
+    -fx-padding: 10;
+    -fx-background-color: transparent;
+    -fx-text-fill: #2C3E50;
+}
+
+.list-cell:hover {
+    -fx-background-color: rgba(58, 125, 107, 0.1);
+}
+
+.list-cell:selected {
+    -fx-background-color: rgba(58, 125, 107, 0.2);
+}
+/* Search Field */
+.search-field {
+    -fx-background-color: white;
+    -fx-background-radius: 25;
+    -fx-border-color: #3A7D6B;
+    -fx-border-radius: 25;
+    -fx-border-width: 1;
+    -fx-padding: 10 20;
+    -fx-font-size: 14;
+}
+
+.search-field:focused {
+    -fx-border-color: #2C3E50;
+    -fx-border-width: 2;
+}
+
+/* Suggestions List */
+.list-view {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-color: #3A7D6B;
+    -fx-border-radius: 10;
+    -fx-padding: 5;
+}
+
+.list-cell {
+    -fx-padding: 10;
+    -fx-background-color: transparent;
+    -fx-text-fill: #2C3E50;
+}
+
+.list-cell:hover {
+    -fx-background-color: rgba(58, 125, 107, 0.1);
+}
+
+.list-cell:selected {
+    -fx-background-color: rgba(58, 125, 107, 0.2);
+}
+/* Search Field */
+.search-field {
+    -fx-background-color: white;
+    -fx-background-radius: 25;
+    -fx-border-color: #3A7D6B;
+    -fx-border-radius: 25;
+    -fx-border-width: 1;
+    -fx-padding: 10 20;
+    -fx-font-size: 14;
+}
+
+.search-field:focused {
+    -fx-border-color: #2C3E50;
+    -fx-border-width: 2;
+}
+
+/* Suggestions List */
+.list-view {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-color: #3A7D6B;
+    -fx-border-radius: 10;
+    -fx-padding: 5;
+}
+
+.list-cell {
+    -fx-padding: 10;
+    -fx-background-color: transparent;
+    -fx-text-fill: #2C3E50;
+}
+
+.list-cell:hover {
+    -fx-background-color: rgba(58, 125, 107, 0.1);
+}
+
+.list-cell:selected {
+    -fx-background-color: rgba(58, 125, 107, 0.2);
+}

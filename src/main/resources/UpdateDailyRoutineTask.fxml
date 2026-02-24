@@ -11,11 +11,11 @@
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="tn.esprit.controllers.UpdateDailyRoutineTask"
-           prefWidth="600" prefHeight="700"
+           prefWidth="600" prefHeight="750"
            stylesheets="@styles.css">
 
     <!-- 🌿 Background nature apaisant -->
-    <ImageView fitWidth="600" fitHeight="700" preserveRatio="false" styleClass="nature-background">
+    <ImageView fitWidth="600" fitHeight="750" preserveRatio="false" styleClass="nature-background">
         <image>
             <Image url="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?w=1600&amp;q=80"
                    backgroundLoading="true"/>
@@ -50,11 +50,31 @@
 
                 <Separator/>
 
-                <!-- Utilisateur -->
-                <VBox spacing="5">
-                    <Label text="👤 Utilisateur *" styleClass="form-label" style="-fx-font-weight: bold;"/>
-                    <ComboBox fx:id="cbUserId" prefHeight="40" promptText="Sélectionner un utilisateur" styleClass="text-field"/>
+                <!-- 🔍 RECHERCHE UTILISATEUR AVANCÉE -->
+                <VBox spacing="5" style="-fx-padding: 0 0 5 0;">
+                    <Label text="👤 Rechercher un utilisateur *" style="-fx-font-weight: bold; -fx-text-fill: #2C3E50;"/>
+                    <HBox spacing="5" alignment="CENTER_LEFT">
+                        <TextField fx:id="searchUserField"
+                                   promptText="Tapez le nom ou l'email..."
+                                   HBox.hgrow="ALWAYS"
+                                   prefHeight="40"
+                                   styleClass="search-field"/>
+                        <Button fx:id="clearUserBtn"
+                                text="✖"
+                                styleClass="button-secondary"
+                                visible="false" managed="false"/>
+                    </HBox>
+                    <ListView fx:id="userSuggestionsList"
+                              prefHeight="120"
+                              visible="false" managed="false"
+                              style="-fx-background-color: white; -fx-border-color: #3A7D6B; -fx-border-radius: 5; -fx-background-radius: 5;"/>
+                    <Label fx:id="selectedUserLabel"
+                           text="Aucun utilisateur sélectionné"
+                           style="-fx-text-fill: #7f8c8d; -fx-font-style: italic; -fx-padding: 5 0 0 0;"/>
                 </VBox>
+
+                <!-- Original ComboBox (caché mais conservé pour la compatibilité) -->
+                <ComboBox fx:id="cbUserId" visible="false" managed="false"/>
 
                 <!-- Titre -->
                 <VBox spacing="5">
@@ -95,7 +115,6 @@
                             style="-fx-background-color: #F39C12;"/>
 
                     <HBox spacing="10" alignment="CENTER">
-
                         <Button text="❌ Annuler"
                                 onAction="#closeWindow"
                                 prefWidth="145" prefHeight="40"
