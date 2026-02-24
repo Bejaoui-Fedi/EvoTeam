@@ -47,6 +47,32 @@
             <VBox spacing="15" styleClass="card" style="-fx-padding: 20; -fx-background-color: rgba(255,255,255,0.7);"
                   VBox.vgrow="ALWAYS">
 
+                <!-- 🔍 BARRE DE RECHERCHE AVANCÉE -->
+                <VBox spacing="10" style="-fx-padding: 0 0 10 0;">
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="🔍" style="-fx-font-size: 20;"/>
+                        <TextField fx:id="searchField"
+                                   promptText="Rechercher par utilisateur, titre, statut..."
+                                   HBox.hgrow="ALWAYS"
+                                   prefHeight="40"
+                                   styleClass="search-field"/>
+                        <Button fx:id="searchBtn"
+                                text="Rechercher"
+                                styleClass="button-primary"/>
+                        <Button fx:id="clearSearchBtn"
+                                text="✖"
+                                styleClass="button-secondary"
+                                visible="false" managed="false"
+                                onAction="#clearSearch"/>
+                    </HBox>
+
+                    <!-- Suggestions en temps réel -->
+                    <ListView fx:id="suggestionsListView"
+                              visible="false" managed="false"
+                              prefHeight="150"
+                              style="-fx-background-color: white; -fx-border-color: #E2E2E2; -fx-border-radius: 5;"/>
+                </VBox>
+
                 <!-- Barre d'actions -->
                 <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 0 0 10 0;">
                     <Button text="➕ Nouvelle tâche"
@@ -59,7 +85,19 @@
 
                     <Region HBox.hgrow="ALWAYS"/>
 
-                    <!-- Filtres avec texte en noir -->
+                    <!-- Filtres de recherche rapide -->
+                    <HBox spacing="5" alignment="CENTER">
+                        <ToggleButton fx:id="filterAllBtn" text="Tous"
+                                      styleClass="filter-chip" selected="true"/>
+                        <ToggleButton fx:id="filterTitleBtn" text="📝 Titre"
+                                      styleClass="filter-chip"/>
+                        <ToggleButton fx:id="filterUserBtn" text="👤 Utilisateur"
+                                      styleClass="filter-chip"/>
+                        <ToggleButton fx:id="filterStatusBtn" text="✅ Statut"
+                                      styleClass="filter-chip"/>
+                    </HBox>
+
+                    <!-- Filtres existants -->
                     <fx:define>
                         <ToggleGroup fx:id="filterGroup"/>
                     </fx:define>

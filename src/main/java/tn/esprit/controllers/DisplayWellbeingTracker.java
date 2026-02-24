@@ -5,11 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.Separator;
+import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -20,6 +16,7 @@ import tn.esprit.entities.WellbeingTracker;
 import tn.esprit.services.ServiceWellbeingTracker;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import javafx.stage.Modality;
 
@@ -27,10 +24,25 @@ import javafx.stage.Modality;
 
 // Add these imports at the top if not already there
 import javafx.application.Platform;
-import javafx.scene.control.ProgressIndicator;
 import tn.esprit.services.WeatherService.WeatherData;
 import tn.esprit.services.WeatherService;  // Missing!
 import javafx.geometry.Insets;
+
+// Add these imports at the top
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.util.Duration;
+import javafx.animation.PauseTransition;
+import tn.esprit.services.Search;
+import tn.esprit.services.UserService;
+import tn.esprit.entities.User;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
 
 public class DisplayWellbeingTracker {
 
@@ -39,25 +51,44 @@ public class DisplayWellbeingTracker {
     @FXML private Label lblAvgMood;
     @FXML private Label lblAvgSleep;
     @FXML private VBox weatherBox; // Make sure this exists in your FXML
+    // Add these fields with your existing FXML fields
+    @FXML private TextField searchField;
+    @FXML private Button searchBtn;
+    @FXML private Button clearSearchBtn;
+    @FXML private ListView<String> suggestionsListView;
+    @FXML private ToggleButton filterAllBtn;
+    @FXML private ToggleButton filterUserBtn;
+    @FXML private ToggleButton filterMoodBtn;
+    @FXML private ToggleButton filterStressBtn;
+    @FXML private ToggleButton filterEnergyBtn;
 
     private final ServiceWellbeingTracker serviceTracker = new ServiceWellbeingTracker();
     private final WeatherService weatherService = new WeatherService();
     private static final String API_KEY = "a52860789d8833de9b306769d1270a8f";
 
+    private final Search searchService = new Search();
+    private final UserService userService = new UserService();
+    private List<WellbeingTracker> allTrackers = new ArrayList<>();
+    private List<User> allUsers = new ArrayList<>();
+    private PauseTransition searchDelay = new PauseTransition(Duration.millis(300));
+
     @FXML
     public void initialize() {
         loadCards();
         showWeather();
+        initializeSearch();
     }
 
     @FXML
     private void refresh() {
         loadCards();
         showWeather();
+        initializeSearch();
 
     }
 
     private void loadCards() {
+        allTrackers = serviceTracker.getAll();
         cardsContainer.getChildren().clear();
         try {
             List<WellbeingTracker> trackers = serviceTracker.getAll();
@@ -77,6 +108,7 @@ public class DisplayWellbeingTracker {
         } catch (Exception e) {
             showAlert("Erreur", "Impossible de charger les suivis: " + e.getMessage());
         }
+        searchService.setData(new ArrayList<>(), allTrackers, allUsers);
     }
 
     private VBox createCard(WellbeingTracker t) {
@@ -327,6 +359,192 @@ public class DisplayWellbeingTracker {
             }
         }).start();
     }
+    private void initializeSearch() {
+        // Load users for search
+        try {
+            allUsers = userService.getAll(); // You need to implement this method
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
+        // Setup search field listener with delay (to avoid searching on every keystroke)
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            searchDelay.setOnFinished(event -> performSearch(newValue));
+            searchDelay.playFromStart();
+
+            // Show/hide clear button
+            clearSearchBtn.setVisible(!newValue.isEmpty());
+            clearSearchBtn.setManaged(!newValue.isEmpty());
+
+            // Update suggestions
+            updateSuggestions(newValue);
+        });
+
+        // Search button action
+        searchBtn.setOnAction(event -> performSearch(searchField.getText()));
+
+        // Clear search button
+        clearSearchBtn.setOnAction(event -> clearSearch());
+
+        // Handle enter key in search field
+        searchField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                performSearch(searchField.getText());
+            }
+        });
+
+        // Suggestions list click handler
+        suggestionsListView.setOnMouseClicked(event -> {
+            String selected = suggestionsListView.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                searchField.setText(selected);
+                performSearch(selected);
+                suggestionsListView.setVisible(false);
+                suggestionsListView.setManaged(false);
+            }
+        });
+
+        // Filter toggles
+        ToggleButton[] filters = {filterAllBtn, filterUserBtn, filterMoodBtn, filterStressBtn, filterEnergyBtn};
+        for (ToggleButton filter : filters) {
+            filter.setOnAction(event -> performSearch(searchField.getText()));
+        }
+    }
+    private void updateSuggestions(String query) {
+        if (query == null || query.trim().isEmpty()) {
+            suggestionsListView.setVisible(false);
+            suggestionsListView.setManaged(false);
+            return;
+        }
+
+        // Get suggestions from search service
+        List<String> suggestions = searchService.getSuggestions(query, Search.SearchFilter.WELLBEING);
+
+        if (!suggestions.isEmpty()) {
+            suggestionsListView.getItems().setAll(suggestions);
+            suggestionsListView.setVisible(true);
+            suggestionsListView.setManaged(true);
+        } else {
+            suggestionsListView.setVisible(false);
+            suggestionsListView.setManaged(false);
+        }
+    }
+
+    private void performSearch(String query) {
+        // Hide suggestions
+        suggestionsListView.setVisible(false);
+        suggestionsListView.setManaged(false);
+
+        // Determine filter
+        Search.SearchFilter filter = Search.SearchFilter.ALL;
+        if (filterUserBtn.isSelected()) filter = Search.SearchFilter.USERS;
+        else if (filterMoodBtn.isSelected()) filter = Search.SearchFilter.WELLBEING;
+        else if (filterStressBtn.isSelected()) filter = Search.SearchFilter.WELLBEING;
+        else if (filterEnergyBtn.isSelected()) filter = Search.SearchFilter.WELLBEING;
+
+        // Perform search
+        List<Search.SearchResult> results = searchService.search(query, filter);
+
+        // Update display
+        updateDisplayWithResults(results);
+    }
+
+    private void updateDisplayWithResults(List<Search.SearchResult> results) {
+        cardsContainer.getChildren().clear();
+
+        if (results.isEmpty()) {
+            // Show "no results" message
+            Label noResults = new Label("🔍 Aucun suivi trouvé pour \"" + searchField.getText() + "\"");
+            noResults.setStyle("-fx-font-size: 16; -fx-text-fill: #7f8c8d; -fx-padding: 50;");
+            cardsContainer.getChildren().add(noResults);
+            lblCount.setText("0 résultat(s)");
+            return;
+        }
+
+        // Separate results by type
+        List<Search.SearchResult> wellbeingResults = new ArrayList<>();
+        List<Search.SearchResult> userResults = new ArrayList<>();
+
+        for (Search.SearchResult result : results) {
+            if (result.entityType.equals("WELLBEING")) {
+                wellbeingResults.add(result);
+            } else if (result.entityType.equals("USER")) {
+                userResults.add(result);
+            }
+        }
+
+        System.out.println("Displaying: " + userResults.size() + " users, " + wellbeingResults.size() + " wellbeing entries");
+
+        // Display user results first
+        for (Search.SearchResult userResult : userResults) {
+            // Create a special card for users
+            VBox userCard = createUserResultCard(userResult);
+            cardsContainer.getChildren().add(userCard);
+
+            // Also add their wellbeing entries
+            for (WellbeingTracker tracker : userResult.userWellbeing) {
+                cardsContainer.getChildren().add(createCard(tracker));
+            }
+        }
+
+        // Display individual wellbeing results
+        for (Search.SearchResult wellbeingResult : wellbeingResults) {
+            WellbeingTracker tracker = (WellbeingTracker) wellbeingResult.entity;
+
+            // Check if this tracker's user was already displayed
+            boolean userAlreadyDisplayed = userResults.stream()
+                    .anyMatch(u -> u.userId == tracker.getUserId());
+
+            if (!userAlreadyDisplayed) {
+                cardsContainer.getChildren().add(createCard(tracker));
+            }
+        }
+
+        lblCount.setText(wellbeingResults.size() + " suivi(s) trouvé(s)");
+    }
+
+    private VBox createUserResultCard(Search.SearchResult userResult) {
+        VBox card = new VBox(10);
+        card.setPrefWidth(300);
+        card.setPadding(new Insets(15));
+        card.setStyle("-fx-background-color: #9B59B6; " +
+                "-fx-background-radius: 12; " +
+                "-fx-text-fill: white; " +
+                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 5);");
+
+        Label userLabel = new Label("👤 " + userResult.title);
+        userLabel.setStyle("-fx-text-fill: white; -fx-font-size: 18; -fx-font-weight: bold;");
+
+        Label emailLabel = new Label("📧 " + userResult.subtitle);
+        emailLabel.setStyle("-fx-text-fill: white; -fx-font-size: 12;");
+
+        Label statsLabel = new Label("📊 " + userResult.userWellbeing.size() + " suivis bien-être");
+        statsLabel.setStyle("-fx-text-fill: white; -fx-font-size: 14; -fx-font-weight: bold;");
+
+        // Add mood stats if available
+        if (!userResult.userWellbeing.isEmpty()) {
+            double avgMood = userResult.userWellbeing.stream()
+                    .mapToInt(WellbeingTracker::getMood)
+                    .average()
+                    .orElse(0);
+            Label moodLabel = new Label(String.format("😊 Humeur moyenne: %.1f/5", avgMood));
+            moodLabel.setStyle("-fx-text-fill: white; -fx-font-size: 12;");
+            card.getChildren().add(moodLabel);
+        }
+
+        card.getChildren().addAll(userLabel, emailLabel, statsLabel);
+
+        return card;
+    }
+
+    @FXML
+    private void clearSearch() {
+        searchField.clear();
+        clearSearchBtn.setVisible(false);
+        clearSearchBtn.setManaged(false);
+        suggestionsListView.setVisible(false);
+        suggestionsListView.setManaged(false);
+        loadCards(); // Reload all cards
+    }
 
 }
