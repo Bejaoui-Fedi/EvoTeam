@@ -13,23 +13,28 @@ import tn.esprit.entities.DailyRoutineTask;
 import tn.esprit.entities.User;
 import tn.esprit.services.ServiceDailyRoutineTask;
 import tn.esprit.services.UserService;
+import tn.esprit.services.QuoteService;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javafx.application.Platform;
+
 public class UpdateDailyRoutineTask {
 
     @FXML private Label lblId;
     @FXML private ComboBox<Integer> cbUserId;
-    @FXML private TextField tfTitle;
+    @FXML private TextArea tfTitle;
     @FXML private CheckBox chkCompleted;
     @FXML private Label lblCompletedAt;
     @FXML private Label lblCreatedAt;
+    @FXML private Button btnSuggestQuote;
 
-    // NEW: User search fields
+    // User search fields
     @FXML private TextField searchUserField;
     @FXML private ListView<String> userSuggestionsList;
     @FXML private Label selectedUserLabel;
@@ -38,6 +43,7 @@ public class UpdateDailyRoutineTask {
     private DailyRoutineTask task;
     private final ServiceDailyRoutineTask serviceTask = new ServiceDailyRoutineTask();
     private final UserService serviceUser = new UserService();
+    private final QuoteService quoteService = new QuoteService();
 
     // Data lists
     private List<User> allUsers = new ArrayList<>();
@@ -238,8 +244,22 @@ public class UpdateDailyRoutineTask {
             return;
         }
 
+        // Get the title and check its length
+        String title = tfTitle.getText().trim();
+        System.out.println("Original title length: " + title.length());
+
+        // Assuming your database column is VARCHAR(255), we need to be safe
+        int MAX_LENGTH = 255; // Change this to match your DB column
+
+        if (title.length() > MAX_LENGTH) {
+            // Truncate and add ellipsis
+            title = title.substring(0, MAX_LENGTH - 3) + "...";
+            tfTitle.setText(title); // Update the text field
+            System.out.println("Truncated to: " + title.length() + " chars");
+        }
+
         task.setUserId(cbUserId.getValue());
-        task.setTitle(tfTitle.getText().trim());
+        task.setTitle(title);
         task.setCompleted(chkCompleted.isSelected());
 
         if (chkCompleted.isSelected() && task.getCompletedAt() == null) {
@@ -265,6 +285,75 @@ public class UpdateDailyRoutineTask {
         }
     }
 
+    @FXML
+    private void suggestQuoteTask() {
+        // Disable button during API call
+        if (btnSuggestQuote != null) {
+            btnSuggestQuote.setDisable(true);
+            btnSuggestQuote.setText("⏳ Chargement...");
+        }
+
+        new Thread(() -> {
+            try {
+                QuoteService quoteService = new QuoteService();
+                QuoteService.Quote quote = quoteService.getWellnessQuote();
+
+                Platform.runLater(() -> {
+                    try {
+                        if (quote != null && quote.quote != null) {
+                            // Format with quote, author, and category
+                            String taskTitle = "💭 " + quote.quote;
+
+                            if (quote.author != null && !quote.author.isEmpty() && !quote.author.equals("Unknown")) {
+                                taskTitle += "\n— " + quote.author;
+                            }
+
+                            if (quote.category != null && !quote.category.isEmpty()) {
+                                taskTitle += "\n🌿 " + quote.category.substring(0, 1).toUpperCase()
+                                        + quote.category.substring(1).toLowerCase();
+                            }
+
+                            // Check length and truncate if needed
+                            int MAX_LENGTH = 255;
+                            if (taskTitle.length() > MAX_LENGTH) {
+                                // Try to truncate intelligently - keep the quote, remove category if needed
+                                if (taskTitle.length() > MAX_LENGTH && taskTitle.contains("\n🌿")) {
+                                    taskTitle = taskTitle.substring(0, taskTitle.lastIndexOf("\n🌿"));
+                                }
+
+                                // If still too long, do hard truncation
+                                if (taskTitle.length() > MAX_LENGTH) {
+                                    taskTitle = taskTitle.substring(0, MAX_LENGTH - 3) + "...";
+                                }
+                            }
+
+                            tfTitle.setText(taskTitle);
+                            System.out.println("Quote length: " + taskTitle.length());
+                        } else {
+                            tfTitle.setText("💭 Désolé, aucune citation bien-être trouvée pour le moment");
+                        }
+
+                    } finally {
+                        if (btnSuggestQuote != null) {
+                            btnSuggestQuote.setDisable(false);
+                            btnSuggestQuote.setText("💡 Citation bien-être");
+                        }
+                    }
+                });
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                Platform.runLater(() -> {
+                    if (btnSuggestQuote != null) {
+                        btnSuggestQuote.setDisable(false);
+                        btnSuggestQuote.setText("💡 Citation bien-être");
+                    }
+                    tfTitle.setText("💭 Erreur lors du chargement de la citation");
+                });
+            }
+        }).start();
+    }
+
     private boolean validateInputs() {
         // Check if user is selected via search or ComboBox
         if (selectedUser == null && cbUserId.getValue() == null) {
@@ -282,6 +371,27 @@ public class UpdateDailyRoutineTask {
             return false;
         }
         return true;
+    }
+
+    @FXML
+    void goToDisplay() {
+        try {
+            // Close the current window
+            Stage stage = (Stage) lblId.getScene().getWindow();
+            stage.close();
+
+            // Optionally open the display window if you want
+            // FXMLLoader loader = new FXMLLoader(getClass().getResource("/DisplayDailyRoutineTask.fxml"));
+            // Parent root = loader.load();
+            // Stage displayStage = new Stage();
+            // displayStage.setTitle("Liste des tâches");
+            // displayStage.setScene(new Scene(root));
+            // displayStage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Erreur", "Impossible d'ouvrir la liste des tâches");
+        }
     }
 
     @FXML
