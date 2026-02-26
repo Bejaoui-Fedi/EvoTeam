@@ -179,7 +179,10 @@ public class NewTemplateController {
     }
 
     private void setActiveMenuItem(Button activeButton) {
-        // Reset all menu items
+        if (activeButton == null)
+            return;
+
+        // Reset all menu items if they exist
         resetMenuItemStyle(btnDashboard);
         resetMenuItemStyle(btnUsers);
         resetMenuItemStyle(btnEvents);
@@ -193,6 +196,8 @@ public class NewTemplateController {
     }
 
     private void resetMenuItemStyle(Button button) {
+        if (button == null)
+            return;
         button.setStyle(
                 "-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 15; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 20; -fx-background-radius: 8; -fx-cursor: hand;");
     }
