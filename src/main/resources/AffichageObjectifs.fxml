@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="tn.esprit.controllers.AffichageObjectifsController"
+            prefWidth="1150" prefHeight="600"
+            stylesheets="@styles.css">
+
+    <children>
+        <VBox spacing="20" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="0">
+            <children>
+                <Label text="Liste des objectifs" styleClass="header-label"/>
+                
+                <HBox spacing="20" VBox.vgrow="ALWAYS">
+                    <children>
+                        <!-- Table Container -->
+                        <VBox styleClass="card" HBox.hgrow="ALWAYS">
+                            <children>
+                                <TableView fx:id="tableObjectives" VBox.vgrow="ALWAYS">
+                                    <columns>
+                                        <TableColumn fx:id="colId" text="ID" prefWidth="40"/>
+                                        <TableColumn fx:id="colTitle" text="Titre" prefWidth="180" style="-fx-font-weight: bold;"/>
+                                        <TableColumn fx:id="colDescription" text="Description" prefWidth="250"/>
+                                        <TableColumn fx:id="colLevel" text="Niveau" prefWidth="100"/>
+                                        <TableColumn fx:id="colPublished" text="Statut" prefWidth="80"/>
+                                        <TableColumn fx:id="colCreatedAt" text="Date création" prefWidth="160"/>
+                                        <TableColumn fx:id="colUpdatedAt" text="Date modification" prefWidth="160"/>
+                                        <TableColumn fx:id="colUserId" text="Utilisateur" prefWidth="80"/>
+                                    </columns>
+                                    <columnResizePolicy>
+                                        <TableView fx:constant="UNCONSTRAINED_RESIZE_POLICY"/>
+                                    </columnResizePolicy>
+                                </TableView>
+                            </children>
+                        </VBox>
+
+                        <!-- Actions Sidebar -->
+                        <VBox spacing="15" prefWidth="260" minWidth="260" style="-fx-padding: 10;">
+                             <Label text="Actions" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: -color-secondary-green;"/>
+                             
+                             <Button fx:id="btnDetails" text="Détails" maxWidth="Infinity" styleClass="button, btn-secondary"/>
+                             <Button fx:id="btnViewExercises" text="Voir Exercices" maxWidth="Infinity" styleClass="button, btn-primary"/>
+                             
+                             <Region prefHeight="20"/>
+                             
+                             <Button fx:id="btnGoAdd" text="Ajouter Objectif" maxWidth="Infinity" styleClass="button, btn-secondary"/>
+                             <Button fx:id="btnGoEdit" text="Modifier" maxWidth="Infinity" styleClass="button"/>
+                             <Button fx:id="btnGoDelete" text="Supprimer" maxWidth="Infinity" styleClass="button" style="-fx-background-color: #ffdddd; -fx-text-fill: #d32f2f;"/>
+                             
+                             <Region prefHeight="20"/>
+                             
+                             <Button fx:id="btnRefresh" text="Rafraîchir" maxWidth="Infinity" styleClass="button"/>
+                        </VBox>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

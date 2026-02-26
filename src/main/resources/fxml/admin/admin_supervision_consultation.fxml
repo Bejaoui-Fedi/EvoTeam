@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!-- CHANGER StackPane en VBox comme racine -->
+<VBox spacing="20" style="-fx-padding: 20;"
+      xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="tn.esprit.controllers.admin.AdminSupervisionConsultationController"
+      prefWidth="1300" prefHeight="800">
+
+    <!-- SUPPRIMER tout le background et overlay -->
+
+    <!-- Top Navigation Bar (gardée mais simplifiée) -->
+    <HBox spacing="20" alignment="CENTER_LEFT"
+          style="-fx-background-color: transparent; -fx-padding: 0 0 20 0;">
+
+        <!-- Title and Subtitle -->
+        <VBox spacing="2" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT" spacing="15">
+                <Label text="📋" style="-fx-font-size: 28; -fx-text-fill: #396f5b;"/>
+                <Label text="Supervision des Consultations" style="-fx-font-size: 26; -fx-text-fill: #396f5b; -fx-font-weight: bold;"/>
+            </HBox>
+            <Label text="Suivi détaillé des dossiers médicaux de la communauté" style="-fx-padding: 0 0 0 45; -fx-text-fill: #5F9B8A;"/>
+        </VBox>
+
+        <!-- Navigation Buttons -->
+        <HBox spacing="15" alignment="CENTER_RIGHT">
+            <Button fx:id="retourButton" text="📅 Rendez-vous" onAction="#retourSupervisionRdv"
+                    style="-fx-background-color: transparent; -fx-text-fill: #396f5b; -fx-border-color: #396f5b; -fx-border-radius: 8; -fx-padding: 10 20; -fx-cursor: hand;"/>
+
+            <Button text="📋 Consultations"
+                    style="-fx-background-color: #396f5b; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 8; -fx-cursor: hand;"/>
+        </HBox>
+    </HBox>
+
+    <!-- Reste du contenu (inchangé) -->
+    <VBox spacing="20" style="-fx-background-color: rgba(255,255,255,0.7); -fx-background-radius: 15; -fx-padding: 25;" VBox.vgrow="ALWAYS">
+
+        <!-- Search and Filter Bar -->
+        <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-background-color: rgba(240, 249, 236, 0.5); -fx-padding: 15; -fx-background-radius: 12;">
+            <TextField fx:id="searchField" promptText="Rechercher par ID, diagnostic..."
+                       prefWidth="300" styleClass="text-field"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label text="📅 Date :" style="-fx-font-weight: bold; -fx-text-fill: #396f5b;"/>
+            <DatePicker fx:id="dateFilterPicker" prefWidth="160" styleClass="text-field"/>
+
+            <Label text="Statut :" style="-fx-font-weight: bold; -fx-text-fill: #396f5b;"/>
+            <ChoiceBox fx:id="statutFilterChoice" prefWidth="130" styleClass="text-field"/>
+
+            <Button text="↻ Actualiser" onAction="#refresh" styleClass="button-primary"/>
+        </HBox>
+
+        <!-- Table -->
+        <TableView fx:id="tableView" VBox.vgrow="ALWAYS"
+                   style="-fx-background-color: transparent; -fx-border-color: #E0E0E0; -fx-border-radius: 10; -fx-padding: 5;">
+            <columns>
+                <TableColumn fx:id="colId" text="ID" prefWidth="60"/>
+                <TableColumn fx:id="colAppointmentId" text="RDV #" prefWidth="80"/>
+                <TableColumn fx:id="colDate" text="Date" prefWidth="120"/>
+                <TableColumn fx:id="colDiagnostic" text="Diagnostic" prefWidth="250"/>
+                <TableColumn fx:id="colObservation" text="Observations" prefWidth="200"/>
+                <TableColumn fx:id="colTraitement" text="Traitement" prefWidth="150"/>
+                <TableColumn fx:id="colOrdonnance" text="Ordonnance" prefWidth="150"/>
+                <TableColumn fx:id="colDuree" text="Durée" prefWidth="80"/>
+                <TableColumn fx:id="colStatut" text="Statut" prefWidth="120"/>
+            </columns>
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+            </columnResizePolicy>
+        </TableView>
+
+        <!-- Stats Bar -->
+        <HBox spacing="20" style="-fx-padding: 15; -fx-background-color: rgba(240, 249, 236, 0.5); -fx-background-radius: 12;" alignment="CENTER_LEFT">
+            <HBox spacing="10" alignment="CENTER">
+                <Label text="📊" style="-fx-font-size: 18; -fx-text-fill: #396f5b;"/>
+                <Label fx:id="totalLabel" text="Total: 0 consultations"
+                       style="-fx-font-weight: bold; -fx-text-fill: #396f5b; -fx-font-size: 14;"/>
+            </HBox>
+            <Separator orientation="VERTICAL" style="-fx-pref-height: 30;"/>
+            <Label fx:id="statsLabel" text="Stats..."
+                   style="-fx-text-fill: #396f5b; -fx-font-size: 13;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <HBox spacing="5" alignment="CENTER">
+                <Label text="🌿" style="-fx-font-size: 16; -fx-text-fill: #6F9A8D;"/>
+                <Label text="Suivi thérapeutique"
+                       style="-fx-text-fill: #6F9A8D; -fx-font-style: italic; -fx-font-size: 13;"/>
+            </HBox>
+        </HBox>
+
+        <!-- Action Button -->
+        <HBox alignment="CENTER_RIGHT" spacing="20" style="-fx-padding: 10 0 0 0;">
+            <Button fx:id="deleteButton" text="🗑️ SUPPRIMER LA CONSULTATION"
+                    onAction="#deleteConsultation" disable="true"
+                    styleClass="button-danger" prefHeight="45" prefWidth="280"/>
+        </HBox>
+
+    </VBox>
+
+</VBox>

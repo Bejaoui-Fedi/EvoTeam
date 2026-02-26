@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.effect.GaussianBlur?>
+
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="tn.esprit.controllers.RoleSelectionController"
+           prefWidth="1400" prefHeight="800"
+           stylesheets="@styles.css">
+
+    <!-- 🌿 Background nature apaisant -->
+    <ImageView fitWidth="1400" fitHeight="800" preserveRatio="false">
+        <image>
+            <Image url="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?w=1600&amp;q=80"
+                   backgroundLoading="true"/>
+        </image>
+        <effect>
+            <GaussianBlur radius="5"/>
+        </effect>
+    </ImageView>
+
+    <!-- 🌿 Overlay vert pistache très doux -->
+    <Region style="-fx-background-color: rgba(225, 240, 218, 0.85);"/>
+
+    <!-- ScrollPane -->
+    <ScrollPane fitToWidth="true"
+                styleClass="scroll-pane"
+                hbarPolicy="NEVER" vbarPolicy="AS_NEEDED">
+
+        <VBox alignment="TOP_CENTER" spacing="0">
+
+            <!-- 🌿 HEADER VERT PISTACHE & BLEU CIEL -->
+            <VBox alignment="CENTER" spacing="12" style="-fx-padding: 60 40 70 40;">
+                <Label text="🌿 Bienvenue dans votre espace de sérénité 🌿"
+                       style="-fx-font-size: 44; -fx-font-weight: bold; -fx-text-fill: -color-primary-green; -fx-font-family: 'System Bold';"/>
+
+                <Label text="Un havre de paix où nature et bien-être se rencontrent"
+                       style="-fx-font-size: 18; -fx-text-fill: -color-secondary-green; -fx-font-style: italic;"/>
+                <Label text="💚 Respirez, avancez, épanouissez-vous 💙"
+                       style="-fx-font-size: 16; -fx-text-fill: -color-light-green; -fx-font-weight: 500;"/>
+            </VBox>
+
+            <!-- Cards Container -->
+            <HBox alignment="CENTER" spacing="60" style="-fx-padding: 0 80 80 80;">
+
+                <!-- 💚 Carte Administration - Vert Pistache & Menthe -->
+                <VBox fx:id="adminCard" spacing="25"
+                      styleClass="card"
+                      style="-fx-background-color: linear-gradient(to bottom, #FFFFFF, #F0F9EC); -fx-effect: dropshadow(gaussian, rgba(90, 140, 100, 0.15), 25, 0, 0, 8); -fx-border-color: #B5D3A7; -fx-border-width: 2.5; -fx-border-radius: 28; -fx-background-radius: 28;"
+                      prefWidth="480"
+                      alignment="TOP_CENTER"
+                      onMouseEntered="#onAdminCardEntered"
+                      onMouseExited="#onAdminCardExited">
+
+                    <!-- Icon Admin - Vert pistache -->
+                    <HBox alignment="CENTER"
+                          style="-fx-background-color: linear-gradient(to bottom right, #9DC3A2, #5F9B8A); -fx-background-radius: 20; -fx-pref-width: 85; -fx-pref-height: 85; -fx-effect: dropshadow(gaussian, rgba(95, 155, 138, 0.4), 15, 0, 0, 4);">
+                        <Label text="🌿" style="-fx-font-size: 48; -fx-text-fill: white;"/>
+                    </HBox>
+
+                    <Label text="Espace Administration"
+                           style="-fx-font-size: 30; -fx-font-weight: bold; -fx-text-fill: -color-primary-green;"/>
+
+                    <Label text="Gérez avec sagesse et bienveillance"
+                           style="-fx-font-size: 17; -fx-text-fill: -color-secondary-green; -fx-font-style: italic;"/>
+
+                    <Label text="Des outils intuitifs pour une gestion en harmonie"
+                           style="-fx-font-size: 16; -fx-text-fill: -color-light-green; -fx-text-alignment: center;"
+                           wrapText="true" maxWidth="380"/>
+
+                    <VBox spacing="16" style="-fx-padding: 25 0 15 0;">
+                        <HBox spacing="12" alignment="CENTER_LEFT">
+                            <Label text="🌱" style="-fx-font-size: 18; -fx-text-fill: -color-light-green;"/>
+                            <Label text="Gestion des utilisateurs" style="-fx-font-size: 16; -fx-text-fill: -color-primary-green; -fx-font-weight: 500;"/>
+                        </HBox>
+                        <!-- ... (keeping other items similar) ... -->
+                         <HBox spacing="12" alignment="CENTER_LEFT">
+                            <Label text="🌱" style="-fx-font-size: 18; -fx-text-fill: -color-light-green;"/>
+                            <Label text="Organisation des événements" style="-fx-font-size: 16; -fx-text-fill: -color-primary-green; -fx-font-weight: 500;"/>
+                        </HBox>
+                        <HBox spacing="12" alignment="CENTER_LEFT">
+                            <Label text="🌱" style="-fx-font-size: 18; -fx-text-fill: -color-light-green;"/>
+                            <Label text="Bibliothèque d'exercices" style="-fx-font-size: 16; -fx-text-fill: -color-primary-green; -fx-font-weight: 500;"/>
+                        </HBox>
+                    </VBox>
+
+                    <Region VBox.vgrow="ALWAYS" minHeight="10"/>
+                    <Button fx:id="adminButton"
+                            text="🌿 Accéder à l'administration 🌿"
+                            onAction="#handleAdminAccess"
+                            prefWidth="380" prefHeight="60"
+                            styleClass="button, btn-primary"
+                            style="-fx-font-size: 17; -fx-background-radius: 35;"/>
+                </VBox>
+
+                <!-- 💙 Carte Personnel - Bleu Ciel & Océan -->
+                <VBox fx:id="userCard" spacing="25"
+                      styleClass="card"
+                      style="-fx-background-color: linear-gradient(to bottom, #FFFFFF, #E8F4F8); -fx-effect: dropshadow(gaussian, rgba(80, 150, 170, 0.15), 25, 0, 0, 8); -fx-border-color: #AAD0D9; -fx-border-width: 2.5; -fx-border-radius: 28; -fx-background-radius: 28;"
+                      prefWidth="480"
+                      alignment="TOP_CENTER"
+                      onMouseEntered="#onUserCardEntered"
+                      onMouseExited="#onUserCardExited">
+
+                    <!-- Icon User - Bleu ciel -->
+                    <HBox alignment="CENTER"
+                          style="-fx-background-color: linear-gradient(to bottom right, #9FC7D1, #5F9DBF); -fx-background-radius: 20; -fx-pref-width: 85; -fx-pref-height: 85; -fx-effect: dropshadow(gaussian, rgba(95, 157, 191, 0.4), 15, 0, 0, 4);">
+                        <Label text="💙" style="-fx-font-size: 48; -fx-text-fill: white;"/>
+                    </HBox>
+
+                    <Label text="Espace Personnel"
+                           style="-fx-font-size: 30; -fx-font-weight: bold; -fx-text-fill: -color-primary-blue;"/>
+
+                    <Label text="Votre chemin vers le bien-être"
+                           style="-fx-font-size: 17; -fx-text-fill: -color-secondary-blue; -fx-font-style: italic;"/>
+
+                    <Label text="Un espace doux comme un ciel d'été pour votre développement"
+                           style="-fx-font-size: 16; -fx-text-fill: -color-light-blue; -fx-text-alignment: center;"
+                           wrapText="true" maxWidth="380"/>
+
+                    <VBox spacing="16" style="-fx-padding: 25 0 15 0;">
+                        <HBox spacing="12" alignment="CENTER_LEFT">
+                            <Label text="💧" style="-fx-font-size: 18; -fx-text-fill: -color-light-blue;"/>
+                            <Label text="Tableau de bord personnalisé" style="-fx-font-size: 16; -fx-text-fill: -color-primary-blue; -fx-font-weight: 500;"/>
+                        </HBox>
+                        <!-- ... -->
+                         <HBox spacing="12" alignment="CENTER_LEFT">
+                            <Label text="💧" style="-fx-font-size: 18; -fx-text-fill: -color-light-blue;"/>
+                            <Label text="Exercices guidés" style="-fx-font-size: 16; -fx-text-fill: -color-primary-blue; -fx-font-weight: 500;"/>
+                        </HBox>
+                    </VBox>
+
+                    <Region VBox.vgrow="ALWAYS" minHeight="10"/>
+                    <Button fx:id="userButton"
+                            text="💙 Accéder à mon espace 💙"
+                            onAction="#handleUserAccess"
+                            prefWidth="380" prefHeight="60"
+                            styleClass="button, btn-secondary"
+                            style="-fx-font-size: 17; -fx-background-radius: 35;"/>
+                </VBox>
+
+            </HBox>
+
+             <!-- Footer -->
+            <Region VBox.vgrow="ALWAYS"/>
+            <HBox alignment="CENTER" style="-fx-padding: 40 30 40 30;">
+                <VBox alignment="CENTER" spacing="10">
+                    <Label text="🌿  Grandissez en harmonie avec vous-même  💙"
+                           style="-fx-font-size: 18; -fx-text-fill: -color-primary-green; -fx-font-weight: 600;"/>
+                    <Label text="© 2026 PsyCoach Pro - Naturellement bienveillant"
+                           style="-fx-font-size: 14; -fx-text-fill: -color-secondary-green;"/>
+                </VBox>
+            </HBox>
+
+        </VBox>
+    </ScrollPane>
+
+</StackPane>

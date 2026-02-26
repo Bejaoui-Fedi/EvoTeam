@@ -65,6 +65,7 @@ public class LoginAdminController {
             }
 
             // Connexion réussie
+            tn.esprit.utils.Session.currentUser = user;
             showMessage("✅ Connexion réussie ! Redirection...", "success");
 
             // Rediriger vers AdminDashboard

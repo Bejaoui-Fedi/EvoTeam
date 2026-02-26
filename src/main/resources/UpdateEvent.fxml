@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.GaussianBlur?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="tn.esprit.controllers.UpdateEvent"
+           prefWidth="650" prefHeight="750"
+           stylesheets="@styles.css">
+
+    <!-- 🌿 Background -->
+    <ImageView fitWidth="650" fitHeight="750" preserveRatio="false" styleClass="nature-background">
+        <image>
+            <Image url="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?w=1600&amp;q=80"
+                   backgroundLoading="true"/>
+        </image>
+        <effect>
+            <GaussianBlur radius="6"/>
+        </effect>
+    </ImageView>
+
+    <!-- Overlay -->
+    <Region styleClass="overlay"/>
+
+    <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;">
+        <VBox alignment="CENTER" spacing="20" style="-fx-padding: 40;">
+
+            <VBox styleClass="card" maxWidth="500" spacing="15">
+
+                <Label text="✏️ Modifier l'Événement" styleClass="header-label"/>
+                <Label text="Mettez à jour les informations de votre événement"
+                       styleClass="subheader-label"/>
+
+                <Separator/>
+
+                <!-- Nom -->
+                <Label text="Nom de l'événement" styleClass="normal-label"/>
+                <TextField fx:id="name" promptText="Conférence JavaFX"
+                           styleClass="text-field"/>
+
+                <!-- Dates -->
+                <Label text="Date de début" styleClass="normal-label"/>
+                <DatePicker fx:id="startDate" styleClass="text-field"/>
+
+                <Label text="Date de fin" styleClass="normal-label"/>
+                <DatePicker fx:id="endDate" styleClass="text-field"/>
+
+                <!-- Participants -->
+                <Label text="Nombre max de participants" styleClass="normal-label"/>
+                <TextField fx:id="maxParticipants" promptText="50"
+                           styleClass="text-field"/>
+
+                <!-- Description -->
+                <Label text="Description" styleClass="normal-label"/>
+                <TextArea fx:id="description"
+                          prefRowCount="3"
+                          promptText="Atelier + networking..."
+                          styleClass="text-field"/>
+
+                <!-- Prix -->
+                <Label text="Prix (DT)" styleClass="normal-label"/>
+                <TextField fx:id="fee" promptText="20"
+                           styleClass="text-field"/>
+
+                <!-- Localisation -->
+                <Label text="Localisation" styleClass="normal-label"/>
+                <TextField fx:id="tfLocation" promptText="Centre ville / INSA..."
+                           styleClass="text-field"/>
+
+                <Separator/>
+
+                <!-- Boutons -->
+                <VBox spacing="10" alignment="CENTER">
+                    <Button text="✅ Enregistrer"
+                            prefWidth="280"
+                            onAction="#handleUpdate"
+                            styleClass="button-primary"/>
+
+                    <Button text="🧹 Réinitialiser"
+                            prefWidth="280"
+                            onAction="#resetForm"
+                            styleClass="button-secondary"/>
+                </VBox>
+
+            </VBox>
+        </VBox>
+    </ScrollPane>
+
+</StackPane>

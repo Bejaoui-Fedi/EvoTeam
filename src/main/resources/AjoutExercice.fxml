@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<StackPane xmlns="http://javafx.com/javafx/21"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="tn.esprit.controllers.AjoutExerciceController"
+           stylesheets="@styles.css"
+           style="-fx-background-color: rgba(0,0,0,0.4);">
+
+    <!-- Modal Card -->
+    <VBox styleClass="form-container" spacing="25" maxWidth="700" alignment="TOP_CENTER"
+          style="-fx-background-color: white; -fx-background-radius: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 30, 0, 0, 10); -fx-padding: 40;">
+        
+        <!-- Header -->
+        <VBox spacing="8" alignment="CENTER">
+            <Label text="💪" style="-fx-font-size: 48;"/>
+            <Label text="Nouvel Exercice" styleClass="form-header" 
+                   style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #3A7D6B;"/>
+            <Label text="Créez un nouvel exercice de bien-être" 
+                   style="-fx-font-size: 14; -fx-text-fill: #7F8C8D; -fx-font-style: italic;"/>
+        </VBox>
+        
+        <Separator style="-fx-background-color: #E8F4F8;"/>
+        
+        <!-- Form Fields -->
+        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;" 
+                    maxHeight="450">
+            <VBox spacing="20" style="-fx-background-color: transparent;">
+                
+                <!-- Objective Selection -->
+                <VBox spacing="8">
+                    <Label text="Objectif associé *" styleClass="form-label" 
+                           style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #2C3E50;"/>
+                    <ChoiceBox fx:id="cbObjective" maxWidth="Infinity"
+                               style="-fx-font-size: 14; -fx-padding: 10;"/>
+                </VBox>
+                
+                <!-- Title -->
+                <VBox spacing="8">
+                    <Label text="Titre *" styleClass="form-label" 
+                           style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #2C3E50;"/>
+                    <TextField fx:id="tfTitle" promptText="Ex: Respiration profonde 5 minutes"
+                               style="-fx-font-size: 14; -fx-padding: 12;"/>
+                </VBox>
+                
+                <!-- Description -->
+                <VBox spacing="8">
+                    <Label text="Description *" styleClass="form-label"
+                           style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #2C3E50;"/>
+                    <TextArea fx:id="taDescription" prefRowCount="3" wrapText="true"
+                              promptText="Décrivez l'exercice et ses bénéfices..."
+                              style="-fx-font-size: 14; -fx-padding: 12;"/>
+                </VBox>
+                
+                <!-- Type and Difficulty Row -->
+                <HBox spacing="20">
+                    <!-- Type -->
+                    <VBox spacing="8" HBox.hgrow="ALWAYS">
+                        <Label text="Type *" styleClass="form-label"
+                               style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #2C3E50;"/>
+                        <ChoiceBox fx:id="cbType" maxWidth="Infinity"
+                                   style="-fx-font-size: 14; -fx-padding: 10;"/>
+                        <Label text="respiration, journaling, meditation, cbt, challenge, relaxation" 
+                               style="-fx-font-size: 11; -fx-text-fill: #95A5A6; -fx-font-style: italic;"/>
+                    </VBox>
+                    
+                    <!-- Difficulty -->
+                    <VBox spacing="8" HBox.hgrow="ALWAYS">
+                        <Label text="Difficulté *" styleClass="form-label"
+                               style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #2C3E50;"/>
+                        <ChoiceBox fx:id="cbDifficulty" maxWidth="Infinity"
+                                   style="-fx-font-size: 14; -fx-padding: 10;"/>
+                        <Label text="debutant, moyen, avance" 
+                               style="-fx-font-size: 11; -fx-text-fill: #95A5A6; -fx-font-style: italic;"/>
+                    </VBox>
+                </HBox>
+                
+                <!-- Duration and Media URL Row -->
+                <HBox spacing="20">
+                    <!-- Duration -->
+                    <VBox spacing="8" HBox.hgrow="ALWAYS">
+                        <Label text="Durée (minutes)" styleClass="form-label"
+                               style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #2C3E50;"/>
+                        <TextField fx:id="tfDuration" promptText="Ex: 15"
+                                   style="-fx-font-size: 14; -fx-padding: 12;"/>
+                    </VBox>
+                    
+                    <!-- Published -->
+                    <VBox spacing="8" HBox.hgrow="ALWAYS">
+                        <Label text="Statut" styleClass="form-label"
+                               style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #2C3E50;"/>
+                        <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 12 0 0 0;">
+                            <CheckBox fx:id="chkPublished" text="Publier immédiatement"
+                                      style="-fx-font-size: 14;"/>
+                        </HBox>
+                    </VBox>
+                </HBox>
+                
+                <!-- Media URL -->
+                <VBox spacing="8">
+                    <Label text="URL Média (image/vidéo)" styleClass="form-label"
+                           style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #2C3E50;"/>
+                    <TextField fx:id="tfMediaUrl" promptText="https://..."
+                               style="-fx-font-size: 14; -fx-padding: 12;"/>
+                </VBox>
+                
+                <!-- Steps -->
+                <VBox spacing="8">
+                    <Label text="Étapes de l'exercice" styleClass="form-label"
+                           style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #2C3E50;"/>
+                    <TextArea fx:id="taSteps" prefRowCount="4" wrapText="true"
+                              promptText="1. Première étape&#10;2. Deuxième étape&#10;3. ..."
+                              style="-fx-font-size: 14; -fx-padding: 12;"/>
+                </VBox>
+                
+            </VBox>
+        </ScrollPane>
+        
+        <Separator style="-fx-background-color: #E8F4F8;"/>
+        
+        <!-- Action Buttons -->
+        <HBox spacing="15" alignment="CENTER">
+            <Button fx:id="btnCancel" text="✕ Annuler" onAction="#handleCancel"
+                    prefWidth="180" prefHeight="45"
+                    style="-fx-background-color: #E0E0E0; -fx-text-fill: #555; -fx-font-size: 15; -fx-font-weight: bold; -fx-background-radius: 10; -fx-cursor: hand;"/>
+            <Button fx:id="btnSave" text="✓ Créer l'Exercice" onAction="#handleSave" defaultButton="true"
+                    prefWidth="180" prefHeight="45"
+                    styleClass="btn-primary"
+                    style="-fx-background-color: #3A7D6B; -fx-text-fill: white; -fx-font-size: 15; -fx-font-weight: bold; -fx-background-radius: 10; -fx-cursor: hand;"/>
+        </HBox>
+        
+        <!-- Required Fields Note -->
+        <Label text="* Champs obligatoires" 
+               style="-fx-font-size: 12; -fx-text-fill: #95A5A6; -fx-font-style: italic; -fx-alignment: center;"/>
+        
+    </VBox>
+
+</StackPane>

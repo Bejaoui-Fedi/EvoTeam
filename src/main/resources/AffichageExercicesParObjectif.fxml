@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="tn.esprit.controllers.AffichageExercicesParObjectifController"
+            prefWidth="1150" prefHeight="600"
+            stylesheets="@styles.css">
+
+    <children>
+        <VBox spacing="20" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="0">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+            <children>
+                <!-- Header Section -->
+                <VBox spacing="5">
+                    <Label text="Exercices associés" styleClass="header-label"/>
+                    <Label fx:id="lblObjectiveTitle" text="Objectif : -" styleClass="subheader-label"/>
+                </VBox>
+
+                <HBox spacing="20" VBox.vgrow="ALWAYS">
+                    <children>
+                        <!-- Table Card -->
+                        <VBox styleClass="card" HBox.hgrow="ALWAYS">
+                            <children>
+                                <TableView fx:id="tableExercises" VBox.vgrow="ALWAYS">
+                                    <columns>
+                                        <TableColumn fx:id="colId" text="ID" prefWidth="40"/>
+                                        <TableColumn fx:id="colTitle" text="Titre" prefWidth="180" style="-fx-font-weight: bold;"/>
+                                        <TableColumn fx:id="colDescription" text="Description" prefWidth="250"/>
+                                        <TableColumn fx:id="colType" text="Type" prefWidth="100"/>
+                                        <TableColumn fx:id="colDuration" text="Durée (min)" prefWidth="100"/>
+                                        <TableColumn fx:id="colDifficulty" text="Difficulté" prefWidth="100"/>
+                                        <TableColumn fx:id="colMedia" text="Media URL" prefWidth="120"/>
+                                        <TableColumn fx:id="colPublished" text="Publié" prefWidth="80"/>
+                                        <TableColumn fx:id="colCreatedAt" text="Date création" prefWidth="160"/>
+                                        <TableColumn fx:id="colUpdatedAt" text="Date modification" prefWidth="160"/>
+                                        <TableColumn fx:id="colUserId" text="Utilisateur" prefWidth="80"/>
+                                    </columns>
+                                    <columnResizePolicy>
+                                        <TableView fx:constant="UNCONSTRAINED_RESIZE_POLICY"/>
+                                    </columnResizePolicy>
+                                </TableView>
+                            </children>
+                        </VBox>
+
+                        <!-- Sidebar Actions -->
+                         <VBox spacing="15" prefWidth="260" minWidth="260" style="-fx-padding: 10;">
+                             
+                             <Button fx:id="btnBack" text="← Retour" maxWidth="Infinity" styleClass="button"/>
+                             
+                             <Region prefHeight="20"/>
+                             
+                             <Label text="Actions" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: -color-secondary-green;"/>
+                             
+                             <Button fx:id="btnDetails" text="Détails" maxWidth="Infinity" styleClass="button, btn-secondary"/>
+                             <Button fx:id="btnDoExercise" text="Passer l'exercice" maxWidth="Infinity" styleClass="button, btn-primary"/>
+                             
+                             <Region prefHeight="10"/>
+
+                             <Button fx:id="btnGoAdd" text="Ajouter Exercice" maxWidth="Infinity" styleClass="button, btn-secondary"/>
+                             <Button fx:id="btnGoEdit" text="Modifier" maxWidth="Infinity" styleClass="button"/>
+                             <Button fx:id="btnGoDelete" text="Supprimer" maxWidth="Infinity" styleClass="button" style="-fx-background-color: #ffdddd; -fx-text-fill: #d32f2f;"/>
+                             
+                             <Region prefHeight="20"/>
+                             
+                             <Button fx:id="btnRefresh" text="Rafraîchir" maxWidth="Infinity" styleClass="button"/>
+                        </VBox>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </children>
+
+</AnchorPane>

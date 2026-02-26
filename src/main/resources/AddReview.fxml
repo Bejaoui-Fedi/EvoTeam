@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.effect.GaussianBlur?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
+<StackPane xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="tn.esprit.controllers.AddReview"
+           prefWidth="650" prefHeight="750"
+           stylesheets="@styles.css">
+
+    <!-- 🌿 Background -->
+    <ImageView fitWidth="650" fitHeight="750" preserveRatio="false" styleClass="nature-background">
+        <image>
+            <Image url="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?w=1600&amp;q=80" backgroundLoading="true"/>
+        </image>
+        <effect>
+            <GaussianBlur radius="6"/>
+        </effect>
+    </ImageView>
+
+    <!-- Overlay -->
+    <Region styleClass="overlay"/>
+
+    <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
+        <VBox alignment="CENTER" spacing="20" style="-fx-padding: 40;">
+
+            <VBox styleClass="card" maxWidth="500" spacing="15">
+
+                <Label text="📝 Ajouter Review" styleClass="header-label"/>
+                <Label text="Ajoutez une nouvelle review pour un événement" styleClass="subheader-label"/>
+
+                <Separator/>
+
+                <!-- EventId -->
+                <Label text="Event (eventId) *" styleClass="normal-label"/>
+                <ComboBox fx:id="cbEventId" promptText="Choisir un eventId" styleClass="text-field"/>
+
+                <Label text="Titre (optionnel)" styleClass="normal-label"/>
+                <TextField fx:id="title" promptText="Titre de la review" styleClass="text-field"/>
+
+                <Label text="Rating (1..5) *" styleClass="normal-label"/>
+                <TextField fx:id="rating" promptText="Ex: 4" styleClass="text-field"/>
+
+                <Label text="Date review *" styleClass="normal-label"/>
+                <DatePicker fx:id="reviewDate" styleClass="text-field"/>
+
+                <Label text="Commentaire (optionnel)" styleClass="normal-label"/>
+                <TextArea fx:id="comment" promptText="Votre commentaire..." prefRowCount="4" wrapText="true" styleClass="text-field"/>
+
+                <Separator/>
+
+                <!-- Buttons -->
+                <VBox spacing="10" alignment="CENTER">
+                    <Button text="✅ Enregistrer"
+                            onAction="#handleAddReview"
+                            prefWidth="280"
+                            styleClass="button-primary"/>
+                    <Button text="📋 Voir les reviews"
+                            onAction="#goToDisplayReviews"
+                            prefWidth="280"
+                            styleClass="button-secondary"/>
+                </VBox>
+
+            </VBox>
+        </VBox>
+    </ScrollPane>
+</StackPane>

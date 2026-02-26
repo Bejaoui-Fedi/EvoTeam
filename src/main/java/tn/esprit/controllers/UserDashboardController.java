@@ -13,6 +13,9 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import tn.esprit.entities.User;
+import tn.esprit.controllers.user.UserPrendreRdvController;
+import tn.esprit.controllers.professionnel.ProConsultationController;
+import tn.esprit.controllers.professionnel.ProGestionRdvController;
 
 import java.io.IOException;
 import java.net.URL;
@@ -32,6 +35,7 @@ public class UserDashboardController implements Initializable {
     @FXML private Button btnLogout;
     @FXML private Label userNameLabel;
     @FXML private Label userEmailLabel;
+
 
     // ==================== VARIABLES ====================
     private User currentUser;
@@ -81,8 +85,15 @@ public class UserDashboardController implements Initializable {
             return;
         }
         this.currentUser = user;
+        // IMPORTANT: Set the global session so other controllers (like NewTemplate) can access it
+        tn.esprit.utils.Session.currentUser = user;
+
         updateUserInfo();
         System.out.println("👤 Utilisateur connecté: " + user.getNom() + " (" + user.getRole() + ")");
+    }
+
+    public User getCurrentUser() {
+        return this.currentUser;
     }
 
     private void updateUserInfo() {
@@ -130,20 +141,56 @@ public class UserDashboardController implements Initializable {
         return dashboard;
     }
 
+    // =====================================================
+    // TES MODIFICATIONS : handleEvents() avec passage du currentUser
+    // =====================================================
     @FXML
     private void handleEvents() {
-        System.out.println("📅 Navigation vers Événements");
+        System.out.println("Navigation vers Evenements (mode utilisateur)");
         resetButtonStyles();
         setActiveButton(btnEvents);
-        showPlaceholder("Événements");
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/UserDisplayEvent.fxml"));
+            Parent root = loader.load();
+
+            // Passer la reference du dashboard ET le currentUser au controller
+            UserDisplayEvent controller = loader.getController();
+            controller.setUserDashboardController(this);
+            controller.setCurrentUser(currentUser);  // ✅ AJOUTÉ : passage du currentUser
+
+            contentArea.getChildren().clear();
+            contentArea.getChildren().add(root);
+
+        } catch (IOException e) {
+            System.err.println("Erreur chargement UserDisplayEvent.fxml: " + e.getMessage());
+            e.printStackTrace();
+            showError("Page Evenements non trouvee");
+        }
     }
 
     @FXML
     private void handleExercises() {
-        System.out.println("🧘 Navigation vers Exercices");
+        System.out.println("Navigation vers Exercices");
         resetButtonStyles();
         setActiveButton(btnExercises);
-        showPlaceholder("Exercices");
+
+        try {
+            // Charger le NewTemplateController qui contient la gestion des exercices
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/NewTemplate.fxml"));
+            Parent exerciseView = loader.load();
+
+            // Remplacer le contenu
+            contentArea.getChildren().clear();
+            contentArea.getChildren().add(exerciseView);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showError("Impossible de charger la page Exercices");
+        } catch (NullPointerException e) {
+            System.err.println("❌ Fichier FXML non trouvé ! Vérifiez le chemin : /NewTemplate.fxml");
+            showError("Fichier NewTemplate.fxml introuvable !");
+        }
     }
 
     @FXML
@@ -156,12 +203,53 @@ public class UserDashboardController implements Initializable {
 
     @FXML
     private void handleAppointments() {
-        System.out.println("📆 Navigation vers Mes rendez-vous");
+        System.out.println("📆 Navigation vers Rendez-vous/Consultations");
         resetButtonStyles();
         setActiveButton(btnAppointments);
-        showPlaceholder("Mes rendez-vous");
-    }
 
+        if (currentUser == null) {
+            showError("Aucun utilisateur connecté");
+            return;
+        }
+
+        try {
+            String role = currentUser.getRole();
+
+            if ("PATIENT".equals(role)) {
+                // Patient: interface de prise de rendez-vous
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/user/user_prendre_rdv.fxml"));
+                Parent view = loader.load();
+                UserPrendreRdvController controller = loader.getController();
+                controller.setCurrentUser(currentUser);
+                controller.setDashboardController(this); // Pass dashboard controller
+                contentArea.getChildren().clear();
+                contentArea.getChildren().add(view);
+                System.out.println("✅ Interface patient chargée");
+            }
+            else if ("PSY_COACH".equals(role)) {
+                // ICI ON CHARGE LA PAGE RENDEZ-VOUS
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/professionnel/pro_gestion_rdv.fxml"));
+                Parent view = loader.load();
+
+                // Le controller pour les rendez-vous
+                ProGestionRdvController controller = loader.getController();
+                // PASSER LE DASHBOARD CONTROLLER
+                controller.setDashboardController(this);
+
+                contentArea.getChildren().clear();
+                contentArea.getChildren().add(view);
+                System.out.println("✅ Interface professionnel (Rendez-vous) chargée");
+            }
+            else {
+                showPlaceholder("Rendez-vous");
+            }
+
+        } catch (IOException e) {
+            System.err.println("❌ Erreur: " + e.getMessage());
+            e.printStackTrace();
+            showError("Impossible de charger la page: " + e.getMessage());
+        }
+    }
     @FXML
     private void handleNotifications() {
         System.out.println("🔔 Navigation vers Notifications");
@@ -234,12 +322,10 @@ public class UserDashboardController implements Initializable {
         btnAppointments.setStyle(INACTIVE_BUTTON_STYLE);
         btnProfile.setStyle(INACTIVE_BUTTON_STYLE);
         btnNotifications.setStyle(INACTIVE_BUTTON_STYLE);
-        // ✅ CORRIGÉ ! MÊME STYLE QUE LES AUTRES !
         btnLogout.setStyle(INACTIVE_BUTTON_STYLE);
     }
 
     private void setActiveButton(Button button) {
-        // ✅ CORRIGÉ ! MÊME STYLE ACTIF POUR TOUS !
         button.setStyle(ACTIVE_BUTTON_STYLE);
     }
 
@@ -290,4 +376,34 @@ public class UserDashboardController implements Initializable {
         contentArea.getChildren().clear();
         contentArea.getChildren().add(errorBox);
     }
+
+    /**
+     * Sets the content of the main content area
+     * @param content The Parent node to display in the content area
+     */
+    public void setContent(Parent content) {
+        if (contentArea != null) {
+            contentArea.getChildren().clear();
+            contentArea.getChildren().add(content);
+        } else {
+            System.err.println("⚠️ contentArea is null in UserDashboardController");
+        }
+    }
+    public void navigateToConsultations() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/professionnel/pro_gestion_consultation.fxml"));
+            Parent view = loader.load();
+
+            ProConsultationController controller = loader.getController();
+            controller.setCurrentUser(currentUser);
+            controller.setDashboardController(this); // ← AJOUTER CETTE LIGNE
+
+            contentArea.getChildren().clear();
+            contentArea.getChildren().add(view);
+            System.out.println("✅ Navigation vers consultations");
+        } catch (IOException e) {
+            showError("Erreur de chargement: " + e.getMessage());
+        }
+    }
+
 }
