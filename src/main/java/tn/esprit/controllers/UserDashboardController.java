@@ -195,10 +195,26 @@ public class UserDashboardController implements Initializable {
 
     @FXML
     private void handleWellness() {
-        System.out.println("📝 Navigation vers Journal bien-être");
+        System.out.println("📝 Navigation vers Journal bien-être (Tâches)");
         resetButtonStyles();
         setActiveButton(btnWellness);
-        showPlaceholder("Journal bien-être");
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/UserDisplayDailyRoutineTask.fxml"));
+            Parent root = loader.load();
+
+            UserDisplayDailyRoutineTaskController controller = loader.getController();
+            controller.setUserDashboardController(this);
+            controller.setCurrentUser(currentUser);
+
+            contentArea.getChildren().clear();
+            contentArea.getChildren().add(root);
+
+        } catch (IOException e) {
+            System.err.println("❌ Erreur chargement UserDisplayDailyRoutineTask.fxml: " + e.getMessage());
+            e.printStackTrace();
+            showError("Impossible de charger la page Tâches");
+        }
     }
 
     @FXML
@@ -221,10 +237,7 @@ public class UserDashboardController implements Initializable {
                 Parent view = loader.load();
                 UserPrendreRdvController controller = loader.getController();
                 controller.setCurrentUser(currentUser);
-<<<<<<< HEAD
                 controller.setDashboardController(this); // Pass dashboard controller
-=======
->>>>>>> 7b6b857156e4ffce3799f4dd4112591c8c5bf0bb
                 contentArea.getChildren().clear();
                 contentArea.getChildren().add(view);
                 System.out.println("✅ Interface patient chargée");

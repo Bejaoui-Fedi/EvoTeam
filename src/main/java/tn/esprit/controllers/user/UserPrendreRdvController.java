@@ -10,10 +10,7 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import tn.esprit.entities.Appointment;
 import tn.esprit.entities.User;
-<<<<<<< HEAD
 import tn.esprit.controllers.UserDashboardController;
-=======
->>>>>>> 7b6b857156e4ffce3799f4dd4112591c8c5bf0bb
 import tn.esprit.services.AppointmentService;
 
 import java.io.IOException;
@@ -104,15 +101,12 @@ public class UserPrendreRdvController {
         }
     }
 
-<<<<<<< HEAD
     private UserDashboardController dashboardController;
 
     public void setDashboardController(UserDashboardController dashboardController) {
         this.dashboardController = dashboardController;
     }
 
-=======
->>>>>>> 7b6b857156e4ffce3799f4dd4112591c8c5bf0bb
     @FXML
     private void voirMesRendezVous() {
         try {
@@ -120,7 +114,6 @@ public class UserPrendreRdvController {
             Parent root = loader.load();
 
             UserMesRdvController controller = loader.getController();
-<<<<<<< HEAD
             controller.setUserId(currentUserId);
             controller.setDashboardController(dashboardController); // Pass dashboard controller
 
@@ -131,13 +124,6 @@ public class UserPrendreRdvController {
                 Stage stage = (Stage) voirMesRdvButton.getScene().getWindow();
                 stage.setScene(new Scene(root));
             }
-=======
-            controller.setUserId(currentUserId); // ✅ Appel direct sans réflexion
-
-            Stage stage = (Stage) voirMesRdvButton.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Mes rendez-vous");
->>>>>>> 7b6b857156e4ffce3799f4dd4112591c8c5bf0bb
 
         } catch (IOException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ouvrir la page de vos rendez-vous: " + e.getMessage());
