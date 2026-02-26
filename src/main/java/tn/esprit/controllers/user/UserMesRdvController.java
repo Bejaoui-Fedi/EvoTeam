@@ -11,8 +11,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import tn.esprit.entities.Appointment;
+<<<<<<< HEAD
 import tn.esprit.entities.User;
 import tn.esprit.controllers.UserDashboardController;
+=======
+>>>>>>> 7b6b857156e4ffce3799f4dd4112591c8c5bf0bb
 import tn.esprit.services.AppointmentService;
 
 import java.io.IOException;
@@ -202,12 +205,15 @@ public class UserMesRdvController {
         }
     }
 
+<<<<<<< HEAD
     private UserDashboardController dashboardController;
 
     public void setDashboardController(UserDashboardController dashboardController) {
         this.dashboardController = dashboardController;
     }
 
+=======
+>>>>>>> 7b6b857156e4ffce3799f4dd4112591c8c5bf0bb
     @FXML
     private void nouveauRendezVous() {
         try {
@@ -215,6 +221,7 @@ public class UserMesRdvController {
             Parent root = loader.load();
 
             UserPrendreRdvController controller = loader.getController();
+<<<<<<< HEAD
             controller.setCurrentUser(new User(currentUserId, "", "", "", "", "", true)); 
             // Better would be to pass the full User object if available, but for now ID is critical.
             // Ideally UserMesRdvController should store the full User object.
@@ -228,6 +235,14 @@ public class UserMesRdvController {
                  stage.setScene(new Scene(root));
                  stage.setTitle("Prendre un rendez-vous");
             }
+=======
+            // Vous devrez passer l'utilisateur si nécessaire
+            // controller.setCurrentUser(currentUser);
+
+            Stage stage = (Stage) nouveauRdvButton.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Prendre un rendez-vous");
+>>>>>>> 7b6b857156e4ffce3799f4dd4112591c8c5bf0bb
 
         } catch (IOException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de retourner: " + e.getMessage());

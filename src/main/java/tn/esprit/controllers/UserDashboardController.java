@@ -221,7 +221,10 @@ public class UserDashboardController implements Initializable {
                 Parent view = loader.load();
                 UserPrendreRdvController controller = loader.getController();
                 controller.setCurrentUser(currentUser);
+<<<<<<< HEAD
                 controller.setDashboardController(this); // Pass dashboard controller
+=======
+>>>>>>> 7b6b857156e4ffce3799f4dd4112591c8c5bf0bb
                 contentArea.getChildren().clear();
                 contentArea.getChildren().add(view);
                 System.out.println("✅ Interface patient chargée");
