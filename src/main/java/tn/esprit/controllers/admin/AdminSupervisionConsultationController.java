@@ -239,6 +239,27 @@ public class AdminSupervisionConsultationController {
     }
 
     @FXML
+    private void showStatistics() {
+        try {
+            java.net.URL url = getClass().getResource("/fxml/statistics_dashboard.fxml");
+            if (url == null) {
+                showAlert(Alert.AlertType.ERROR, "Erreur",
+                        "Fichier FXML introuvable : /fxml/statistics_dashboard.fxml");
+                return;
+            }
+            FXMLLoader loader = new FXMLLoader(url);
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Tableau de bord des Statistiques (Admin)");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ouvrir le tableau de bord : " + e.getMessage());
+        }
+    }
+
+    @FXML
     private void resetFilters() {
         searchField.clear();
         dateFilterPicker.setValue(null);

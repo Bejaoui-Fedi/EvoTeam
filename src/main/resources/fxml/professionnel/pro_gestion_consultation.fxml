@@ -49,10 +49,14 @@
                     <Button fx:id="retourButton" text="📅 Rendez-vous" onAction="#retourGestionRdv" 
                             style="-fx-background-color: transparent; -fx-text-fill: #396f5b; -fx-border-color: #396f5b; -fx-border-radius: 8; -fx-padding: 10 20; -fx-cursor: hand;"/>
                     
+                    <Button fx:id="calendarButton" text="📅 Calendrier" onAction="#handleOpenCalendar"
+                            style="-fx-background-color: transparent; -fx-text-fill: #396f5b; -fx-border-color: #396f5b; -fx-border-radius: 8; -fx-padding: 10 20; -fx-cursor: hand;"/>
+
                     <Button text="📋 Consultations" 
                             style="-fx-background-color: #396f5b; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 8; -fx-cursor: hand;"/>
-                    
 
+                    <Button fx:id="statsButton" text="📊 Dashboard" onAction="#showStatistics" 
+                            style="-fx-background-color: transparent; -fx-text-fill: #396f5b; -fx-border-color: #396f5b; -fx-border-radius: 8; -fx-padding: 10 20; -fx-cursor: hand;"/>
                 </HBox>
             </HBox>
         </top>

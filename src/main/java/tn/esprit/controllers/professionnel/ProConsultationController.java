@@ -57,6 +57,10 @@ public class ProConsultationController {
     @FXML
     private Button retourButton;
     @FXML
+    private Button calendarButton;
+    @FXML
+    private Button statsButton;
+    @FXML
     private Label messageLabel;
 
     private ConsultationService consultationService = new ConsultationService();
@@ -423,6 +427,41 @@ public class ProConsultationController {
         } catch (IOException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur",
                     "Impossible de retourner à la gestion des rendez-vous: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    private void showStatistics() {
+        try {
+            java.net.URL url = getClass().getResource("/fxml/statistics_dashboard.fxml");
+            if (url == null) {
+                showAlert(Alert.AlertType.ERROR, "Erreur",
+                        "Fichier FXML introuvable : /fxml/statistics_dashboard.fxml");
+                return;
+            }
+            FXMLLoader loader = new FXMLLoader(url);
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Tableau de bord des Statistiques");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ouvrir le tableau de bord : " + e.getMessage());
+        }
+    }
+
+    @FXML
+    private void handleOpenCalendar() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/professionnel/calendar.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) calendarButton.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Calendrier des Rendez-vous - EvoTeam");
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ouvrir le calendrier : " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
