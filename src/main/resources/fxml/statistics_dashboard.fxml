@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.effect.GaussianBlur?>
+
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="tn.esprit.controllers.StatisticsController"
+           prefWidth="1200" prefHeight="800"
+           stylesheets="@../css/styles.css">
+
+    <!-- Nature Background -->
+    <ImageView fitWidth="1200" fitHeight="800" preserveRatio="false" styleClass="nature-background">
+        <image>
+            <Image url="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1600&amp;q=80"
+                   backgroundLoading="true"/>
+        </image>
+        <effect>
+            <GaussianBlur radius="15"/>
+        </effect>
+    </ImageView>
+
+    <!-- Overlay Layer -->
+    <Region styleClass="overlay" style="-fx-background-color: rgba(255, 255, 255, 0.4);"/>
+
+    <!-- Main Scrollable Content -->
+    <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent; -fx-padding: 0;" hbarPolicy="NEVER">
+        <VBox spacing="30" style="-fx-padding: 40;">
+            
+            <!-- Header with Back Button -->
+            <HBox spacing="20" alignment="CENTER_LEFT" style="-fx-background-color: rgba(255,255,255,0.7); -fx-padding: 20; -fx-background-radius: 15;">
+                <Button onAction="#handleBack" text="← Précédent" 
+                        style="-fx-background-color: #1a4d3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 25; -fx-background-radius: 8; -fx-cursor: hand;"/>
+                <VBox spacing="5">
+                    <Label text="📈 Tableau de Bord Analytique" 
+                           style="-fx-font-size: 32; -fx-font-weight: bold; -fx-text-fill: #1a4d3c;"/>
+                    <Label text="Statistiques détaillées et indicateurs clés de performance" 
+                           style="-fx-font-size: 16; -fx-text-fill: #2d5a27; -fx-font-weight: bold;"/>
+                </VBox>
+            </HBox>
+
+            <!-- KPI Summary Cards -->
+            <HBox spacing="25" alignment="CENTER">
+                <VBox styleClass="card" alignment="CENTER" spacing="8" prefWidth="250" 
+                      style="-fx-background-color: rgba(255,255,255,0.9); -fx-padding: 20;">
+                    <Label text="📊 Total RDV" style="-fx-text-fill: #666; -fx-font-size: 14;"/>
+                    <Label fx:id="totalLabel" text="0" style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #1a4d3c;"/>
+                </VBox>
+                
+                <VBox styleClass="card" alignment="CENTER" spacing="8" prefWidth="250" 
+                      style="-fx-background-color: rgba(255,255,255,0.9); -fx-padding: 20;">
+                    <Label text="📅 Aujourd'hui" style="-fx-text-fill: #666; -fx-font-size: 14;"/>
+                    <Label fx:id="todayLabel" text="0" style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #27ae60;"/>
+                </VBox>
+                
+                <VBox styleClass="card" alignment="CENTER" spacing="8" prefWidth="250" 
+                      style="-fx-background-color: rgba(255,255,255,0.9); -fx-padding: 20;">
+                    <Label text="⏳ En Attente" style="-fx-text-fill: #666; -fx-font-size: 14;"/>
+                    <Label fx:id="pendingLabel" text="0" style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #f39c12;"/>
+                </VBox>
+                
+                <VBox styleClass="card" alignment="CENTER" spacing="8" prefWidth="250" 
+                      style="-fx-background-color: rgba(255,255,255,0.9); -fx-padding: 20;">
+                    <Label text="✅ Confirmés" style="-fx-text-fill: #666; -fx-font-size: 14;"/>
+                    <Label fx:id="confirmedLabel" text="0" style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #2980b9;"/>
+                </VBox>
+            </HBox>
+
+            <!-- Charts Section -->
+            <GridPane hgap="30" vgap="30" VBox.vgrow="ALWAYS">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="40"/>
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="60"/>
+                </columnConstraints>
+
+                <!-- Pie Chart Card -->
+                <VBox styleClass="card" spacing="15" GridPane.rowIndex="0" GridPane.columnIndex="0" 
+                      style="-fx-background-color: rgba(255,255,255,0.85); -fx-padding: 25;">
+                    <Label text="Distribution des Statuts" 
+                           style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #1a4d3c;"/>
+                    <PieChart fx:id="statusPieChart" legendSide="BOTTOM" style="-fx-pref-height: 400;"/>
+                </VBox>
+
+                <!-- Bar Chart Card -->
+                <VBox styleClass="card" spacing="15" GridPane.rowIndex="0" GridPane.columnIndex="1" 
+                      style="-fx-background-color: rgba(255,255,255,0.85); -fx-padding: 25;">
+                    <Label text="Fréquence Mensuelle des Rendez-vous" 
+                           style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #1a4d3c;"/>
+                    <BarChart fx:id="appointmentsBarChart" legendVisible="false" style="-fx-pref-height: 400;">
+                        <xAxis><CategoryAxis label="Mois" /></xAxis>
+                        <yAxis><NumberAxis label="Nombre de RDV" /></yAxis>
+                    </BarChart>
+                </VBox>
+            </GridPane>
+
+            <!-- Footer -->
+            <HBox alignment="CENTER" style="-fx-padding: 20 0 0 0;">
+                <Label text="© 2026 EvoTeam - Intelligence Analytique Santé" 
+                       style="-fx-text-fill: #666; -fx-font-size: 13; -fx-font-style: italic;"/>
+            </HBox>
+        </VBox>
+    </ScrollPane>
+
+</StackPane>

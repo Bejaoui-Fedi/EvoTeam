@@ -130,6 +130,9 @@
 
             <bottom>
                 <HBox spacing="20" alignment="CENTER" style="-fx-padding: 20;">
+                    <Button fx:id="exportPDFButton" text="📄 EXPORTER EN PDF"
+                            onAction="#handleExportPDF" styleClass="button-secondary"
+                            prefWidth="180" prefHeight="40"/>
                     <Button fx:id="confirmerButton" text="✓ CONFIRMER LA MODIFICATION"
                             onAction="#handleConfirmer" styleClass="button-success"
                             prefWidth="250" prefHeight="40"/>
@@ -137,6 +140,7 @@
                             onAction="#handleAnnuler" styleClass="button-danger"
                             prefWidth="150" prefHeight="40"/>
                 </HBox>
+
             </bottom>
 
 </BorderPane>

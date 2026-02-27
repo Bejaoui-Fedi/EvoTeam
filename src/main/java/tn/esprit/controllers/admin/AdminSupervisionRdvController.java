@@ -7,35 +7,42 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import javafx.stage.Modality;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.Priority;
+import javafx.geometry.Pos;
+import java.sql.SQLException;
 import tn.esprit.entities.Appointment;
 import tn.esprit.services.AppointmentService;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 public class AdminSupervisionRdvController {
 
-    @FXML private TextField searchField;
-    @FXML private DatePicker dateFilterPicker;
-    @FXML private ChoiceBox<String> statutFilterChoice;
+    @FXML
+    private TextField searchField;
+    @FXML
+    private DatePicker dateFilterPicker;
+    @FXML
+    private ChoiceBox<String> statutFilterChoice;
 
-    @FXML private TableView<Appointment> tableView;
-    @FXML private TableColumn<Appointment, Integer> colId;
-    @FXML private TableColumn<Appointment, LocalDate> colDate;
-    @FXML private TableColumn<Appointment, LocalTime> colHeure;
-    @FXML private TableColumn<Appointment, String> colStatut;
-    @FXML private TableColumn<Appointment, String> colMotif;
-    @FXML private TableColumn<Appointment, String> colType;
-    @FXML private TableColumn<Appointment, Integer> colUserId;
+    @FXML
+    private FlowPane cardsContainer;
+    private Appointment selectedAppointment;
 
-    @FXML private Button deleteButton;
-    @FXML private Button consultationsButton;
-    @FXML private Label statsLabel;
-    @FXML private Label totalLabel;
+    @FXML
+    private Button deleteButton;
+    @FXML
+    private Button consultationsButton;
+    @FXML
+    private Label statsLabel;
+    @FXML
+    private Label totalLabel;
 
     private AppointmentService service = new AppointmentService();
     private ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
@@ -43,55 +50,91 @@ public class AdminSupervisionRdvController {
 
     @FXML
     public void initialize() {
-        setupTableColumns();
         setupFilters();
         setupSearch();
         loadAllAppointments();
-        setupSelectionListener();
     }
 
-    private void setupTableColumns() {
-        colId.setCellValueFactory(new PropertyValueFactory<>("id"));
-        colDate.setCellValueFactory(new PropertyValueFactory<>("dateRdv"));
-        colHeure.setCellValueFactory(new PropertyValueFactory<>("heureRdv"));
-        colStatut.setCellValueFactory(new PropertyValueFactory<>("statut"));
-        colMotif.setCellValueFactory(new PropertyValueFactory<>("motif"));
-        colType.setCellValueFactory(new PropertyValueFactory<>("typeRdv"));
-        colUserId.setCellValueFactory(new PropertyValueFactory<>("userId"));
+    private void renderCards(ObservableList<Appointment> appointments) {
+        cardsContainer.getChildren().clear();
+        for (Appointment app : appointments) {
+            VBox card = createAdminAppointmentCard(app);
+            cardsContainer.getChildren().add(card);
+        }
+    }
 
-        colStatut.setCellFactory(column -> new TableCell<Appointment, String>() {
-            @Override
-            protected void updateItem(String statut, boolean empty) {
-                super.updateItem(statut, empty);
-                if (empty || statut == null) {
-                    setText(null);
-                    setStyle("");
-                } else {
-                    setText(statut);
-                    switch (statut) {
-                        case "confirmé":
-                            setStyle("-fx-background-color: #d4edda; -fx-text-fill: #155724;");
-                            break;
-                        case "annulé":
-                            setStyle("-fx-background-color: #f8d7da; -fx-text-fill: #721c24;");
-                            break;
-                        case "terminé":
-                            setStyle("-fx-background-color: #cce5ff; -fx-text-fill: #004085;");
-                            break;
-                        default:
-                            setStyle("-fx-background-color: #fff3cd; -fx-text-fill: #856404;");
-                    }
-                }
+    private VBox createAdminAppointmentCard(Appointment app) {
+        VBox card = new VBox(10);
+        card.getStyleClass().add("item-card");
+        card.setPrefWidth(300);
+
+        // Header: ID and Status
+        HBox header = new HBox();
+        header.setAlignment(Pos.CENTER_LEFT);
+        Label idLabel = new Label("RDV #" + app.getId());
+        idLabel.getStyleClass().add("card-id");
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        Label statusBadge = new Label(app.getStatut().toUpperCase());
+        statusBadge.getStyleClass().add("card-badge");
+        applyStatusStyle(statusBadge, app.getStatut());
+
+        header.getChildren().addAll(idLabel, spacer, statusBadge);
+
+        // Content: Patient and Motif
+        Label patientLabel = new Label("👤 Patient ID: " + app.getUserId());
+        patientLabel.getStyleClass().add("card-title");
+
+        Label motifLabel = new Label("📝 " + app.getMotif());
+        motifLabel.setWrapText(true);
+        motifLabel.setStyle("-fx-font-size: 13; -fx-text-fill: #555;");
+
+        // Info: Date and Time
+        HBox info = new HBox(15);
+        info.getChildren().addAll(
+                new Label("📅 " + app.getDateRdv()),
+                new Label("⏰ " + app.getHeureRdv()));
+
+        Region separator = new Region();
+        separator.getStyleClass().add("card-separator");
+        separator.setPrefHeight(1);
+
+        // Selection handling
+        card.setOnMouseClicked(e -> {
+            for (javafx.scene.Node n : cardsContainer.getChildren()) {
+                n.setStyle("");
             }
+            card.setStyle("-fx-border-color: #396f5b; -fx-border-width: 3; -fx-border-radius: 12;");
+            selectedAppointment = app;
+            deleteButton.setDisable(false);
         });
+
+        card.getChildren().addAll(header, patientLabel, motifLabel, info, separator);
+        return card;
+    }
+
+    private void applyStatusStyle(Label label, String statut) {
+        switch (statut) {
+            case "confirmé":
+                label.setStyle("-fx-background-color: #d4edda; -fx-text-fill: #155724;");
+                break;
+            case "annulé":
+                label.setStyle("-fx-background-color: #f8d7da; -fx-text-fill: #721c24;");
+                break;
+            case "terminé":
+                label.setStyle("-fx-background-color: #cce5ff; -fx-text-fill: #004085;");
+                break;
+            default:
+                label.setStyle("-fx-background-color: #fff3cd; -fx-text-fill: #856404;");
+        }
     }
 
     private void setupFilters() {
         dateFilterPicker.valueProperty().addListener((obs, old, newVal) -> applyFilters());
 
         statutFilterChoice.setItems(FXCollections.observableArrayList(
-                "Tous", "en attente", "confirmé", "terminé", "annulé"
-        ));
+                "Tous", "en attente", "confirmé", "terminé", "annulé"));
         statutFilterChoice.setValue("Tous");
         statutFilterChoice.valueProperty().addListener((obs, old, newVal) -> applyFilters());
     }
@@ -135,7 +178,7 @@ public class AdminSupervisionRdvController {
             }
         }
 
-        tableView.setItems(filteredAppointments);
+        renderCards(filteredAppointments);
         updateStatistics();
     }
 
@@ -154,25 +197,17 @@ public class AdminSupervisionRdvController {
 
         totalLabel.setText(String.format(
                 "📊 Total: %d rendez-vous | Affichés: %d",
-                total, affiches
-        ));
+                total, affiches));
 
         statsLabel.setText(String.format(
                 "📅 Aujourd'hui: %d | ⏳ En attente: %d | ❌ Annulés: %d",
-                aujourdHui, enAttente, annules
-        ));
-    }
-
-    private void setupSelectionListener() {
-        tableView.getSelectionModel().selectedItemProperty().addListener((obs, old, newSel) -> {
-            deleteButton.setDisable(newSel == null);
-        });
+                aujourdHui, enAttente, annules));
     }
 
     @FXML
     private void deleteRendezVous() {
-        Appointment selected = tableView.getSelectionModel().getSelectedItem();
-        if (selected == null) return;
+        if (selectedAppointment == null)
+            return;
 
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
         confirm.setTitle("Confirmation de suppression");
@@ -181,10 +216,12 @@ public class AdminSupervisionRdvController {
 
         if (confirm.showAndWait().get() == ButtonType.OK) {
             try {
-                service.delete(selected);
+                service.delete(selectedAppointment);
                 loadAllAppointments();
                 showAlert(Alert.AlertType.INFORMATION, "Succès",
-                        "Rendez-vous #" + selected.getId() + " supprimé avec succès");
+                        "Rendez-vous #" + selectedAppointment.getId() + " supprimé avec succès");
+                selectedAppointment = null;
+                deleteButton.setDisable(true);
             } catch (SQLException e) {
                 showAlert(Alert.AlertType.ERROR, "Erreur",
                         "Échec de la suppression : " + e.getMessage());
@@ -195,7 +232,8 @@ public class AdminSupervisionRdvController {
     @FXML
     private void gererConsultations() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/admin_supervision_consultation.fxml"));
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/fxml/admin/admin_supervision_consultation.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) consultationsButton.getScene().getWindow();
             stage.setScene(new Scene(root));
@@ -203,6 +241,27 @@ public class AdminSupervisionRdvController {
         } catch (IOException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur",
                     "Impossible d'ouvrir la supervision des consultations: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    private void showStatistics() {
+        try {
+            java.net.URL url = getClass().getResource("/fxml/statistics_dashboard.fxml");
+            if (url == null) {
+                showAlert(Alert.AlertType.ERROR, "Erreur",
+                        "Fichier FXML introuvable : /fxml/statistics_dashboard.fxml");
+                return;
+            }
+            FXMLLoader loader = new FXMLLoader(url);
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Tableau de bord des Statistiques (Admin)");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ouvrir le tableau de bord : " + e.getMessage());
         }
     }
 

@@ -7,9 +7,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.stage.Modality;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.Priority;
+import javafx.geometry.Pos;
 import tn.esprit.entities.Appointment;
 import tn.esprit.services.AppointmentService;
 
@@ -20,20 +25,22 @@ import java.time.LocalTime;
 
 public class UserMesRdvController {
 
-    @FXML private TableView<Appointment> tableView;
-    @FXML private TableColumn<Appointment, LocalDate> colDate;
-    @FXML private TableColumn<Appointment, LocalTime> colHeure;
-    @FXML private TableColumn<Appointment, String> colMotif;
-    @FXML private TableColumn<Appointment, String> colType;
-    @FXML private TableColumn<Appointment, String> colStatut;
+    @FXML
+    private FlowPane cardsContainer;
 
-    @FXML private Button modifierButton;
-    @FXML private Button annulerButton;
-    @FXML private Button supprimerButton;
-    @FXML private Button nouveauRdvButton;
+    @FXML
+    private Button modifierButton;
+    @FXML
+    private Button annulerButton;
+    @FXML
+    private Button supprimerButton;
+    @FXML
+    private Button nouveauRdvButton;
 
-    @FXML private Label infoLabel;
-    @FXML private Label compteurLabel;
+    @FXML
+    private Label infoLabel;
+    @FXML
+    private Label compteurLabel;
 
     private AppointmentService service = new AppointmentService();
     private ObservableList<Appointment> rdvList = FXCollections.observableArrayList();
@@ -42,73 +49,97 @@ public class UserMesRdvController {
 
     @FXML
     public void initialize() {
-        setupTableColumns();
-        setupCellFactories();
         loadMesRendezVous();
-        setupSelectionListener();
     }
 
-    private void setupTableColumns() {
-        colDate.setCellValueFactory(new PropertyValueFactory<>("dateRdv"));
-        colHeure.setCellValueFactory(new PropertyValueFactory<>("heureRdv"));
-        colMotif.setCellValueFactory(new PropertyValueFactory<>("motif"));
-        colType.setCellValueFactory(new PropertyValueFactory<>("typeRdv"));
-        colStatut.setCellValueFactory(new PropertyValueFactory<>("statut"));
+    private void renderCards(ObservableList<Appointment> appointments) {
+        cardsContainer.getChildren().clear();
+        for (Appointment app : appointments) {
+            VBox card = createAppointmentCard(app);
+            cardsContainer.getChildren().add(card);
+        }
     }
 
-    private void setupCellFactories() {
-        colDate.setCellFactory(column -> new TableCell<Appointment, LocalDate>() {
-            @Override
-            protected void updateItem(LocalDate date, boolean empty) {
-                super.updateItem(date, empty);
-                if (empty || date == null) {
-                    setText(null);
-                    setStyle("");
-                } else {
-                    setText(date.toString());
-                    if (date.isBefore(LocalDate.now())) {
-                        setStyle("-fx-text-fill: #7f8c8d; -fx-font-style: italic;");
-                    } else if (date.isEqual(LocalDate.now())) {
-                        setStyle("-fx-text-fill: #e67e22; -fx-font-weight: bold;");
-                    } else {
-                        setStyle("-fx-text-fill: #2c3e50;");
-                    }
-                }
+    private VBox createAppointmentCard(Appointment app) {
+        VBox card = new VBox(10);
+        card.getStyleClass().add("item-card");
+        card.setPrefWidth(300);
+
+        // Date Header
+        HBox header = new HBox();
+        header.setAlignment(Pos.CENTER_LEFT);
+        Label dateLabel = new Label("📅 " + app.getDateRdv());
+
+        // Date specific styling from original setupCellFactories
+        if (app.getDateRdv().isBefore(LocalDate.now())) {
+            dateLabel.setStyle("-fx-text-fill: #7f8c8d; -fx-font-style: italic;");
+        } else if (app.getDateRdv().isEqual(LocalDate.now())) {
+            dateLabel.setStyle("-fx-text-fill: #e67e22; -fx-font-weight: bold;");
+        } else {
+            dateLabel.setStyle("-fx-text-fill: #2c3e50; -fx-font-weight: bold;");
+        }
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        Label statusBadge = new Label(app.getStatut().toUpperCase());
+        statusBadge.getStyleClass().add("card-badge");
+        applyStatusStyle(statusBadge, app.getStatut());
+
+        header.getChildren().addAll(dateLabel, spacer, statusBadge);
+
+        // Time and Type
+        HBox timeType = new HBox(15);
+        timeType.getChildren().addAll(
+                new Label("⏰ " + app.getHeureRdv()),
+                new Label("🏥 " + app.getTypeRdv()));
+        timeType.setStyle("-fx-font-size: 14; -fx-text-fill: #555;");
+
+        // Motif
+        Label motifLabel = new Label(app.getMotif());
+        motifLabel.setWrapText(true);
+        motifLabel.getStyleClass().add("card-title");
+        motifLabel.setMinHeight(40);
+
+        Region separator = new Region();
+        separator.getStyleClass().add("card-separator");
+        separator.setPrefHeight(1);
+
+        // Selection handling
+        card.setOnMouseClicked(e -> {
+            for (javafx.scene.Node n : cardsContainer.getChildren()) {
+                n.setStyle("");
             }
+            card.setStyle("-fx-border-color: #3A7D6B; -fx-border-width: 3; -fx-border-radius: 15;");
+            selectedAppointment = app;
+            updateButtonStates(app);
         });
 
-        colStatut.setCellFactory(column -> new TableCell<Appointment, String>() {
-            @Override
-            protected void updateItem(String statut, boolean empty) {
-                super.updateItem(statut, empty);
-                if (empty || statut == null) {
-                    setText(null);
-                    setStyle("");
-                } else {
-                    setText(statut);
-                    switch (statut) {
-                        case "confirmé":
-                            setStyle("-fx-background-color: #d4edda; -fx-text-fill: #155724; -fx-font-weight: bold; -fx-alignment: CENTER;");
-                            break;
-                        case "annulé":
-                            setStyle("-fx-background-color: #f8d7da; -fx-text-fill: #721c24; -fx-font-weight: bold; -fx-alignment: CENTER;");
-                            break;
-                        case "terminé":
-                            setStyle("-fx-background-color: #cce5ff; -fx-text-fill: #004085; -fx-font-weight: bold; -fx-alignment: CENTER;");
-                            break;
-                        default:
-                            setStyle("-fx-background-color: #fff3cd; -fx-text-fill: #856404; -fx-font-weight: bold; -fx-alignment: CENTER;");
-                    }
-                }
-            }
-        });
+        card.getChildren().addAll(header, timeType, motifLabel, separator);
+        return card;
+    }
+
+    private void applyStatusStyle(Label label, String statut) {
+        switch (statut) {
+            case "confirmé":
+                label.setStyle("-fx-background-color: #d4edda; -fx-text-fill: #155724;");
+                break;
+            case "annulé":
+                label.setStyle("-fx-background-color: #f8d7da; -fx-text-fill: #721c24;");
+                break;
+            case "terminé":
+                label.setStyle("-fx-background-color: #cce5ff; -fx-text-fill: #004085;");
+                break;
+            default:
+                label.setStyle("-fx-background-color: #fff3cd; -fx-text-fill: #856404;");
+        }
     }
 
     private void loadMesRendezVous() {
         try {
             rdvList.clear();
             rdvList.addAll(service.getByUserId(currentUserId));
-            tableView.setItems(rdvList);
+            renderCards(rdvList);
             updateStatistics();
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur",
@@ -152,18 +183,6 @@ public class UserMesRdvController {
         }
     }
 
-    private void setupSelectionListener() {
-        tableView.getSelectionModel().selectedItemProperty().addListener((obs, old, newSel) -> {
-            selectedAppointment = newSel;
-
-            if (newSel != null) {
-                updateButtonStates(newSel);
-            } else {
-                disableAllButtons();
-            }
-        });
-    }
-
     private void updateButtonStates(Appointment a) {
         String statut = a.getStatut();
         LocalDate date = a.getDateRdv();
@@ -197,12 +216,6 @@ public class UserMesRdvController {
         } else {
             Tooltip.uninstall(annulerButton, null);
         }
-    }
-
-    private void disableAllButtons() {
-        modifierButton.setDisable(true);
-        annulerButton.setDisable(true);
-        supprimerButton.setDisable(true);
     }
 
     @FXML
@@ -251,7 +264,8 @@ public class UserMesRdvController {
 
     @FXML
     private void annulerRendezVous() {
-        if (selectedAppointment == null) return;
+        if (selectedAppointment == null)
+            return;
 
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
         confirm.setTitle("Confirmation d'annulation");
@@ -266,8 +280,7 @@ public class UserMesRdvController {
                 selectedAppointment.getDateRdv(),
                 selectedAppointment.getHeureRdv(),
                 selectedAppointment.getMotif(),
-                selectedAppointment.getTypeRdv()
-        ));
+                selectedAppointment.getTypeRdv()));
 
         if (confirm.showAndWait().get() == ButtonType.OK) {
             try {
@@ -291,7 +304,8 @@ public class UserMesRdvController {
 
     @FXML
     private void supprimerRendezVous() {
-        if (selectedAppointment == null) return;
+        if (selectedAppointment == null)
+            return;
 
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
         confirm.setTitle("Confirmation de suppression");
@@ -306,8 +320,7 @@ public class UserMesRdvController {
                 selectedAppointment.getDateRdv(),
                 selectedAppointment.getHeureRdv(),
                 selectedAppointment.getMotif(),
-                selectedAppointment.getStatut()
-        ));
+                selectedAppointment.getStatut()));
 
         if (confirm.showAndWait().get() == ButtonType.OK) {
             try {

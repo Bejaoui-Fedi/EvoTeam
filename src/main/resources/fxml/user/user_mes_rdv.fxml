@@ -55,24 +55,6 @@
                     <Button text="↻ Actualiser" onAction="#refresh" styleClass="button-primary"/>
                 </HBox>
 
-                <!-- Table -->
-                <TableView fx:id="tableView" VBox.vgrow="ALWAYS"
-                           style="-fx-font-size: 13; -fx-background-color: transparent; -fx-border-color: #D4E8D0; -fx-border-radius: 15; -fx-padding: 5;"
-                           prefHeight="450">
-                    <columns>
-                        <TableColumn fx:id="colDate" text="Date" prefWidth="120"
-                                     style="-fx-alignment: CENTER; -fx-background-color: #F0F9EC;"/>
-                        <TableColumn fx:id="colHeure" text="Heure" prefWidth="100"/>
-                        <TableColumn fx:id="colMotif" text="Motif" prefWidth="250"/>
-                        <TableColumn fx:id="colType" text="Type" prefWidth="120"/>
-                        <TableColumn fx:id="colStatut" text="Statut" prefWidth="120"
-                                     style="-fx-alignment: CENTER;"/>
-                    </columns>
-                    <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
-                    </columnResizePolicy>
-                </TableView>
-
                 <!-- Stats Bar -->
                 <HBox spacing="20" style="-fx-padding: 15 20; -fx-background-color: rgba(225,240,218,0.8); -fx-background-radius: 15; -fx-border-color: #B5D3A7; -fx-border-radius: 15; -fx-border-width: 1;"
                       alignment="CENTER_LEFT">
@@ -89,6 +71,14 @@
                                style="-fx-text-fill: #5F9B8A; -fx-font-style: italic; -fx-font-size: 14;"/>
                     </HBox>
                 </HBox>
+
+                <!-- Scrollable Cards Area -->
+                <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent; -fx-padding: 0;"
+                            VBox.vgrow="ALWAYS" hbarPolicy="NEVER">
+                    <FlowPane fx:id="cardsContainer" hgap="25" vgap="25" styleClass="cards-grid" alignment="CENTER">
+                        <!-- Cards will be injected here -->
+                    </FlowPane>
+                </ScrollPane>
 
                 <!-- Action Buttons -->
                 <HBox spacing="20" alignment="CENTER" style="-fx-padding: 10 20;">

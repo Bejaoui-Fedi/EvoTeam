@@ -190,42 +190,41 @@
     -fx-border-radius: 25;
 }
 
-/* Table styling */
+/* TableView Styling */
 .table-view {
     -fx-background-color: transparent;
-    -fx-border-color: -secondary-color;
+    -fx-border-color: #E0E0E0;
     -fx-border-radius: 10;
-    -fx-background-radius: 10;
+    -fx-padding: 5;
 }
 
 .table-view .column-header-background {
-    -fx-background-color: linear-gradient(to bottom, -primary-color, -secondary-color);
+    -fx-background-color: rgba(240, 249, 236, 0.7);
     -fx-background-radius: 10 10 0 0;
 }
 
-.table-view .column-header,
-.table-view .filler {
+.table-view .column-header {
     -fx-background-color: transparent;
     -fx-size: 40;
 }
 
 .table-view .column-header .label {
-    -fx-text-fill: white;
+    -fx-text-fill: #000000;
     -fx-font-weight: bold;
-}
-
-.table-row-cell {
-    -fx-background-color: rgba(255, 255, 255, 0.7);
-    -fx-border-color: transparent;
+    -fx-font-size: 13px;
 }
 
 .table-row-cell:odd {
-    -fx-background-color: rgba(240, 240, 240, 0.7);
+    -fx-background-color: rgba(245, 250, 242, 0.5);
+}
+
+.table-row-cell:even {
+    -fx-background-color: rgba(255, 255, 255, 0.5);
 }
 
 .table-row-cell:selected {
-    -fx-background-color: rgba(58, 125, 107, 0.3);
-    -fx-text-fill: -text-color;
+    -fx-background-color: -primary-color;
+    -fx-text-fill: white;
 }
 
 /* ScrollPane */
@@ -263,4 +262,57 @@
     -fx-border-color: -secondary-color;
     -fx-border-width: 0 2 2 2;
     -fx-border-radius: 0 0 10 10;
+}
+
+/* Card View Components */
+.item-card {
+    -fx-background-color: rgba(255, 255, 255, 0.95);
+    -fx-background-radius: 12;
+    -fx-padding: 18;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 10, 0, 0, 4);
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+    -fx-cursor: hand;
+}
+
+.item-card:hover {
+    -fx-background-color: #ffffff;
+    -fx-effect: dropshadow(gaussian, rgba(39, 111, 91, 0.2), 15, 0, 0, 6);
+    -fx-border-color: #396f5b;
+}
+
+.item-card .label {
+    -fx-text-fill: #2C3E50;
+}
+
+.card-id {
+    -fx-font-family: 'Consolas', monospace;
+    -fx-font-weight: bold;
+    -fx-text-fill: #396f5b !important;
+    -fx-font-size: 13;
+}
+
+.card-title {
+    -fx-font-size: 16;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333 !important;
+}
+
+.card-badge {
+    -fx-padding: 4 12;
+    -fx-background-radius: 20;
+    -fx-font-size: 11;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.card-separator {
+    -fx-background-color: #EEEEEE;
+    -fx-min-height: 1;
+    -fx-max-height: 1;
+}
+
+.cards-grid {
+    -fx-padding: 10;
 }

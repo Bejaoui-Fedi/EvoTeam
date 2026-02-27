@@ -9,10 +9,10 @@ import tn.esprit.entities.Appointment;
 import tn.esprit.entities.Consultation;
 import tn.esprit.services.AppointmentService;
 import tn.esprit.services.ConsultationService;
+import tn.esprit.services.PDFService;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 
 public class ModifierConsultationProDialogController {
 
@@ -61,6 +61,8 @@ public class ModifierConsultationProDialogController {
     private Label messageLabel;
 
     @FXML
+    private Button exportPDFButton;
+    @FXML
     private Button confirmerButton;
     @FXML
     private Button annulerButton;
@@ -68,6 +70,7 @@ public class ModifierConsultationProDialogController {
     private Consultation consultation;
     private ConsultationService consultationService = new ConsultationService();
     private AppointmentService appointmentService = new AppointmentService();
+    private PDFService pdfService = new PDFService();
     private ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
     private Stage stage;
     private boolean modificationReussie = false;
@@ -263,7 +266,29 @@ public class ModifierConsultationProDialogController {
     }
 
     @FXML
+    private void handleExportPDF() {
+        if (consultation == null || consultation.getOrdonnance() == null || consultation.getOrdonnance().isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Attention", "L'ordonnance est vide. Rien à exporter.");
+            return;
+        }
+
+        try {
+            // In a real app, we would get the patient and doctor names from the database
+            String patientName = "Patient #" + consultation.getAppointmentId();
+            String doctorName = "Dr. EvoTeam";
+
+            pdfService.generateOrdonnance(consultation, patientName, doctorName);
+
+            showAlert(Alert.AlertType.INFORMATION, "Succès", "L'ordonnance a été exportée en PDF avec succès.");
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la génération du PDF : " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     private void handleAnnuler() {
+
         modificationReussie = false;
         fermer();
     }

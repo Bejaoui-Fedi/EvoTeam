@@ -34,5 +34,8 @@ build/
 ### VS Code ###
 .vscode/
 
+### Secrets ###
+src/main/resources/config.properties
+
 ### Mac OS ###
 .DS_Store

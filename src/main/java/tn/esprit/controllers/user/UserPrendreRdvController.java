@@ -18,23 +18,41 @@ import java.time.LocalTime;
 
 public class UserPrendreRdvController {
 
-    @FXML private DatePicker datePicker;
-    @FXML private ComboBox<String> heureCombo;
-    @FXML private TextField motifField;
-    @FXML private ChoiceBox<String> typeChoice;
-    @FXML private Button prendreRdvButton;
-    @FXML private Button voirMesRdvButton;
-    @FXML private Label messageLabel;
+    @FXML
+    private DatePicker datePicker;
+    @FXML
+    private ComboBox<String> heureCombo;
+    @FXML
+    private TextField motifField;
+    @FXML
+    private ChoiceBox<String> typeChoice;
+    @FXML
+    private Button prendreRdvButton;
+    @FXML
+    private Button voirMesRdvButton;
+    @FXML
+    private Label weatherLabel;
+    @FXML
+    private Label messageLabel;
 
     private int currentUserId = 1; // À remplacer par l'ID de session réel
     private AppointmentService service = new AppointmentService();
+    private tn.esprit.services.WeatherService weatherService = new tn.esprit.services.WeatherService();
 
     @FXML
     public void initialize() {
         setupHeures();
         setupTypeChoice();
         setupDatePicker();
+        loadWeather();
         messageLabel.setText("");
+    }
+
+    private void loadWeather() {
+        new Thread(() -> {
+            String weather = weatherService.getWeatherInfo();
+            javafx.application.Platform.runLater(() -> weatherLabel.setText(weather));
+        }).start();
     }
 
     private void setupHeures() {
@@ -49,8 +67,7 @@ public class UserPrendreRdvController {
 
     private void setupTypeChoice() {
         typeChoice.setItems(FXCollections.observableArrayList(
-                "Présentiel", "Téléconsultation"
-        ));
+                "Présentiel", "Téléconsultation"));
         typeChoice.setValue("Présentiel");
     }
 
@@ -71,7 +88,8 @@ public class UserPrendreRdvController {
 
     @FXML
     private void prendreRendezVous() {
-        if (!validateInputs()) return;
+        if (!validateInputs())
+            return;
 
         try {
             Appointment rdv = new Appointment(
@@ -79,8 +97,7 @@ public class UserPrendreRdvController {
                     LocalTime.parse(heureCombo.getValue()),
                     "en attente",
                     motifField.getText().trim(),
-                    typeChoice.getValue()
-            );
+                    typeChoice.getValue());
             rdv.setUserId(currentUserId);
 
             service.add(rdv);

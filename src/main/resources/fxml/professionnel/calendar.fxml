@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.effect.GaussianBlur?>
+
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="tn.esprit.controllers.professionnel.CalendarController"
+           prefWidth="1200" prefHeight="800"
+           stylesheets="@../../css/styles.css">
+
+    <!-- Nature Background -->
+    <ImageView fitWidth="1200" fitHeight="800" preserveRatio="false" styleClass="nature-background">
+        <image>
+            <Image url="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?w=1600&amp;q=80"
+                   backgroundLoading="true"/>
+        </image>
+        <effect>
+            <GaussianBlur radius="5"/>
+        </effect>
+    </ImageView>
+
+    <!-- Overlay -->
+    <Region styleClass="overlay"/>
+
+    <BorderPane style="-fx-background-color: transparent; -fx-padding: 0;">
+        
+        <!-- Top Navigation Bar -->
+        <top>
+            <HBox spacing="20" alignment="CENTER_LEFT" 
+                  style="-fx-background-color: transparent; -fx-padding: 15 30; -fx-border-color: #396f5b; -fx-border-width: 0 0 2 0;">
+                
+                <!-- Title and Navigation -->
+                <VBox spacing="2" HBox.hgrow="ALWAYS">
+                    <HBox alignment="CENTER_LEFT" spacing="15">
+                        <Label text="📅" style="-fx-font-size: 28; -fx-text-fill: #396f5b;"/>
+                        <Label fx:id="monthYearLabel" text="Month Year" styleClass="header-label" style="-fx-font-size: 26; -fx-text-fill: #396f5b;"/>
+                    </HBox>
+                    <Label text="Visualisez votre emploi du temps mensuel" styleClass="subheader-label" style="-fx-padding: 0 0 0 45;"/>
+                </VBox>
+
+                <!-- Navigation Controls -->
+                <HBox spacing="15" alignment="CENTER_RIGHT">
+                    <Button text="◀ Précédent" onAction="#previousMonth" styleClass="button-secondary" prefWidth="130" prefHeight="40"/>
+                    <Button text="Suivant ▶" onAction="#nextMonth" styleClass="button-secondary" prefWidth="130" prefHeight="40"/>
+                    <Button text="✖ FERMER" onAction="#backToList" styleClass="button-danger" prefWidth="130" prefHeight="40"/>
+                </HBox>
+            </HBox>
+        </top>
+        
+        <center>
+            <VBox spacing="10" style="-fx-padding: 20;">
+                <!-- Days Header -->
+                <HBox spacing="10" alignment="CENTER" style="-fx-padding: 0 0 10 0;">
+                    <Label text="DIMANCHE" style="-fx-font-weight: bold; -fx-pref-width: 155; -fx-alignment: center; -fx-text-fill: #7f8c8d; -fx-font-size: 11;"/>
+                    <Label text="LUNDI" style="-fx-font-weight: bold; -fx-pref-width: 155; -fx-alignment: center; -fx-text-fill: #7f8c8d; -fx-font-size: 11;"/>
+                    <Label text="MARDI" style="-fx-font-weight: bold; -fx-pref-width: 155; -fx-alignment: center; -fx-text-fill: #7f8c8d; -fx-font-size: 11;"/>
+                    <Label text="MERCREDI" style="-fx-font-weight: bold; -fx-pref-width: 155; -fx-alignment: center; -fx-text-fill: #7f8c8d; -fx-font-size: 11;"/>
+                    <Label text="JEUDI" style="-fx-font-weight: bold; -fx-pref-width: 155; -fx-alignment: center; -fx-text-fill: #7f8c8d; -fx-font-size: 11;"/>
+                    <Label text="VENDREDI" style="-fx-font-weight: bold; -fx-pref-width: 155; -fx-alignment: center; -fx-text-fill: #7f8c8d; -fx-font-size: 11;"/>
+                    <Label text="SAMEDI" style="-fx-font-weight: bold; -fx-pref-width: 155; -fx-alignment: center; -fx-text-fill: #7f8c8d; -fx-font-size: 11;"/>
+                </HBox>
+                
+                <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+                    <GridPane fx:id="calendarGrid" hgap="10" vgap="10" alignment="CENTER" 
+                              style="-fx-background-color: transparent;">
+                        <!-- Calendar days will be added here dynamically -->
+                    </GridPane>
+                </ScrollPane>
+            </VBox>
+        </center>
+
+        <bottom>
+            <HBox alignment="CENTER" style="-fx-padding: 15; -fx-background-color: rgba(255,255,255,0.7);">
+                <Button text="Retour à la liste" onAction="#backToList" styleClass="button-primary" prefWidth="200"/>
+            </HBox>
+        </bottom>
+    </BorderPane>
+</StackPane>

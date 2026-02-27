@@ -111,25 +111,15 @@
                     </VBox>
 
                     <!-- CONSULTATIONS LIST CARD -->
-                    <VBox styleClass="card" spacing="15" style="-fx-padding: 25; -fx-background-color: rgba(255,255,255,0.85);" VBox.vgrow="ALWAYS">
+                    <VBox styleClass="card" spacing="15" style="-fx-padding: 25; -fx-background-color: rgba(255,255,255,0.85);">
                         <Label text="📜 Liste des Consultations" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #396f5b;"/>
                         <Separator/>
                         
-                        <TableView fx:id="tableView" prefHeight="400" VBox.vgrow="ALWAYS" style="-fx-text-fill: black;">
-                            <columns>
-                                <TableColumn fx:id="colId" text="ID" prefWidth="60" style="-fx-text-fill: black;"/>
-                                <TableColumn fx:id="colAppointmentId" text="RDV #" prefWidth="80" style="-fx-text-fill: black;"/>
-                                <TableColumn fx:id="colDate" text="Date" prefWidth="120" style="-fx-text-fill: black;"/>
-                                <TableColumn fx:id="colDiagnostic" text="Diagnostic" prefWidth="300" style="-fx-text-fill: black;"/>
-                                <TableColumn fx:id="colStatut" text="Statut" prefWidth="130"/>
-                                <TableColumn fx:id="colDuree" text="Durée" prefWidth="90" style="-fx-text-fill: black;"/>
-                            </columns>
-                            <columnResizePolicy>
-                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
-                            </columnResizePolicy>
-                        </TableView>
+                        <!-- Cards Container -->
+                        <FlowPane fx:id="cardsContainer" hgap="25" vgap="25" styleClass="cards-grid" alignment="TOP_LEFT">
+                            <!-- Consultation cards will be injected here -->
+                        </FlowPane>
                     </VBox>
-                    
                 </VBox>
             </ScrollPane>
         </center>

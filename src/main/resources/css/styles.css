@@ -227,3 +227,93 @@
     -fx-background-color: -primary-color;
     -fx-text-fill: white;
 }
+
+/* Card View Components */
+.item-card {
+    -fx-background-color: rgba(255, 255, 255, 0.95);
+    -fx-background-radius: 12;
+    -fx-padding: 18;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 10, 0, 0, 4);
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+    -fx-cursor: hand;
+}
+
+.item-card:hover {
+    -fx-background-color: #ffffff;
+    -fx-effect: dropshadow(gaussian, rgba(39, 111, 91, 0.2), 15, 0, 0, 6);
+    -fx-border-color: #396f5b;
+}
+
+.item-card .label {
+    -fx-text-fill: #2C3E50;
+}
+
+.card-id {
+    -fx-font-family: 'Consolas', monospace;
+    -fx-font-weight: bold;
+    -fx-text-fill: #396f5b !important;
+    -fx-font-size: 13;
+}
+
+.card-title {
+    -fx-font-size: 16;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333 !important;
+}
+
+.card-badge {
+    -fx-padding: 4 12;
+    -fx-background-radius: 20;
+    -fx-font-size: 11;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.card-separator {
+    -fx-background-color: #EEEEEE;
+    -fx-min-height: 1;
+    -fx-max-height: 1;
+}
+
+.cards-grid {
+    -fx-padding: 10;
+}
+
+/* Dashboard Chart Improvements */
+.chart {
+    -fx-padding: 10;
+}
+
+.chart-pie-label {
+    -fx-fill: #1a4d3c;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+.chart-legend {
+    -fx-background-color: rgba(255, 255, 255, 0.5);
+    -fx-background-radius: 5;
+    -fx-padding: 10;
+}
+
+.chart-legend-item {
+    -fx-text-fill: #1a4d3c;
+    -fx-font-weight: bold;
+}
+
+.axis {
+    -fx-tick-label-fill: #102e23;
+    -fx-tick-label-font-weight: bold;
+}
+
+.axis-label {
+    -fx-text-fill: #102e23;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+.chart-bar {
+    -fx-bar-fill: #27ae60;
+}

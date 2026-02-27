@@ -10,15 +10,14 @@ public class MainFX extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         // Change le chemin pour tester chaque interface
-        // Parent root =
-        // FXMLLoader.load(getClass().getResource("/fxml/user/user_prendre_rdv.fxml"));
-        // Parent root =
-        // FXMLLoader.load(getClass().getResource("/fxml/user/user_mes_rdv.fxml"));
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/professionnel/pro_gestion_rdv.fxml"));
+        //Parent root = FXMLLoader.load(getClass().getResource("/fxml/user/user_prendre_rdv.fxml"));
+         //Parent root =
+         //FXMLLoader.load(getClass().getResource("/fxml/user/user_mes_rdv.fxml"));
+       Parent root = FXMLLoader.load(getClass().getResource("/fxml/professionnel/pro_gestion_rdv.fxml"));
         // Parent root =
         // FXMLLoader.load(getClass().getResource("/fxml/professionnel/pro_gestion_consultation.fxml"));
-        // Parent root =
-        // FXMLLoader.load(getClass().getResource("/fxml/admin/admin_supervision_rdv.fxml"));
+        //Parent root =
+       //FXMLLoader.load(getClass().getResource("/fxml/admin/admin_supervision_rdv.fxml"));
         // Parent root =
         // FXMLLoader.load(getClass().getResource("/fxml/admin/admin_supervision_consultation.fxml"));
 

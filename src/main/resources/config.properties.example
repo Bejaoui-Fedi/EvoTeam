@@ -1,0 +1,11 @@
+# Twilio Configuration
+twilio.sid=YOUR_TWILIO_SID_HERE
+twilio.token=YOUR_TWILIO_TOKEN_HERE
+twilio.phone=YOUR_TWILIO_PHONE_NUMBER_HERE
+
+# Gmail Configuration
+mail.username=YOUR_GMAIL_USERNAME_HERE
+mail.password=YOUR_GMAIL_APP_PASSWORD_HERE
+
+# Weather Configuration
+weather.api.key=YOUR_OPENWEATHERMAP_API_KEY_HERE

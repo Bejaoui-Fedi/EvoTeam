@@ -7,9 +7,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.stage.Modality;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.Priority;
+import javafx.geometry.Pos;
 import tn.esprit.entities.Appointment;
 import tn.esprit.entities.Consultation;
 import tn.esprit.services.AppointmentService;
@@ -39,19 +44,7 @@ public class ProConsultationController {
     private ChoiceBox<String> statutConsultationChoice;
 
     @FXML
-    private TableView<Consultation> tableView;
-    @FXML
-    private TableColumn<Consultation, Integer> colId;
-    @FXML
-    private TableColumn<Consultation, Integer> colAppointmentId;
-    @FXML
-    private TableColumn<Consultation, LocalDate> colDate;
-    @FXML
-    private TableColumn<Consultation, String> colDiagnostic;
-    @FXML
-    private TableColumn<Consultation, String> colStatut;
-    @FXML
-    private TableColumn<Consultation, Integer> colDuree;
+    private FlowPane cardsContainer;
 
     @FXML
     private Button saveButton;
@@ -74,12 +67,10 @@ public class ProConsultationController {
 
     @FXML
     public void initialize() {
-        setupTableColumns();
         setupSpinner();
         setupChoiceBoxes();
         loadAppointments();
         loadConsultations();
-        setupSelectionListener();
 
         // Auto-remplissage de la date de consultation à partir du RDV sélectionné
         rdvCombo.valueProperty().addListener((obs, oldVal, newVal) -> {
@@ -93,53 +84,89 @@ public class ProConsultationController {
         messageLabel.setText("");
     }
 
-    private void setupTableColumns() {
-        colId.setCellValueFactory(new PropertyValueFactory<>("id"));
-        colAppointmentId.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
-        colDate.setCellValueFactory(new PropertyValueFactory<>("dateConsultation"));
-        colDiagnostic.setCellValueFactory(new PropertyValueFactory<>("diagnostic"));
-        colStatut.setCellValueFactory(new PropertyValueFactory<>("statutConsultation"));
-        colDuree.setCellValueFactory(new PropertyValueFactory<>("duree"));
+    private void renderCards(ObservableList<Consultation> consultations) {
+        cardsContainer.getChildren().clear();
+        for (Consultation c : consultations) {
+            VBox card = createConsultationCard(c);
+            cardsContainer.getChildren().add(card);
+        }
+    }
 
-        colDate.setCellFactory(column -> new TableCell<Consultation, LocalDate>() {
-            @Override
-            protected void updateItem(LocalDate date, boolean empty) {
-                super.updateItem(date, empty);
-                if (empty || date == null) {
-                    setText(null);
-                } else {
-                    setText(date.toString());
-                }
+    private VBox createConsultationCard(Consultation c) {
+        VBox card = new VBox(10);
+        card.getStyleClass().add("item-card");
+        card.setPrefWidth(320);
+
+        // Header: ID and Status
+        HBox header = new HBox();
+        header.setAlignment(Pos.CENTER_LEFT);
+        Label idLabel = new Label("CONS #" + c.getId() + " (RDV #" + c.getAppointmentId() + ")");
+        idLabel.getStyleClass().add("card-id");
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        Label statusBadge = new Label(c.getStatutConsultation().toUpperCase());
+        statusBadge.getStyleClass().add("card-badge");
+        applyStatusStyle(statusBadge, c.getStatutConsultation());
+
+        header.getChildren().addAll(idLabel, spacer, statusBadge);
+
+        // Content: Diagnostic
+        Label diagLabel = new Label("Diagnostic:");
+        diagLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: -primary-color;");
+        Label diagValue = new Label(c.getDiagnostic());
+        diagValue.getStyleClass().add("card-title");
+        diagValue.setWrapText(true);
+
+        // Details
+        VBox details = new VBox(5);
+        details.getChildren().addAll(
+                createDetailRow("📅 Date:", c.getDateConsultation().toString()),
+                createDetailRow("⏱️ Durée:", c.getDuree() + " min"),
+                createDetailRow("💊 Traitement:", c.getTraitement()));
+
+        Region separator = new Region();
+        separator.getStyleClass().add("card-separator");
+        separator.setPrefHeight(1);
+
+        // Selection handling
+        card.setOnMouseClicked(e -> {
+            for (javafx.scene.Node n : cardsContainer.getChildren()) {
+                n.setStyle("");
             }
+            card.setStyle("-fx-border-color: -primary-color; -fx-border-width: 3;");
+            selectedConsultation = c;
+            fillForm(c);
+            saveButton.setDisable(true);
+            updateButton.setDisable(false);
+            deleteButton.setDisable(false);
         });
 
-        colStatut.setCellFactory(column -> new TableCell<Consultation, String>() {
-            @Override
-            protected void updateItem(String statut, boolean empty) {
-                super.updateItem(statut, empty);
-                if (empty || statut == null) {
-                    setText(null);
-                    setStyle("");
-                } else {
-                    setText(statut);
-                    String lowerStatut = statut.toLowerCase();
-                    if (lowerStatut.equals("en cours")) {
-                        setStyle(
-                                "-fx-background-color: #d1ecf1; -fx-text-fill: #0c5460; -fx-font-weight: bold; -fx-alignment: CENTER;");
-                    } else if (lowerStatut.equals("attente")) {
-                        setStyle(
-                                "-fx-background-color: #fff3cd; -fx-text-fill: #856404; -fx-font-weight: bold; -fx-alignment: CENTER;");
-                    } else if (lowerStatut.equals("clôturée") || lowerStatut.equals("cloturée")) {
-                        setStyle(
-                                "-fx-background-color: #d4edda; -fx-text-fill: #155724; -fx-font-weight: bold; -fx-alignment: CENTER;");
-                    } else if (lowerStatut.equals("annulée")) {
-                        setStyle(
-                                "-fx-background-color: #f8d7da; -fx-text-fill: #721c24; -fx-font-weight: bold; -fx-alignment: CENTER;");
-                    }
-                }
-            }
-        });
+        card.getChildren().addAll(header, diagLabel, diagValue, details, separator);
+        return card;
+    }
 
+    private HBox createDetailRow(String label, String value) {
+        HBox row = new HBox(5);
+        Label l = new Label(label);
+        l.setStyle("-fx-font-weight: bold; -fx-min-width: 80;");
+        Label v = new Label(value);
+        v.setWrapText(true);
+        row.getChildren().addAll(l, v);
+        return row;
+    }
+
+    private void applyStatusStyle(Label label, String statut) {
+        String lowerStatut = statut.toLowerCase();
+        if (lowerStatut.equals("en cours")) {
+            label.setStyle("-fx-background-color: #d1ecf1; -fx-text-fill: #0c5460;");
+        } else if (lowerStatut.equals("attente")) {
+            label.setStyle("-fx-background-color: #fff3cd; -fx-text-fill: #856404;");
+        } else if (lowerStatut.equals("clôturée") || lowerStatut.equals("cloturée")) {
+            label.setStyle("-fx-background-color: #d4edda; -fx-text-fill: #155724;");
+        } else if (lowerStatut.equals("annulée")) {
+            label.setStyle("-fx-background-color: #f8d7da; -fx-text-fill: #721c24;");
+        }
     }
 
     private void setupSpinner() {
@@ -192,28 +219,11 @@ public class ProConsultationController {
         try {
             consultationList.clear();
             consultationList.addAll(consultationService.getAll());
-            tableView.setItems(consultationList);
+            renderCards(consultationList);
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur",
                     "Impossible de charger les consultations : " + e.getMessage());
         }
-    }
-
-    private void setupSelectionListener() {
-        tableView.getSelectionModel().selectedItemProperty().addListener((obs, old, newSel) -> {
-            selectedConsultation = newSel;
-            if (newSel != null) {
-                fillForm(newSel);
-                saveButton.setDisable(true);
-                updateButton.setDisable(false);
-                deleteButton.setDisable(false);
-            } else {
-                clearForm();
-                saveButton.setDisable(false);
-                updateButton.setDisable(true);
-                deleteButton.setDisable(true);
-            }
-        });
     }
 
     private void fillForm(Consultation c) {
@@ -379,7 +389,9 @@ public class ProConsultationController {
         saveButton.setDisable(false);
         updateButton.setDisable(true);
         deleteButton.setDisable(true);
-        tableView.getSelectionModel().clearSelection();
+        for (javafx.scene.Node n : cardsContainer.getChildren()) {
+            n.setStyle("");
+        }
         messageLabel.setText("");
     }
 
