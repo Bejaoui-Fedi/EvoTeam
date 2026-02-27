@@ -34,7 +34,7 @@ public class AjoutObjectifController {
     public void initialize() {
         // ADMIN uniquement
         if (!Session.isAdmin()) {
-            showError("Accès refusé", "Seul un administrateur peut ajouter un objectif.");
+            showError("Accès refusé", "Seul un administrateur peut ajouter  UN  un objectif.");
             Platform.runLater(this::backToList);
             return;
         }

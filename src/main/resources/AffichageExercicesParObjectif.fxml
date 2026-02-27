@@ -18,7 +18,7 @@
             <children>
                 <!-- Header Section -->
                 <VBox spacing="5">
-                    <Label text="Exercices associés" styleClass="header-label"/>
+                    <Label text="Exercices associéEs" styleClass="header-label"/>
                     <Label fx:id="lblObjectiveTitle" text="Objectif : -" styleClass="subheader-label"/>
                 </VBox>
 
