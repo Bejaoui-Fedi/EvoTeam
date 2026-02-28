@@ -14,7 +14,15 @@ import tn.esprit.services.ServiceReview;
 
 import java.io.IOException;
 import java.util.List;
+import tn.esprit.services.BadWordsService;
+import javafx.scene.paint.Color;
 
+import tn.esprit.services.TraductionService;
+import javafx.scene.control.ChoiceDialog;
+import java.util.ArrayList;
+import javafx.scene.control.ChoiceDialog;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 public class UserDisplayReview {
 
     @FXML private FlowPane cardsContainer;
@@ -158,6 +166,25 @@ public class UserDisplayReview {
         Label title = new Label(titleText);
         title.getStyleClass().add("event-title");
 
+        // 👇 VÉRIFICATION DES GROS MOTS
+        boolean hasBadWords = BadWordsService.containsBadWords(r.getComment());
+        Label warningBadge = new Label();
+        if (hasBadWords) {
+            warningBadge.setText("⚠️ GROS MOTS");
+            warningBadge.setStyle("-fx-background-color: #FF4444; -fx-text-fill: white; -fx-padding: 2 8; -fx-background-radius: 10; -fx-font-weight: bold;");
+        } else {
+            warningBadge.setText("✅ OK");
+            warningBadge.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-padding: 2 8; -fx-background-radius: 10; -fx-font-weight: bold;");
+        }
+
+
+        // Bouton Traduire
+        Button btnTraduire = new Button("🌐");
+        btnTraduire.setStyle("-fx-background-color: #FF9800; -fx-text-fill: white; -fx-cursor: hand; -fx-font-weight: bold; -fx-padding: 4 8; -fx-background-radius: 8;");
+        btnTraduire.setOnAction(ev -> traduireCommentaire(r));
+
+
+
         // Badge rating
         Label badge = new Label();
         badge.setText(r.getRating() + "/5");
@@ -180,7 +207,8 @@ public class UserDisplayReview {
         btnDelete.setStyle("-fx-background-color: #FF3A3A; -fx-text-fill: white; -fx-cursor: hand; -fx-font-weight: bold; -fx-padding: 4 10; -fx-background-radius: 10;");
         btnDelete.setOnAction(ev -> confirmAndDelete(r));
 
-        HBox header = new HBox(10, title, spacer, badge, btnEdit, btnDelete);
+        // 👇 HEADER AVEC LE BADGE D'ALERTE
+        HBox header = new HBox(10, title, spacer, badge, btnTraduire, btnEdit, btnDelete);
         header.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
 
         // Infos
@@ -190,10 +218,22 @@ public class UserDisplayReview {
         Label ratingLabel = new Label("Note: " + r.getRating() + "/5");
         ratingLabel.getStyleClass().add("event-info");
 
-        // Commentaire
-        Label desc = new Label(r.getComment() == null ? "" : r.getComment());
+        // 👇 COMMENTAIRE (caché ou censuré si gros mots)
+        String commentText;
+        if (hasBadWords) {
+            commentText = BadWordsService.censor(r.getComment()) + "\n[Commentaire masqué - langage inapproprié]";
+        } else {
+            commentText = (r.getComment() == null ? "" : r.getComment());
+        }
+
+        Label desc = new Label(commentText);
         desc.setWrapText(true);
         desc.getStyleClass().add("event-description");
+
+        // Met le texte en rouge si gros mots
+        if (hasBadWords) {
+            desc.setStyle("-fx-text-fill: #CC0000;");
+        }
 
         Separator sep = new Separator();
         sep.getStyleClass().add("event-separator");
@@ -246,16 +286,67 @@ public class UserDisplayReview {
     // =====================================================
     private List<Review> getMyReviews() {
         if (currentEvent != null && currentUser != null) {
-            // Retourne SEULEMENT les reviews de cet event par cet utilisateur
+            // 👉 RETOURNE LES REVIEWS DE CET UTILISATEUR POUR CET ÉVÉNEMENT
             return serviceReview.getByEventIdAndUserId(
                     currentEvent.getEventId(), currentUser.getId()
             );
         } else if (currentEvent != null) {
-            // Fallback : toutes les reviews de l'event (si pas de user -- ne devrait pas arriver)
-            return serviceReview.getByEventId(currentEvent.getEventId());
+            // 👉 SI PAS D'UTILISATEUR, ON RETOURNE UNE LISTE VIDE
+            // (car on ne veut pas voir les reviews des autres)
+            return new ArrayList<>();
         }
-        return serviceReview.getAll();
+        return new ArrayList<>();
     }
+
+
+    private void traduireCommentaire(Review review) {
+        // Choix de la langue SOURCE
+        ChoiceDialog<String> sourceDialog = new ChoiceDialog<>("Français",
+                "Français", "Anglais", "Espagnol", "Allemand", "Italien", "Arabe");
+        sourceDialog.setTitle("Langue source");
+        sourceDialog.setHeaderText("Dans quelle langue est le commentaire ?");
+        sourceDialog.setContentText("Langue source :");
+
+        sourceDialog.showAndWait().ifPresent(sourceLangue -> {
+            // Choix de la langue CIBLE
+            ChoiceDialog<String> targetDialog = new ChoiceDialog<>("Anglais",
+                    "Français", "Anglais", "Espagnol", "Allemand", "Italien", "Arabe");
+            targetDialog.setTitle("Langue cible");
+            targetDialog.setHeaderText("Vers quelle langue traduire ?");
+            targetDialog.setContentText("Langue cible :");
+
+            targetDialog.showAndWait().ifPresent(targetLangue -> {
+                // Convertir les noms en codes
+                String sourceCode = getCodeLangue(sourceLangue);
+                String targetCode = getCodeLangue(targetLangue);
+
+                // Appeler le service avec la source spécifiée
+                String texteOriginal = review.getComment();
+                String texteTraduit = TraductionService.traduireAvecSource(texteOriginal, sourceCode, targetCode);
+
+                // Afficher le résultat
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Résultat de la traduction");
+                alert.setHeaderText("Commentaire original (" + sourceLangue + ") :\n" + texteOriginal);
+                alert.setContentText("Traduit en " + targetLangue + " :\n" + texteTraduit);
+                alert.showAndWait();
+            });
+        });
+    }
+
+    private String getCodeLangue(String nom) {
+        switch (nom) {
+            case "Français": return "fr";
+            case "Anglais": return "en";
+            case "Espagnol": return "es";
+            case "Allemand": return "de";
+            case "Italien": return "it";
+            case "Arabe": return "ar";
+            default: return "en";
+        }
+    }
+
+
 
     public void loadCards() {
         cardsContainer.getChildren().clear();

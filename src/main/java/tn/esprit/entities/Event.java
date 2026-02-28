@@ -13,6 +13,10 @@ public class Event {
     private int fee;
     private String location; // nouvel attribut saisi par l'utilisateur
 
+    private double latitude;
+    private double longitude;
+
+
     // Constructeur avec ID
     public Event(int eventId, String name, String startDate, String endDate, int maxParticipants,
                  String description, int fee, String location) {
@@ -53,6 +57,14 @@ public class Event {
 
     public int getMaxParticipants() { return maxParticipants; }
     public void setMaxParticipants(int maxParticipants) { this.maxParticipants = maxParticipants; }
+
+    public double getLatitude() { return latitude; }
+    public void setLatitude(double latitude) { this.latitude = latitude; }
+
+    public double getLongitude() { return longitude; }
+    public void setLongitude(double longitude) { this.longitude = longitude; }
+
+
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }

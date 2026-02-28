@@ -15,6 +15,13 @@ import tn.esprit.services.GoogleCalendarService;  // ← AJOUTE CET IMPORT
 import tn.esprit.controllers.QRCodeEventController;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
+
+import tn.esprit.controllers.MapTilerController;
+
+import tn.esprit.services.CurrencyService;
+import javafx.stage.FileChooser;
+import java.io.File;
+import tn.esprit.services.ExcelExportService;
 public class UserDisplayEvent {
 
     @FXML private FlowPane cardsContainer;
@@ -65,20 +72,24 @@ public class UserDisplayEvent {
     // =====================================================
     private VBox createCard(Event e) {
         VBox card = new VBox(12);
-        card.setPrefWidth(300);
+        card.setPrefWidth(400);
         card.getStyleClass().add("event-card");
 
         // Titre
         Label title = new Label(e.getName());
         title.getStyleClass().add("event-title");
 
-
-        // ✅ BOUTON GOOGLE CALENDAR (NOUVEAU)
+        // Bouton Google Calendar
         Button btnCalendar = new Button("📅");
         btnCalendar.setStyle("-fx-background-color: #4285F4; -fx-text-fill: white; -fx-cursor: hand; -fx-font-weight: bold; -fx-padding: 6 10; -fx-background-radius: 15;");
         btnCalendar.setOnAction(ev -> addToGoogleCalendar(e));
 
-        // ✅ Bouton QR code (à ajouter)
+        // Bouton Carte
+        Button btnMap = new Button("🗺️");
+        btnMap.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-cursor: hand; -fx-font-weight: bold; -fx-padding: 4 8; -fx-background-radius: 8;");
+        btnMap.setOnAction(ev -> openMap(e));
+
+        // Bouton QR code
         Button btnQR = new Button("📱");
         btnQR.setStyle("-fx-background-color: #6A4E9B; -fx-text-fill: white; -fx-cursor: hand; -fx-font-weight: bold; -fx-padding: 4 8; -fx-background-radius: 8;");
         btnQR.setOnAction(ev -> showQRCode(e));
@@ -96,7 +107,7 @@ public class UserDisplayEvent {
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        // Bouton "Mes Reviews" -- navigue vers UserDisplayReview
+        // Bouton "Mes Reviews"
         Button btnReviews = new Button("Mes Reviews");
         btnReviews.setStyle(
                 "-fx-background-color: #3A7D6B; -fx-text-fill: white; " +
@@ -105,7 +116,7 @@ public class UserDisplayEvent {
         );
         btnReviews.setOnAction(ev -> goToReviewsForEvent(e));
 
-        HBox header = new HBox(10, title, spacer, badge, btnQR, btnCalendar, btnReviews);
+        HBox header = new HBox(10, title, spacer, badge, btnMap, btnQR, btnCalendar, btnReviews);
         header.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
 
         // Infos
@@ -123,10 +134,24 @@ public class UserDisplayEvent {
         desc.setWrapText(true);
         desc.getStyleClass().add("event-description");
 
+        // ✅ CONVERSIONS DINAR → EURO / DOLLAR
+        Label conversionLabel = new Label();
+        if (e.getFee() > 0) {
+            String conversions = String.format("💶 %s | 💵 %s",
+                    CurrencyService.formatEur(e.getFee()),
+                    CurrencyService.formatUsd(e.getFee()));
+            conversionLabel.setText(conversions);
+            conversionLabel.setStyle("-fx-font-size: 12; -fx-text-fill: #3A7D6B; -fx-font-weight: bold; -fx-padding: 5 0 0 0;");
+        } else {
+            conversionLabel.setText("💶 Gratuit | 💵 Free");
+            conversionLabel.setStyle("-fx-font-size: 12; -fx-text-fill: #4CAF50; -fx-padding: 5 0 0 0;");
+        }
+
         Separator sep = new Separator();
         sep.getStyleClass().add("event-separator");
 
-        card.getChildren().addAll(header, sep, dates, max, location, desc);
+        // ✅ Ajout du label de conversion DANS la carte
+        card.getChildren().addAll(header, sep, dates, max, location, desc, conversionLabel);
         return card;
     }
 
@@ -199,6 +224,82 @@ public class UserDisplayEvent {
             new Alert(Alert.AlertType.ERROR, "Impossible d'ouvrir UserDisplayReview.fxml").show();
         }
     }
+
+
+
+    private void openMap(Event event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/MapTilerView.fxml"));
+            Parent root = loader.load();
+
+            MapTilerController controller = loader.getController();
+            controller.setEvent(event);
+
+            // Pour l'instant, on utilise des coordonnées fixes (Tunis)
+            controller.loadMapWithCoords(36.8065, 10.1815);
+
+            Stage stage = new Stage();
+            stage.setTitle("Carte - " + event.getName());
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Impossible d'ouvrir la carte").show();
+        }
+    }
+
+
+
+    @FXML
+    private void openHistorique() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/HistoriqueView.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Historique");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Impossible d'ouvrir l'historique").show();
+        }
+    }
+
+
+
+    @FXML
+    private void exportToExcel() {
+        try {
+            // Boîte de dialogue pour choisir l'emplacement
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Exporter les événements");
+            fileChooser.getExtensionFilters().add(
+                    new FileChooser.ExtensionFilter("Fichiers Excel", "*.xlsx")
+            );
+            fileChooser.setInitialFileName("mes_evenements.xlsx");
+
+            File file = fileChooser.showSaveDialog(cardsContainer.getScene().getWindow());
+
+            if (file != null) {
+                // Récupérer tous les événements
+                List<Event> events = serviceEvent.getAll();
+
+                // Exporter
+                ExcelExportService.exporterEvenements(events, file.getAbsolutePath());
+
+                new Alert(Alert.AlertType.INFORMATION,
+                        "✅ Export réussi !\nFichier : " + file.getName()).show();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "❌ Erreur : " + e.getMessage()).show();
+        }
+    }
+
 
     private void loadCards() {
         cardsContainer.getChildren().clear();

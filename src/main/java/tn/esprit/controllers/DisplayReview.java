@@ -16,6 +16,8 @@ import tn.esprit.services.ServiceReview;
 
 import java.io.IOException;
 import java.util.List;
+import tn.esprit.services.TraductionService;
+import javafx.scene.control.ChoiceDialog;
 
 public class DisplayReview {
 
@@ -123,13 +125,20 @@ public class DisplayReview {
         btnEdit.setStyle("-fx-background-color: #3A7DFF; -fx-text-fill: white; -fx-cursor: hand; -fx-font-weight: bold;");
         btnEdit.setOnAction(ev -> openUpdateWindow(r));
 
+
+        // Bouton Traduire
+        Button btnTraduire = new Button("🌐");
+        btnTraduire.setStyle("-fx-background-color: #FF9800; -fx-text-fill: white; -fx-cursor: hand; -fx-font-weight: bold; -fx-padding: 4 8; -fx-background-radius: 8;");
+        btnTraduire.setOnAction(ev -> traduireCommentaire(r));
+
+
         // Bouton Delete (rouge)
         Button btnDelete = new Button("🗑");
         btnDelete.setStyle("-fx-background-color: #FF3A3A; -fx-text-fill: white; -fx-cursor: hand; -fx-font-weight: bold;");
         btnDelete.setOnAction(ev -> confirmAndDelete(r));
 
         // Header avec le nom d'utilisateur au-dessus
-        HBox header = new HBox(10, title, spacer, badge, btnEdit, btnDelete);
+        HBox header = new HBox(10, title, spacer, badge, btnTraduire, btnEdit, btnDelete);
         header.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
 
         // Infos
@@ -202,6 +211,58 @@ public class DisplayReview {
             new Alert(Alert.AlertType.ERROR, "Impossible d'ouvrir AddReview.fxml").show();
         }
     }
+
+
+
+    private void traduireCommentaire(Review review) {
+        // Choix de la langue SOURCE
+        ChoiceDialog<String> sourceDialog = new ChoiceDialog<>("Français",
+                "Français", "Anglais", "Espagnol", "Allemand", "Italien", "Arabe");
+        sourceDialog.setTitle("Langue source");
+        sourceDialog.setHeaderText("Dans quelle langue est le commentaire ?");
+        sourceDialog.setContentText("Langue source :");
+
+        sourceDialog.showAndWait().ifPresent(sourceLangue -> {
+            // Choix de la langue CIBLE
+            ChoiceDialog<String> targetDialog = new ChoiceDialog<>("Anglais",
+                    "Français", "Anglais", "Espagnol", "Allemand", "Italien", "Arabe");
+            targetDialog.setTitle("Langue cible");
+            targetDialog.setHeaderText("Vers quelle langue traduire ?");
+            targetDialog.setContentText("Langue cible :");
+
+            targetDialog.showAndWait().ifPresent(targetLangue -> {
+                // Convertir les noms en codes
+                String sourceCode = getCodeLangue(sourceLangue);
+                String targetCode = getCodeLangue(targetLangue);
+
+                // Appeler le service avec la source spécifiée
+                String texteOriginal = review.getComment();
+                String texteTraduit = TraductionService.traduireAvecSource(texteOriginal, sourceCode, targetCode);
+
+                // Afficher le résultat
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Résultat de la traduction");
+                alert.setHeaderText("Commentaire original (" + sourceLangue + ") :\n" + texteOriginal);
+                alert.setContentText("Traduit en " + targetLangue + " :\n" + texteTraduit);
+                alert.showAndWait();
+            });
+        });
+    }
+
+    private String getCodeLangue(String nom) {
+        switch (nom) {
+            case "Français": return "fr";
+            case "Anglais": return "en";
+            case "Espagnol": return "es";
+            case "Allemand": return "de";
+            case "Italien": return "it";
+            case "Arabe": return "ar";
+            default: return "en";
+        }
+    }
+
+
+
 
     // ================== LOAD CARDS MODIFIÉ ==================
     private void loadCards() {

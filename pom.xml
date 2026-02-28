@@ -46,6 +46,10 @@
 
 
 
+
+
+
+
         <!-- Google Guava (version compatible) -->
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -111,6 +115,28 @@
             <version>3.5.1</version>
         </dependency>
 
+
+
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.14</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
+        </dependency>
+
+
+
         <!-- JUnit (Tests) -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -145,7 +171,33 @@
             <version>21.0.2</version>
         </dependency>
 
+
+        <dependency>
+            <groupId>com.github.haifengl</groupId>
+            <artifactId>smile-core</artifactId>
+            <version>3.0.3</version>
+        </dependency>
+
+
+
+        <dependency>
+            <groupId>com.sothawo</groupId>
+            <artifactId>mapjfx</artifactId>
+            <version>2.13.0</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>5.2.3</version>
+        </dependency>
+
+
     </dependencies>
+
+
+
 
     <build>
         <plugins>
@@ -183,6 +235,7 @@
                     <include>**/*.png</include>
                     <include>**/*.jpg</include>
                     <include>**/*.properties</include>
+                    <include>**/*.txt</include>
                 </includes>
             </resource>
         </resources>

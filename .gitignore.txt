@@ -1,0 +1,87 @@
+### FICHIERS SENSIBLES ###
+credentials.json
+*.json
+.env
+application.properties
+config.properties
+*.key
+*.pem
+*.keystore
+secrets.txt
+
+### JAVA ###
+*.class
+*.jar
+*.war
+*.ear
+target/
+out/
+
+### INTELLIJ IDEA ###
+.idea/
+*.iml
+*.iws
+*.ipr
+.settings/
+.project
+.classpath
+.factorypath
+
+### ECLIPSE ###
+.settings/
+bin/
+.metadata/
+.classpath
+.project
+*.prefs
+
+### VS CODE ###
+.vscode/
+*.code-workspace
+
+### MAVEN ###
+log/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+### LOGS ###
+*.log
+logs/
+
+### TEMP FILES ###
+*.tmp
+*.temp
+*.bak
+*~
+*.swp
+*.swo
+
+### OS ###
+.DS_Store
+Thumbs.db
+desktop.ini
+
+### UPLOADS ###
+uploads/
+uploaded/
+images/
+media/
+
+### TESTS ###
+test-output/
+*.test.js
+*.spec.js
+
+### PROJECT SPECIFIC ###
+web/event_detail.html
+nbproject/
+build/
+dist/
+nb-configuration.xml

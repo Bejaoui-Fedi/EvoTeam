@@ -50,10 +50,13 @@
                 <!-- Barre d'actions (PAS de bouton Ajouter Event - lecture seule) -->
                 <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 0 0 10 0;">
                     <Button text="🔄 Rafraichir" onAction="#refresh" styleClass="button-secondary"/>
+                    <Button text="📊 Exporter Excel" onAction="#exportToExcel" styleClass="button-secondary"/>
+
                     <Region HBox.hgrow="ALWAYS"/>
                     <!-- Search -->
                     <TextField fx:id="searchField" promptText="Rechercher par nom ou lieu..." prefWidth="250" styleClass="text-field"/>
                     <Button text="🔎 Rechercher" onAction="#handleSearch" styleClass="button-primary"/>
+                    <Button text="📜 Historique" onAction="#openHistorique" styleClass="button-secondary"/>
                 </HBox>
 
                 <!-- Compteur -->

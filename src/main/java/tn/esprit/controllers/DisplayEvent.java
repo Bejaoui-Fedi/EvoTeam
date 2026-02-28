@@ -328,6 +328,25 @@ public class DisplayEvent {
         displayEvents(allEvents);
     }
 
+
+
+    @FXML
+    private void openHistorique() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/HistoriqueView.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("📜 Historique des événements");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Impossible d'ouvrir l'historique").show();
+        }
+    }
+
     private void displayEvents(List<Event> events) {
         cardsContainer.getChildren().clear();
         lblCount.setText(events.size() + " evenement(s)");

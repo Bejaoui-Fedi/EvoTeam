@@ -9,7 +9,7 @@ import java.util.List;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
+import tn.esprit.services.HistoriqueService;
 public class ServiceEvent {
 
     private Connection connection = DBConnection.getInstance().getConnection();
@@ -18,7 +18,7 @@ public class ServiceEvent {
     public void ajouter(Event event) {
         String sql = "INSERT INTO evenement (name, startDate, endDate, maxParticipants, description, fee, location) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement pst = connection.prepareStatement(sql)) {
+        try (PreparedStatement pst = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             pst.setString(1, event.getName());
             pst.setString(2, event.getStartDate());
             pst.setString(3, event.getEndDate());
@@ -27,11 +27,22 @@ public class ServiceEvent {
             pst.setInt(6, event.getFee());
             pst.setString(7, event.getLocation());
             pst.executeUpdate();
+
+            // Récupérer l'ID généré
+            ResultSet rs = pst.getGeneratedKeys();
+            if (rs.next()) {
+                int newId = rs.getInt(1);
+                event.setEventId(newId);
+            }
+
+            // ✅ AJOUT DANS L'HISTORIQUE
+            String details = event.getName() + " (" + event.getLocation() + ")";
+            HistoriqueService.ajouter("AJOUT", details);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-
     // ================== READ ==================
     public List<Event> getAll() {
         List<Event> events = new ArrayList<>();
@@ -60,10 +71,19 @@ public class ServiceEvent {
 
     // ================== DELETE ==================
     public void delete(int eventId) {
+        // Récupérer l'événement avant de le supprimer pour avoir son nom
+        Event event = getById(eventId);
+        String nom = (event != null) ? event.getName() : "Inconnu";
+
         String sql = "DELETE FROM evenement WHERE eventId = ?";
         try (PreparedStatement pst = connection.prepareStatement(sql)) {
             pst.setInt(1, eventId);
             pst.executeUpdate();
+
+            // ✅ AJOUT DANS L'HISTORIQUE
+            String details = nom + " (ID " + eventId + ")";
+            HistoriqueService.ajouter("SUPPRESSION", details);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -83,11 +103,15 @@ public class ServiceEvent {
             pst.setString(7, event.getLocation());
             pst.setInt(8, event.getEventId());
             pst.executeUpdate();
+
+            // ✅ AJOUT DANS L'HISTORIQUE
+            String details = event.getName() + " (ID " + event.getEventId() + ")";
+            HistoriqueService.ajouter("MODIFICATION", details);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-
     // ================== joinure ==================
     public List<Integer> getAllEventIds() {
         List<Integer> ids = new ArrayList<>();
