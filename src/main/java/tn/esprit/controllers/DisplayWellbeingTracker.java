@@ -547,4 +547,23 @@ public class DisplayWellbeingTracker {
         loadCards(); // Reload all cards
     }
 
+
+    @FXML
+    private void openSelfCareChat() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Chat.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Coach Équilibre - Bien-être");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL); // Optional: makes it modal
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Erreur", "Impossible d'ouvrir le coach bien-être");
+        }
+    }
+
 }

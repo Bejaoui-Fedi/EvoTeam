@@ -537,3 +537,111 @@
 .list-cell:selected {
     -fx-background-color: rgba(58, 125, 107, 0.2);
 }
+
+
+
+
+/* Chat Input */
+.chat-input {
+    -fx-background-color: white;
+    -fx-background-radius: 15;
+    -fx-border-color: #3A7D6B;
+    -fx-border-radius: 15;
+    -fx-border-width: 1;
+    -fx-padding: 10;
+    -fx-font-size: 14;
+}
+
+.chat-input:focused {
+    -fx-border-color: #2C3E50;
+    -fx-border-width: 2;
+}
+
+/* ScrollPane */
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+/* Typing Indicator */
+.typing-indicator {
+    -fx-text-fill: #7F8C8D;
+    -fx-font-style: italic;
+    -fx-padding: 5;
+}
+
+/* Suggestions Container */
+.suggestions-container {
+    -fx-background-color: rgba(255,255,255,0.7);
+    -fx-background-radius: 15;
+    -fx-padding: 15;
+    -fx-border-color: #3A7D6B;
+    -fx-border-radius: 15;
+    -fx-border-width: 1;
+}
+/* Chat Input */
+.chat-input {
+    -fx-background-color: white;
+    -fx-background-radius: 15;
+    -fx-border-color: #3A7D6B;
+    -fx-border-radius: 15;
+    -fx-border-width: 1;
+    -fx-padding: 10;
+    -fx-font-size: 14;
+}
+
+.chat-input:focused {
+    -fx-border-color: #2C3E50;
+    -fx-border-width: 2;
+}
+
+/* ScrollPane customization */
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .corner {
+    -fx-background-color: transparent;
+}
+
+/* ScrollBar styling */
+.scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 12;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #3A7D6B;
+    -fx-background-radius: 10;
+}
+
+.scroll-bar:vertical .track {
+    -fx-background-color: rgba(58, 125, 107, 0.1);
+    -fx-background-radius: 10;
+}
+
+/* Suggestion buttons - will be created dynamically in code */
+.suggestion-button {
+    -fx-background-color: rgba(58, 125, 107, 0.1);
+    -fx-text-fill: #2C3E50;
+    -fx-background-radius: 20;
+    -fx-padding: 8 15;
+    -fx-font-size: 12;
+    -fx-cursor: hand;
+    -fx-border-color: #3A7D6B;
+    -fx-border-radius: 20;
+    -fx-border-width: 1;
+}
+
+.suggestion-button:hover {
+    -fx-background-color: rgba(58, 125, 107, 0.2);
+}
+
+/* Message bubbles will be styled in code */

@@ -41,6 +41,16 @@
                     <Label text="🌿" style="-fx-font-size: 40; -fx-text-fill: #3A7D6B;"/>
                 </HBox>
                 <Label text="Suivez votre humeur, stress et sommeil au quotidien" styleClass="subheader-label"/>
+
+                <!-- 🧘 COACH ÉQUILIBRE BUTTON - ADDED HERE -->
+                <HBox alignment="CENTER" spacing="10" style="-fx-padding: 15 0 5 0;">
+                    <Button text="🧘 Coach Équilibre"
+                            onAction="#openSelfCareChat"
+                            prefWidth="220" prefHeight="45"
+                            styleClass="button-primary"/>
+                </HBox>
+                <Label text="Votre coach personnel pour le bien-être mental et physique"
+                       style="-fx-text-fill: #6F9A8D; -fx-font-size: 12; -fx-font-style: italic; -fx-padding: 0 0 10 0;"/>
             </VBox>
         </top>
 
